@@ -22,16 +22,27 @@ li {
     text-align: justify;
 }
 
-.home-page-content {
-  /*background-color: #e9ecef*/
+.title-wrapper {
+  text-align: center;
+}
+
+.post-preview {
+}
+
+.post-metadata {
+  display: inline-block;
+  float: left;
+  padding-top: 1em;
+  margin-right: 50px;
 }
 
 .post-description {
-  float: right;
   position: relative;
-  left: -50%;
-  text-align: left
+  text-align: left;
+  display: inline-block;
+  vertical-align: top;
 }
+
 
 .site-header {
   background-color: #8c1515;
@@ -39,9 +50,7 @@ li {
 
 .site-title {
   color: #FFF !important;
-  position: relative;
-  left: 30%; /* or right 50% */
-  text-align: left;
+  float: none;
 }
 
 .page-link {

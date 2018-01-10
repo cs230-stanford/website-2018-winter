@@ -17,12 +17,13 @@
           <ul class="post-list">
             {% for post in site.posts %}
               <li>
-                <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-                <div class="post-description"> 
-                  <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-                  {{ post.excerpt }}
+                <div class="post-preview"> 
+                  <span class="post-meta post-metadata">{{ post.date | date: "%b %-d, %Y" }}</span>
+                  <div class="post-description"> 
+                    <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                    {{ post.excerpt }}
+                  </div>
                 </div>
-                
               </li>
             {% endfor %}
           </ul>
