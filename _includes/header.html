@@ -4,8 +4,10 @@
 
     <a class="site-title" href="{{ "/" | relative_url}}">
     <img src="./assets/seal-dark-red.png" style="height:40px; float: left; margin-left: 20px; margin-right: 20px; margin-top: 10px">
-    {{ site.title | escape }}</a>
+    {{ site.title | escape }}
+    </a>
 
+    {% if site.display-site-nav %}
     <nav class="site-nav">
       <span class="menu-icon"  onclick="changeClass()">
         <svg viewBox="0 0 18 15" width="18px" height="15px">
@@ -15,6 +17,7 @@
         </svg>
       </span>
 
+      
       <div class="trigger" id="trigger">
         {% for my_page in site.pages %}
           {% if my_page.title %}
@@ -22,6 +25,7 @@
           {% endif %}
         {% endfor %}
       </div>
+      {% endif %}
     </nav>
 
   </div>
