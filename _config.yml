@@ -1,0 +1,19 @@
+title: CS230 Deep Learning
+email: ""
+description: "Lecture notes for Stanford CS230"
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://cs230-stanford.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+github_username:  cs230-stanford
+# google_analytics: 
+
+
+# Build settings
+permalink: none
+markdown: kramdown
+theme: minima
+gems:
+  - jekyll-feed
+  - jekyll-seo-tag
+exclude:
+  - Gemfile
+  - Gemfile.lock

@@ -1,0 +1,49 @@
+body {
+  /* font-family: Helvetica, Arial, sans-serif; */
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 300;
+  background-color: #fdfdfd;
+}
+
+.center-image
+{
+    margin: auto;
+    display: block;
+    max-width: 70%;
+}
+
+p {
+    text-align: justify;
+}
+
+li {
+    text-align: justify;
+}
+
+.home-page-content {
+  /*background-color: #e9ecef*/
+}
+
+.post-description {
+  float: right;
+  position: relative;
+  left: -50%;
+  text-align: left
+}
+
+.site-header {
+  background-color: #8c1515;
+}
+
+.site-title {
+  color: #FFF !important;
+  position: relative;
+  left: 30%; /* or right 50% */
+  text-align: left;
+}
+
+.page-link {
+  color: #bbb !important;
+}

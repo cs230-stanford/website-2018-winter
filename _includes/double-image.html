@@ -1,0 +1,14 @@
+<table class="image">
+<tr>
+<td align="center">
+    <div class="center-image" style="max-width: {{ include.size }}"><img src="{{ include.url1 }}" alt="{{ include.caption1 }}" /></div></td>
+<td style="max-width: {{ include.size }}" align="center">
+    <div class="center-image" style="max-width: {{ include.size }}"><img src="{{ include.url2 }}" alt="{{ include.caption2 }}" /></div></td>
+</tr>
+<tr>
+<td align="center">{{ include.caption1 }}</td>
+<td align="center">{{ include.caption2 }}</td>
+</tr>
+<caption align="bottom"><div class="text-center"> {{ include.description }}</div></caption>
+</table>
+<p></p>

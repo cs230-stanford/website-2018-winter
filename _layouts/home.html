@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {% include head.html %}
+  {% seo %}
+
+  <body>
+
+    {% include header.html %}
+
+    <main class="page-content home-page-content" aria-label="Content" onclick="hideClass()">
+      <div class="wrapper">
+        <div class="home">
+          
+          {{ content }}
+
+          <ul class="post-list">
+            {% for post in site.posts %}
+              <li>
+                <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+                <div class="post-description"> 
+                  <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                  {{ post.excerpt }}
+                </div>
+                
+              </li>
+            {% endfor %}
+          </ul>
+
+        </div>
+
+      </div>
+    </main>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>
+
+
