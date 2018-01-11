@@ -5,6 +5,14 @@ body {
   line-height: 1.5;
   font-weight: 300;
   background-color: #fdfdfd;
+
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.home-page-content {
+  padding-bottom: 20px;
 }
 
 .center-image
@@ -27,6 +35,29 @@ li {
 }
 
 .post-preview {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+a.post-preview {
+  color: inherit;
+}
+
+a.post-preview:hover h2 {
+  color: #8c1515;
+  text-decoration: none;
+}
+
+h2.post-preview {
+  font-weight: 700;
+}
+
+.post-preview p {
+  line-height: 0;
+}
+
+.post-preview:last-of-type {
+  border-bottom: none;
 }
 
 .post-metadata {
@@ -56,3 +87,8 @@ li {
 .page-link {
   color: #bbb !important;
 }
+
+.page-content {
+  flex: 1;
+}
+
