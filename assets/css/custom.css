@@ -43,17 +43,16 @@ a.post-preview {
   color: inherit;
 }
 
-a.post-preview:hover h2 {
-  color: #8c1515;
+a.post-preview:hover div.post-preview-title {
+  color: #B70B14;
   text-decoration: none;
+  font-weight: normal;
 }
 
-h2.post-preview {
+
+.post-preview-title {
   font-weight: 700;
-}
-
-.post-preview p {
-  line-height: 0;
+  font-size: 24px;
 }
 
 .post-preview:last-of-type {
@@ -76,7 +75,7 @@ h2.post-preview {
 
 
 .site-header {
-  background-color: #8c1515;
+  background-color: #B70B14;
 }
 
 .site-title {
@@ -92,3 +91,6 @@ h2.post-preview {
   flex: 1;
 }
 
+.site-footer {
+  background-color: #EEF1F5;
+}

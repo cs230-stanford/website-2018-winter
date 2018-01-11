@@ -22,8 +22,8 @@
                 <a class="post-preview" href="{{ post.url | relative_url }}"> 
                   <span class="post-meta post-metadata">{{ post.date | date: "%b %-d, %Y" }}</span>
                   <div class="post-description"> 
-                    <h2>{{ post.title | escape }}</h2>
-                    <p>{{ post.excerpt }}</p>
+                    <div class="post-preview-title">{{ post.title | escape }}</div>
+                    <div class="post-preview-excerpt">{{ post.excerpt }}</div>
                   </div>
                 </a>
               </li>
