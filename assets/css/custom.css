@@ -11,6 +11,10 @@ body {
   flex-direction: column;
 }
 
+.post {
+  padding-top: 30px;
+}
+
 .home-page-content {
   padding-bottom: 20px;
 }
@@ -34,11 +38,6 @@ li {
   text-align: center;
 }
 
-.post-preview {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 24px 0;
-}
-
 a.post-preview {
   color: inherit;
 }
@@ -55,15 +54,41 @@ a.post-preview:hover div.post-preview-title {
   font-size: 24px;
 }
 
-.post-preview:last-of-type {
-  border-bottom: none;
-}
-
 .post-metadata {
   display: inline-block;
   float: left;
-  padding-top: 1em;
-  margin-right: 50px;
+  padding-top: 0.5em;
+  padding-right: 20px;
+  
+}
+
+.post-date {
+  padding-bottom: 5px;
+}
+
+.tags {
+  display: inline-block;
+}
+
+.tag {
+    color: rgba(0,0,0,0.67);
+    padding: 0.1em 0.5em;
+    margin: 0;
+    font-size: 80%;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+@media(min-width: 768px) {
+  .post-metadata {
+    width: 15%;
+  }
+
+  .post-github {
+    float: right;
+  }
 }
 
 .post-description {
@@ -71,7 +96,30 @@ a.post-preview:hover div.post-preview-title {
   text-align: left;
   display: inline-block;
   vertical-align: top;
+  width: 70%;
 }
+
+.post-github {
+  background-color: #E1E4FF;
+  display: inline-block;
+  font-size: 80%;
+  margin-top: 10px;
+  padding: 0.1em 0.5em;
+  border-radius: 15px;
+  margin-bottom: 5px;
+  border: 1px solid rgba(0,0,0,0.4);
+}
+
+a.post-github {
+  color: inherit;
+}
+
+a.post-github:hover {
+  color: inherit;
+  background-color: #C7EEAA;
+  text-decoration: none;
+}
+
 
 
 .site-header {
