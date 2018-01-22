@@ -22,7 +22,7 @@
               {% assign mod = post.module | join:'|' | append:'|' %}
               {% assign modules = modules | append:mod %}
             {% endfor %}
-          {% assign modules = modules | split:'|' | sort %}
+          {% assign modules = modules | split:'|' | sort  | uniq %}
           <!-- end -->
 
           {% for mod in modules %}

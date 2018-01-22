@@ -2,13 +2,14 @@
 layout: post
 title:  "Starter Code: TensorFlow"
 description: "Tutorial for the TensorFlow part of the starter code"
-excerpt: "" 
+excerpt: ""
 author: "Guillaume Genthial, Olivier Moindrot"
-date:   2018-02-01
+date:   2018-01-01
 mathjax: true
 published: false
 tags: tensorflow
 github: https://github.com/cs230-stanford/cs230-starter-code/tensorflow
+module: Tutorials
 ---
 
 <!-- TODO: comment -->
@@ -22,7 +23,7 @@ tensorflow/
     nlp/
 ```
 
-This tutorial is among a series explaining the starter code:  
+This tutorial is among a series explaining the starter code:
 #TODO: add here links to different posts
 - [getting started][post-1]: installation, get started with the code for the projects
 - this post: (TensorFlow) explain the global structure of the code
