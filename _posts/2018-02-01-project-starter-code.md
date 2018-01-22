@@ -6,7 +6,7 @@ excerpt: ""
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-02-01
 mathjax: true
-published: true
+published: false
 tags: tensorflow pytorch
 github: https://github.com/cs230-stanford/cs230-starter-code
 ---
