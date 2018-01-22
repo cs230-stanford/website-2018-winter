@@ -2,18 +2,19 @@
 layout: post
 title:  "Introducing the CS230 Project Starter Code"
 description: "Tutorial for the CS230 project starter code"
-excerpt: "" 
+excerpt: ""
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
-date:   2018-02-01
+date:   2018-01-01
 mathjax: true
 published: false
 tags: tensorflow pytorch
 github: https://github.com/cs230-stanford/cs230-starter-code
+module: Tutorials
 ---
 
 <!-- TODO: comment -->
 
-We are happy to introduce the project starter code for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.  
+We are happy to introduce the project starter code for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
 
 The code contains examples for TensorFlow and PyTorch, in vision and NLP. The structure of the repository is the following:
 ```
@@ -26,7 +27,7 @@ tensorflow/
     nlp/
 ```
 
-This tutorial has multiple parts:  
+This tutorial has multiple parts:
 #TODO: add here links to different posts
 - this post: installation, get started with the code for the projects
 - [second post][tf-post]: (TensorFlow) explain the global structure of the code
@@ -88,7 +89,7 @@ SIGNS/
         ...
 ```
 
-The images are names following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.  
+The images are names following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
 The training set contains 1,080 images and the test set contains 120 images.
 
 
@@ -135,7 +136,7 @@ Now that you have understood the structure of the code, we can try to train a mo
 python train.py --model_dir experiments/test
 ```
 
-We need to pass the model directory in argument, where the hyperparameters are stored in a json file named `params.json`.  
+We need to pass the model directory in argument, where the hyperparameters are stored in a json file named `params.json`.
 Different experiments will be stored in different directories, each with their own `params.json` file. Here is an example:
 ```json
 {

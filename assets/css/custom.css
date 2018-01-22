@@ -49,6 +49,13 @@ a.post-preview:hover div.post-preview-title {
 }
 
 
+.module-header {
+  font-size: 32px;
+  color: #B70B14;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
 .post-preview-title {
   font-weight: 700;
   font-size: 24px;
@@ -59,7 +66,7 @@ a.post-preview:hover div.post-preview-title {
   float: left;
   padding-top: 0.5em;
   padding-right: 20px;
-  
+
 }
 
 .post-date {
@@ -89,6 +96,10 @@ a.post-preview:hover div.post-preview-title {
   .post-github {
     float: right;
   }
+
+  .post-description {
+     width: 70%;
+  }
 }
 
 .post-description {
@@ -96,7 +107,6 @@ a.post-preview:hover div.post-preview-title {
   text-align: left;
   display: inline-block;
   vertical-align: top;
-  width: 70%;
 }
 
 .post-github {
