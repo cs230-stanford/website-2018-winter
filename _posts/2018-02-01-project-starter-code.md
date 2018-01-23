@@ -4,7 +4,7 @@ title:  "Introducing the CS230 Project Starter Code"
 description: "Tutorial for the CS230 project starter code"
 excerpt: ""
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
-date:   2018-01-01
+date:   2018-02-01
 mathjax: true
 published: false
 tags: tensorflow pytorch
