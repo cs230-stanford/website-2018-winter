@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Introducing the CS230 Project Starter Code"
-description: "Tutorial for the CS230 project starter code"
-excerpt: ""
+description: "Tutorial for the CS230 project starter code: introduction and installation"
+excerpt: "Tutorial for the CS230 project starter code: introduction and installation"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-02-01
 mathjax: true

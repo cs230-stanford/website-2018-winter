@@ -2,7 +2,7 @@
 layout: post
 title:  "Starter Code: TensorFlow"
 description: "Tutorial for the TensorFlow part of the starter code"
-excerpt: ""
+excerpt: "Tutorial for the TensorFlow part of the starter code"
 author: "Guillaume Genthial, Olivier Moindrot"
 date:   2018-02-01
 mathjax: true

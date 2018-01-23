@@ -144,6 +144,12 @@ test_filenames = filenames[split_2:]
 ```
 
 
+### References
+TODO: add references
+- coursera
+- our github
+
+
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 <!-- TODO: put correct link -->
 [tf-post]: https://cs230-stanford.github.io/
