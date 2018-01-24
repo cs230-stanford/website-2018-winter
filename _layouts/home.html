@@ -17,44 +17,27 @@
           </div>
 
           <!-- extract different modules -->
-          {% assign modules = "" %}
+          <!-- {% assign modules = "" %}
             {% for post in site.posts %}
               {% assign mod = post.module | join:'|' | append:'|' %}
               {% assign modules = modules | append:mod %}
             {% endfor %}
-          {% assign modules = modules | split:'|' | sort  | uniq %}
+          {% assign modules = modules | split:'|' | sort  | uniq %} -->
           <!-- end -->
 
-          {% for mod in modules %}
-            <div class="module-header">
-              {{ mod }}
-            </div>
-            <ul class="post-list">
-              {% for post in site.posts %}
-                {% if post.module == mod %}
-                  <li>
-                    <a class="post-preview" href="{{ post.url | relative_url }}">
-                      <span class="post-meta post-metadata">
-                        <div class="post-date">{{ post.date | date: "%b %-d, %Y" }}</div>
-                        <div class="tags">
-                          {% for tag in post.tags %}
-                            <div class="tag"> {{ tag }}</div>
-                          {% endfor %}
-                        </div>
-                        </span>
-                      <div class="post-description">
-                        <div class="post-preview-title">{{ post.title | escape }}</div>
-                        <div class="post-preview-excerpt">{{ post.excerpt }}</div>
-                      </div>
-                      {% if post.github %}
-                      <a class="post-github" href="{{ post.github }}">github</a>
-                      {% endif %}
-                    </a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          {% endfor %}
+          <!-- {% for mod in modules %} -->
+          <!-- {% endfor %} -->
+
+          <!-- <div class="module-header">
+              Tutorial
+          </div>
+          <ul class="post-list">
+            {% include post-preview.html id="/project-starter-code" %}
+            {% include post-preview.html id="/psp-tensorflow" %}
+            {% include post-preview.html id="/tensorflow-input-data-image" %}
+            {% include post-preview.html id="/tensorflow-input-data-text" %}
+            {% include post-preview.html id="/train-dev-test-split" %}
+          </ul> -->
 
         </div>
 

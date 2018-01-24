@@ -4,9 +4,9 @@ title:  "Splitting into train, dev and test sets"
 description: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
 excerpt: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
-date:   2018-02-01
+date:   2018-01-24
 mathjax: true
-published: false
+published: true
 tags: theory
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
@@ -17,7 +17,7 @@ module: Tutorials
 <!--       no, we should only include it if train and dev don't come from the same distribution -->
 <!--     - check if we use train/dev or train / dev -->
 
-Splitting your data into training, dev and test sets can be disastrous if not done correctly.  
+Splitting your data into training, dev and test sets can be disastrous if not done correctly.
 In this short tutorial, we will explain the best practices when splitting your dataset.
 
 <!-- TODO: add link to part 3 -->

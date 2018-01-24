@@ -4,16 +4,16 @@ title:  "TensorFlow: building a data pipeline for text"
 description: "Tutorial for the TensorFlow part of the starter code on how to input text data"
 excerpt: "Tutorial for the TensorFlow part of the starter code on how to input text data"
 author: "Guillaume Genthial"
-date:   2018-02-01
+date:   2018-01-24
 mathjax: true
-published: false
+published: true
 tags: tensorflow nlp tf.data
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
 
 <!-- TODO: comment -->
-Building the input pipeline in a machine learning project is always long and painful, and can take more time than building the actual model.  
+Building the input pipeline in a machine learning project is always long and painful, and can take more time than building the actual model.
 In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` to build efficient pipelines for text.
 
 
