@@ -144,7 +144,7 @@ python build_vocab.py --data_dir="data/kaggle"
 
 ## Structure of the code
 
-#TODO: move this to tensorflow / pytorch post
+#TODO: copy this to tensorflow / pytorch post and add more details (model folder)
 The code for each example shares a common structure:
 ```
 data/
@@ -153,11 +153,7 @@ data/
     test/
 experiments/
 model/
-    input_fn.py
-    model_fn.py
-    training.py
-    evaluation.py
-    utils.py
+    *.py
 build_dataset.py
 train.py
 search_hyperparams.py
@@ -166,22 +162,23 @@ evaluate.py
 ```
 
 <!-- TODO: check that the structure is still this -->
-Here is each file or directory purpose:
-- `data/`: will contain all the data of the project (generally not stored on github)
-- `experiments`: contains the different experiments run, the model weights... (will be explained in the following section)
-- `model/`: all the module defining functions used in train or eval
-  - `model/input_fn.py`: where you define the input data pipeline
-  - `model/model_fn.py`: creates the deep learning model
-  - `model/utils.py`: utility functions for handling hyperparams / logging
-  - `model/training.py`: utility functions to train a model
-  - `model/evaluation.py`: utility functions to evaluate a model
+Here is each file or directory's purpose:
+- `data/`: will contain all the data of the project (generally not stored on github), with an explicit train/dev/test split
+- `experiments`: contains the different experiments (will be explained in the following section)
+- `model/`: module defining the model and functions used in train or eval. Different for our PyTorch and TensorFlow examples
+  <!--- `model/input_fn.py`: where you define the input data pipeline-->
+  <!--- `model/model_fn.py`: creates the deep learning model-->
+  <!--- `model/utils.py`: utility functions for handling hyperparams / logging-->
+  <!--- `model/training.py`: utility functions to train a model-->
+  <!--- `model/evaluation.py`: utility functions to evaluate a model-->
 - `build_dataset.py`: creates or transforms the dataset, build the split into train/dev/test
 - `train.py`: train the model on the input data, and evaluate each epoch on the dev set
 - `search_hyperparams.py`: run `train.py` multiple times with different hyperparameters
-- `synthesize_results.py`: explore different experiments in a directory and display a nice table of all the results
-- `evaluate.py`: evaluate the model on the test set (should be run only at the end of your project)
+- `synthesize_results.py`: explore different experiments in a directory and display a nice table of the results
+- `evaluate.py`: evaluate the model on the test set (should be run once at the end of your project)
 
-__Files that you'll need to modify (at first) are `model/input_fn.py` and `model/model_fn.py`__ (in other words, the data and the model).
+__Files that you'll need to modify (at first) are into the `model` module__.
+You should only modify the model definition and the data pipeline at first.
 
 ---
 
@@ -191,11 +188,13 @@ __Files that you'll need to modify (at first) are `model/input_fn.py` and `model
 
 Now that you have understood the structure of the code, we can try to train a model on the data, using the `train.py` script:
 ```bash
-python train.py --model_dir experiments/test
+python train.py --model_dir experiments/base_model
 ```
 
 We need to pass the model directory in argument, where the hyperparameters are stored in a json file named `params.json`.
 Different experiments will be stored in different directories, each with their own `params.json` file. Here is an example:
+
+`experiments/base_model/params.json`:
 ```json
 {
     "learning_rate": 1e-3,
@@ -221,7 +220,7 @@ experiments/
 
 Each directory after training will contain multiple things:
 - `params.json`: the list of hyperparameters, in json format
-- `train.log`: the training log (everything we print)
+- `train.log`: the training log (everything we print to the console)
 - `train_summaries`: train summaries for TensorBoard (TensorFlow only)
 - `eval_summaries`: eval summaries for TensorBoard (TensorFlow only)
 - `last_weights`: weights saved from the 5 last epochs
@@ -230,17 +229,17 @@ Each directory after training will contain multiple things:
 
 ### Training and evaluation
 
-We can now train an example model with the parameters provided in `experiments/test/params.json`:
+We can now train an example model with the parameters provided in the configuration file `experiments/base_model/params.json`:
 ```bash
-python train.py --model_dir experiments/test
+python train.py --model_dir experiments/base_model
 ```
 
 Once training is done, we can evaluate on the test set:
 ```bash
-python evaluate.py --model_dir experiments/test
+python evaluate.py --model_dir experiments/base_model
 ```
 
-This was just a quick example, so please refer to the detailed TensorFlow / PyTorch tutorials for an in-depth explanation of the code.
+This was just a quick example, so please refer to the detailed [TensorFlow][tf-post] / [PyTorch][pytorch-post] tutorials for an in-depth explanation of the code.
 
 
 ### Hyperparameters search
@@ -279,7 +278,15 @@ If you want to aggregate the metrics computed in each experiment (the `metrics_e
 python synthesize_results.py --parent_dir="experiments/learning_rate"
 ```
 
-It will display a table synthesizing the results.
+It will display a table synthesizing the results like this that is compatible with markdown:
+
+```
+|                                               |   accuracy |      loss |
+|:----------------------------------------------|-----------:|----------:|
+| experiments/base_model                        |   0.989    | 0.0550    |
+| experiments/learning_rate/learning_rate_0.01  |   0.939    | 0.0324    |
+| experiments/learning_rate/learning_rate_0.001 |   0.979    | 0.0623    |
+```
 
 
 
@@ -324,6 +331,7 @@ Which one will you [choose][matrix] ?
 
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
+[pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
 [tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
 [tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
 
