@@ -71,6 +71,11 @@ pip install -r requirements.txt
 
 Run `deactivate` if you want to leave the virtual environment. Next time you want to work on the project, just re-run `source .env/bin/activate`.
 
+#### If you have a GPU
+
+TODO: add instructions if GPU
+- for tensorflow, `pip install tensorflow-gpu`
+- for pytorch, ??
 
 
 ### Download the data
@@ -147,7 +152,6 @@ data/
     dev/
     test/
 experiments/
-    test/
 model/
     input_fn.py
     model_fn.py
@@ -159,8 +163,6 @@ train.py
 search_hyperparams.py
 synthesize_results.py
 evaluate.py
-search_hyperparams.py
-synthesize_results.py
 ```
 
 <!-- TODO: check that the structure is still this -->
@@ -173,7 +175,7 @@ Here is each file or directory purpose:
   - `model/utils.py`: utility functions for handling hyperparams / logging
   - `model/training.py`: utility functions to train a model
   - `model/evaluation.py`: utility functions to evaluate a model
-- `build_dataset.py`: script to download data. Makes it easy to clone the repo, download the data and be ready to work
+- `build_dataset.py`: creates or transforms the dataset, build the split into train/dev/test
 - `train.py`: train the model on the input data, and evaluate each epoch on the dev set
 - `search_hyperparams.py`: run `train.py` multiple times with different hyperparameters
 - `synthesize_results.py`: explore different experiments in a directory and display a nice table of all the results
@@ -277,7 +279,7 @@ If you want to aggregate the metrics computed in each experiment (the `metrics_e
 python synthesize_results.py --parent_dir="experiments/learning_rate"
 ```
 
-it will display a table synthesizing the results.
+It will display a table synthesizing the results.
 
 
 
@@ -327,4 +329,4 @@ Which one will you [choose][matrix] ?
 
 <!-- TODO: add a public link -->
 [SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
-[matrix]: https://youtu.be/zE7PKRjrid4?t=1m25s
+[matrix]: https://youtu.be/zE7PKRjrid4?t=1m26s
