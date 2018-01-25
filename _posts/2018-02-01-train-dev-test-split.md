@@ -2,7 +2,7 @@
 layout: post
 title:  "Splitting into train, dev and test sets"
 description: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
-excerpt: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
+excerpt: "Best practices to split your dataset into train, dev and test sets"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
 mathjax: true

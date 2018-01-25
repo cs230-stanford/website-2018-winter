@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Introducing the CS230 Project Starter Code"
+title:  "Introducing the Project Starter Code"
 description: "Tutorial for the CS230 project starter code: introduction and installation"
-excerpt: "Tutorial for the CS230 project starter code: introduction and installation"
+excerpt: "Introduction and installation"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
 mathjax: true
@@ -28,7 +28,7 @@ tensorflow/
 ```
 
 This tutorial has multiple parts:
-#TODO: add here links to different posts
+
 - this post: installation, get started with the code for the projects
 - [second post][tf-post]: (TensorFlow) explain the global structure of the code
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
@@ -46,7 +46,7 @@ This tutorial has multiple parts:
 
 ## Installation
 
-Each of the four examples (TensorFlow / PyTorch + Vision / NLP) is self-contained and can be used independtly of the others.
+Each of the four examples (TensorFlow / PyTorch + Vision / NLP) is self-contained and can be used independently of the others.
 
 Suppose you want to work with TensorFlow on a project involving computer vision. You can first clone the whole github repository and only keep the `tensorflow/vision` folder:
 
@@ -69,10 +69,13 @@ source .env/bin/activate
 pip install -r requirements.txt
 ```
 
-Run `deactivate` if you want to leave the virtual environment.
+Run `deactivate` if you want to leave the virtual environment. Next time you want to work on the project, just re-run `source .env/bin/activate`.
 
 
-### Download the data (for vision only)
+
+### Download the data
+
+#### Vision
 
 For the vision example, we have provided a script `download_data.sh` located in the folder `data`.
 You can download the dataset by running `sh download_data.sh` in your terminal.
@@ -92,6 +95,41 @@ SIGNS/
 The images are names following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
 The training set contains 1,080 images and the test set contains 120 images.
 
+#### Natural Language Processing (NLP)
+
+*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/nlp/README.md)*
+
+We provide a small subset of the kaggle dataset (30 sentences) for testing in `data/small` but you are encouraged to download the original version on the [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) website.
+
+1. __[kaggle] Download the dataset__ `ner_dataset.csv` on [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) and save it under the `nlp/data/kaggle` directory. Make sure you download the simple version `ner_dataset.csv` and NOT the full version `ner.csv`.
+
+2. __[kaggle] Build the dataset__ Run the following script
+```
+python build_kaggle_dataset.py
+```
+It will extract the sentences and labels from the dataset, split it into train / test / dev and save it in a convenient format for our model. Here is the structure of the data
+```
+kaggle/
+    train/
+        sentences.txt
+        labels.txt
+    test/
+        sentences.txt
+        labels.txt
+    dev/
+        sentences.txt
+        labels.txt
+```
+*Debug* If you get some errors, check that you downloaded the right file and saved it in the right directory. If you have issues with encoding, try running the script with python 2.7.
+
+3. __[kaggle and small] Build the vocabulary__ For both datasets, `data/small` and `data/kaggle` you need to build the vocabulary, with
+```
+python build_vocab.py --data_dir="data/small"
+```
+or
+```
+python build_vocab.py --data_dir="data/kaggle"
+```
 
 ---
 
@@ -100,15 +138,21 @@ The training set contains 1,080 images and the test set contains 120 images.
 The code for each example shares a common structure:
 ```
 data/
-    download_data.sh
+    train/
+    dev/
+    test/
 experiments/
+    test/
 model/
-    model.py
+    model_fn.py
+    input_fn.py
     utils.py
-input_data.py
+    training.py
+    evaluation.py
 train.py
+search_hyperparams.py
+synthesize_results.py
 evaluate.py
-hyperparams_search.py
 ```
 
 <!-- TODO: check that the structure is still this -->
@@ -117,13 +161,17 @@ Here is each file or directory purpose:
   - `data/download_data.sh`: script to download data. Makes it easy to clone the repo, download the data and be ready to work
 - `experiments`: contains the different experiments run, the model weights... (will be explained in the following section)
 - `model/`: all the files related to creating the model (here only one) and utilities
-  - `model/model.py`: creates the deep learning model
+  - `model/model_fn.py`: creates the deep learning model
+  - `model/input_fn.py`: where you define the input data pipeline
   - `model/utils.py`: utility functions for handling hyperparams / logging
-- `input_data.py`: where you define the input data pipeline
+  - `model/training.py`: utility functions to train a model
+  - `model/evaluation.py`: utility functions to evaluate a model
 - `train.py`: train the model on the input data, and evaluate each epoch on the dev set
-- `evaluate.py`: evaluate the model on the test set
-- `hyperparams_search.py`: run `train.py` multiple times with different hyperparameters
+- `search_hyperparams.py`: run `train.py` multiple times with different hyperparameters
+- `synthesize_results.py`: explore different experiments in a directory and display a nice table of all the results
+- `evaluate.py`: evaluate the model on the test set (should be run only at the end of your project)
 
+__Files that you'll need to modify are `model/input_fn.py` and `model/model_fn.py`__ (in other words, the data and the model).
 
 ---
 
@@ -142,7 +190,7 @@ Different experiments will be stored in different directories, each with their o
 {
     "learning_rate": 1e-3,
     "batch_size": 32,
-    "num_epochs": 20,
+    "num_epochs": 20
 }
 ```
 
@@ -150,10 +198,15 @@ The structure of `experiments` after running a few different models might look l
 ```
 experiments/
     base_model/
+        params.json
+        ...
     learning_rate/
         lr_0.1/
+            params.json
         lr_0.01/
+            params.json
     batch_norm/
+        params.json
 ```
 
 Each directory after training will contain multiple things:
@@ -180,12 +233,89 @@ python evaluate.py --model_dir experiments/test
 This was just a quick example, so please refer to the detailed TensorFlow / PyTorch tutorials for an in-depth explanation of the code.
 
 
+### Hyperparameters search
+
+We provide an example that will call `train.py` with different values of learning rate. We first create a directory
+```
+experiments/
+    learning_rate/
+        params.jon
+```
+
+with a `params.json` file that contains the other hyperparameters. Then, by calling
+
+
+```
+python search_hyperparams.py --parent_dir="experiments/learning_rate"
+```
+
+It will train and evaluate a model with different values of learning rate defined in `search_hyperparams.py` and create a new directory for each experiment under `experiments/learning_rate/`, like
+
+```
+experiments/
+    learning_rate/
+        learning_rate_0.001/
+            metrics_eval_best_weights.json
+        learning_rate_0.01/
+            metrics_eval_best_weights.json
+        ...
+```
+
+### Display the results of multiple experiments
+
+If you want to aggregate the metrics computed in each experiment (the `metrics_eval_best_weights.json` files), simply run
+
+```
+python synthesize_results.py --parent_dir="experiments/learning_rate"
+```
+
+it will display a table synthesizing the results.
+
+
+
+### Tensorflow or PyTorch ?
+
+Both framework have their pros and cons:
+
+__Tensorflow__
+- mature, most of the models and layers are already implemented in the library.
+- documented and plenty of code / tutorials online
+- built for large-scale deployment and used by a lot of companies
+- has some very useful tools like `Tensorboard`
+- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
+- transparent use of the GPU
+
+__PyTorch__
+- younger, but also well documented and fast-growing community
+- more pythonic and numpy-like approach, easier to get used to the dynamic-graph paradigm
+- designed for faster prototyping and research
+- easy to debug
+
+
+What will you choose ?
+
+<div style="text-align: center;">
+    <div style="display: inline-block; margin-right: 50px; margin-left: 50px;">
+        <a href="https://cs230-stanford.github.io/psp-pytorch.html" style="text-decoration: none">
+            <h3 style="background-color: #B70B14; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
+                PyTorch
+            </h3>
+        </a>
+    </div>
+    <div style="display: inline-block; margin-right: 50px; margin-left: 50px" >
+        <a href="https://cs230-stanford.github.io/psp-tensorflow.html" style="text-decoration: none">
+            <h3 style="background-color: #3168FC; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
+                Tensorflow
+            </h3>
+        </a>
+    </div>
+</div>
 
 
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 <!-- TODO: put correct link -->
-[tf-post]: https://cs230-stanford.github.io/
+[tf-post]: https://cs230-stanford.github.io/psp-tensorflow.html
 <!-- TODO: put correct link -->
-[tf-vision]: https://cs230-stanford.github.io/
+[tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
 <!-- TODO: put correct link -->
-[tf-nlp]: https://cs230-stanford.github.io/
+[tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
