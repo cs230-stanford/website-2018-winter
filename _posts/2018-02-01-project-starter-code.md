@@ -319,7 +319,7 @@ What will you choose ?
 
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 <!-- TODO: put correct link -->
-[tf-post]: https://cs230-stanford.github.io/psp-tensorflow.html
+[tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
 <!-- TODO: put correct link -->
 [tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
 <!-- TODO: put correct link -->
