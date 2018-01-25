@@ -1,0 +1,23 @@
+{% for post in site.posts %}
+  {% if post.id == include.id %}
+    <li>
+      <a class="post-preview" href="{{ post.url | relative_url }}">
+        <span class="post-meta post-metadata">
+          <div class="post-date">{{ post.date | date: "%b %-d, %Y" }}</div>
+          <div class="tags">
+            {% for tag in post.tags %}
+              <div class="tag"> {{ tag }}</div>
+            {% endfor %}
+          </div>
+          </span>
+        <div class="post-description">
+          <div class="post-preview-title">{{ post.title | escape }}</div>
+          <div class="post-preview-excerpt">{{ post.excerpt }}</div>
+        </div>
+        {% if post.github %}
+        <a class="post-github" href="{{ post.github }}">github</a>
+        {% endif %}
+      </a>
+    </li>
+  {% endif %}
+{% endfor %}

@@ -4,9 +4,9 @@ title:  "Starter Code: TensorFlow"
 description: "Tutorial for the TensorFlow part of the starter code"
 excerpt: "Tutorial for the TensorFlow part of the starter code"
 author: "Guillaume Genthial, Olivier Moindrot"
-date:   2018-02-01
+date:   2018-01-24
 mathjax: true
-published: false
+published: true
 tags: tensorflow
 github: https://github.com/cs230-stanford/cs230-starter-code/tensorflow
 module: Tutorials
