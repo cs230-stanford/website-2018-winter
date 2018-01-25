@@ -97,32 +97,37 @@ The training set contains 1,080 images and the test set contains 120 images.
 
 ## Structure of the code
 
+#TODO: move this to tensorflow / pytorch post
 The code for each example shares a common structure:
 ```
 data/
-    download_data.sh
 experiments/
 model/
-    model.py
+    input_fn.py
+    model_fn.py
+    training.py
+    evaluation.py
     utils.py
-input_data.py
+build_dataset.py
 train.py
 evaluate.py
-hyperparams_search.py
+search_hyperparams.py
+synthesize_results.py
 ```
 
 <!-- TODO: check that the structure is still this -->
+<!-- TODO: -->
 Here is each file or directory purpose:
 - `data/`: will contain all the data of the project (generally not stored on github)
-  - `data/download_data.sh`: script to download data. Makes it easy to clone the repo, download the data and be ready to work
 - `experiments`: contains the different experiments run, the model weights... (will be explained in the following section)
-- `model/`: all the files related to creating the model (here only one) and utilities
-  - `model/model.py`: creates the deep learning model
+- `model/`: all the module defining functions used in train or eval
+  - `model/input_fn.py`: where you define the input data pipeline
+  - `model/model_fn.py`: creates the deep learning model
   - `model/utils.py`: utility functions for handling hyperparams / logging
-- `input_data.py`: where you define the input data pipeline
+- `build_dataset.py`: script to download data. Makes it easy to clone the repo, download the data and be ready to work
 - `train.py`: train the model on the input data, and evaluate each epoch on the dev set
 - `evaluate.py`: evaluate the model on the test set
-- `hyperparams_search.py`: run `train.py` multiple times with different hyperparameters
+- `search_hyperparams.py`: run `train.py` multiple times with different hyperparameters
 
 
 ---
