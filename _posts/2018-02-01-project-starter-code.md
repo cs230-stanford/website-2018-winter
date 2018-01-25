@@ -308,7 +308,7 @@ What will you choose ?
         </a>
     </div>
     <div style="display: inline-block; margin-right: 50px; margin-left: 50px" >
-        <a href="https://cs230-stanford.github.io/psp-tensorflow.html" style="text-decoration: none">
+        <a href="https://cs230-stanford.github.io/tensorflow-psp.html" style="text-decoration: none">
             <h3 style="background-color: #3168FC; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
                 Tensorflow
             </h3>
