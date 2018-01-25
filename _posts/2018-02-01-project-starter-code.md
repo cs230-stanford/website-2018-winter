@@ -38,7 +38,7 @@ This tutorial has multiple parts:
 
 - help students kickstart their project with a working codebase
 - in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
-- through this codebase, explain and demonstrate the best practice for structuring a deep learning project
+- through this codebase, explain and demonstrate the best practices for structuring a deep learning project
 
 
 
@@ -77,10 +77,11 @@ Run `deactivate` if you want to leave the virtual environment. Next time you wan
 
 #### Vision
 
-For the vision example, we have provided a script `download_data.sh` located in the folder `data`.
-You can download the dataset by running `sh download_data.sh` in your terminal.
+*All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/README.md)*
 
-This will download the SIGNS dataset (~1Gb) containing photos of hands signs making numbers between 0 and 5.
+For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
+
+This will download the SIGNS dataset (~1.1 GB) containing photos of hands signs making numbers between 0 and 5.
 Here is the structure of the data:
 ```
 SIGNS/
@@ -92,8 +93,11 @@ SIGNS/
         ...
 ```
 
-The images are names following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
+The images are named following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
 The training set contains 1,080 images and the test set contains 120 images.
+
+Once the download is complete, move the dataset into `data/SIGNS`. Run the script `build_dataset.py` which will resize the images to size `(64, 64)`. The new reiszed dataset will be located by default in `data/64x64_SIGNS`.
+
 
 #### Natural Language Processing (NLP)
 
@@ -160,7 +164,6 @@ synthesize_results.py
 ```
 
 <!-- TODO: check that the structure is still this -->
-<!-- TODO: -->
 Here is each file or directory purpose:
 - `data/`: will contain all the data of the project (generally not stored on github)
 - `experiments`: contains the different experiments run, the model weights... (will be explained in the following section)
@@ -176,7 +179,7 @@ Here is each file or directory purpose:
 - `synthesize_results.py`: explore different experiments in a directory and display a nice table of all the results
 - `evaluate.py`: evaluate the model on the test set (should be run only at the end of your project)
 
-__Files that you'll need to modify are `model/input_fn.py` and `model/model_fn.py`__ (in other words, the data and the model).
+__Files that you'll need to modify (at first) are `model/input_fn.py` and `model/model_fn.py`__ (in other words, the data and the model).
 
 ---
 
@@ -286,7 +289,7 @@ __Tensorflow__
 - mature, most of the models and layers are already implemented in the library.
 - documented and plenty of code / tutorials online
 - built for large-scale deployment and used by a lot of companies
-- has some very useful tools like `Tensorboard`
+- has some very useful tools like Tensorboard for visualization
 - but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
 - transparent use of the GPU
 
@@ -297,19 +300,19 @@ __PyTorch__
 - easy to debug
 
 
-What will you choose ?
+Which one will you [choose][matrix] ?
 
 <div style="text-align: center;">
     <div style="display: inline-block; margin-right: 50px; margin-left: 50px;">
         <a href="https://cs230-stanford.github.io/psp-pytorch.html" style="text-decoration: none">
-            <h3 style="background-color: #B70B14; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
+            <h3 style="background-color: #3168FC; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
                 PyTorch
             </h3>
         </a>
     </div>
     <div style="display: inline-block; margin-right: 50px; margin-left: 50px" >
         <a href="https://cs230-stanford.github.io/tensorflow-psp.html" style="text-decoration: none">
-            <h3 style="background-color: #3168FC; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
+            <h3 style="background-color: #B70B14; color: white; border: 2px solid rgba(0,0,0,0.4); border-radius: 25px; padding: 0.2em 0.6em;">
                 Tensorflow
             </h3>
         </a>
@@ -318,9 +321,10 @@ What will you choose ?
 
 
 [github]: https://github.com/cs230-stanford/cs230-starter-code
-<!-- TODO: put correct link -->
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
-<!-- TODO: put correct link -->
 [tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
-<!-- TODO: put correct link -->
 [tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
+
+<!-- TODO: add a public link -->
+[SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
+[matrix]: https://youtu.be/zE7PKRjrid4?t=1m25s
