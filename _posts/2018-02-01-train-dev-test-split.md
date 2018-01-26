@@ -35,13 +35,14 @@ This tutorial has multiple parts:
 
 
 ---
-## Theory: how to split into train / train-dev / dev / test
+## Theory: how to choose the train, train-dev, dev and test sets
 
 TODO: summarize content from the class
 
 TODO: insist on having same distribution for train / dev / test if possible, or at least dev / test
 - make sure that the code does it correctly
 - bad example: `dev = filenames[:100]`, but the first 100 filenames are all of the same label
+- introduce `train-dev` and when we need it
 
 
 ### Objectives
@@ -55,7 +56,7 @@ TODO: insist on having same distribution for train / dev / test if possible, or 
 
 
 ---
-## Split into three directories
+## Practice: have a reproducible script
 
 The best and most secure way to split the data into these three sets is to have one directory for train, one for dev and one for test.
 
@@ -80,21 +81,23 @@ data/
 
 Often a dataset will come either in one big set that you will split into train, dev and test. Academic dataests often come already with a train/test split (to be able to compare different models on a common test set).
 
-You will therefore have to build yourself the split before beginning your project.
+You will therefore have to build yourself the train/dev split before beginning your project.
 
 A good practice that is true for every software, but especially in machine learning, is to make every step of your project reproducible.
 It should be possible to start the project again from scratch and create the same exact split between train, dev and test sets.
 
-One way to do it is to have a `build.py` file that will be called once at the start of the project and will create the split into train, dev and test.
-We also need to make sure that any randomness involved in `build.py` uses a **fixed seed**, so that every call to `python build.py` will result in the same outputs.
+The cleanest way to do it is to have a `build_dataset.py` file that will be called once at the start of the project and will create the split into train, dev and test. Optionally, calling `build_dataset.py` can also download the dataset.  
+We need to make sure that any randomness involved in `build_dataset.py` uses a **fixed seed**, so that every call to `python build_dataset.py` will result in the same output.
 
 >Never do the split manually (by moving files into different folders one by one), because you wouldn't be able to reproduce it.
 
----
-## Split at the beginning of training
+_An example `build_dataset.py` file is the one used [here][build-dataset] in the vision example project._
 
-If the build process contained in `build.py` is not very long, it is possible to do it every time we train the model.
-When loading the data, we can just split it into three sets like this for 80% train, 10% dev and 10% test:
+---
+## Details of implementation
+
+Let's illustrate the good practices with a simple example. We have filenames of images that we want to split into train, dev and test.  
+Here is a way to split the data into three sets: 80% train, 10% dev and 10% test.
 ```python
 filenames = ['img_000.jpg', 'img_001.jpg', ...]
 
@@ -109,7 +112,7 @@ test_filenames = filenames[split_2:]
 
 Often we have a big dataset and want to split it into train, dev and test set. In most cases, each split will have the same distribution as the others.
 
-Suppose that the first 100 images (`img_000.jpg` to `img_099.jpg`) have label 0, the 100 following label 1, ... and the last 100 images have label 9. Then the above code will make the dev set only have label 8, and the test set only label 9.
+__What could go wrong?__ Suppose that the first 100 images (`img_000.jpg` to `img_099.jpg`) have label 0, the 100 following label 1, ... and the last 100 images have label 9. Then the above code will make the dev set only have label 8, and the test set only label 9.
 
 We therefore need to ensure that the filenames are correctly shuffled before splitting the data.
 ```python
@@ -123,16 +126,21 @@ dev_filenames = filenames[split_1:split_2]
 test_filenames = filenames[split_2:]
 ```
 
+This should give approximately the same distribution for train, dev and test sets. If necessary, it is also possible to split each class into 80%/10%/10% so that the distribution is **exactly** the same in each set.
+
 
 #### Make it reproducible
 
-Here again we need to make sure that the train/dev/test split stays the same across every experiment, so we have to make it reproducible.
+We talked earlier about making the script reproducible.
+Here we need to make sure that the train/dev/test split stays the same across every run of `python build_dataset.py`.
 
 The code above doesn't ensure reproducibility, since each time you run it you will have a different split.
->To make sure to have the same dev set each time this code is run, we need to fix the random seed before shuffling the filenames:
+>To make sure to have the same split each time this code is run, we need to fix the random seed before shuffling the filenames:
 
+Here is a good way to remove any randomness in the process:
 ```python
 filenames = ['img_000.jpg', 'img_001.jpg', ...]
+filenames.sort()  # make sure that the filenames have a fixed order before shuffling
 random.seed(230)
 random.shuffle(filenames)
 
@@ -142,6 +150,8 @@ train_filenames = filenames[:split_1]
 dev_filenames = filenames[split_1:split_2]
 test_filenames = filenames[split_2:]
 ```
+
+The call to `filenames.sort()` makes sure that if you build `filenames` in a different way, the output is still the same.
 
 
 ### References
@@ -157,3 +167,5 @@ TODO: add references
 [tf-vision]: https://cs230-stanford.github.io/
 <!-- TODO: put correct link -->
 [tf-nlp]: https://cs230-stanford.github.io/
+
+[build-dataset]: https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/build_dataset.py
