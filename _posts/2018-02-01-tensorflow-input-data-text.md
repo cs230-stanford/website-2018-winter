@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "TensorFlow: building a data pipeline for text"
+title:  "Building a text data pipeline"
 description: "Tutorial for the TensorFlow part of the starter code on how to input text data"
 excerpt: "How to feed text data with tf.data"
 author: "Guillaume Genthial"

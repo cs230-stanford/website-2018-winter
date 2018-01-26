@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "TensorFlow: starter-code"
+title:  "Starter-code"
 description: "Tutorial for the TensorFlow part of the starter code"
 excerpt: "Introduction to Tensorflow"
 author: "Guillaume Genthial, Olivier Moindrot"
@@ -48,9 +48,9 @@ __Table of Content__
 
 For an official __introduction__ to the tensorflow concepts of `Graph()` and `Session()`, check out the [official introduction on tensorflow.org](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial).
 
-For a __simple example on MNIST__, read [the official tutorial](https://www.tensorflow.org/get_started/mnist/beginners), but keep in mind that some of the techniques are not recommended for big projects (they use `placeholders` instead of the new `tf.data` pipeline, don't use `tf.layers`, etc.).
+For a __simple example on MNIST__, read [the official tutorial](https://www.tensorflow.org/get_started/mnist/beginners), but keep in mind that some of the techniques are not recommended for big projects (they use `placeholders` instead of the new `tf.data` pipeline, they don't use `tf.layers`, etc.).
 
-For a more __detailed tour__ of Tensorflow, reading the [programmer's guide](https://www.tensorflow.org/programmers_guide/) is definitely worth the time. You'll learn more about Tensors, Variables, Graphs and Session, as well as the saving mechanism or how to import data.
+For a more __detailed tour__ of Tensorflow, reading the [programmer's guide](https://www.tensorflow.org/programmers_guide/) is definitely worth the time. You'll learn more about Tensors, Variables, Graphs and Sessions, as well as the saving mechanism or how to import data.
 
 For a __more advanced use__ with concrete examples and code, we recommend reading [the relevant tutorials](https://www.tensorflow.org/tutorials/) for your project. You'll find good code and explanations, going from [sequence-to-sequence in Tensorflow](https://www.tensorflow.org/tutorials/seq2seq) to an [introduction to TF layers for convolutionnal Neural Nets](https://www.tensorflow.org/tutorials/layers#getting_started).
 
@@ -110,7 +110,7 @@ Now, let's get to __step 2__, and evaluate this node. We'll need to create a `tf
 ```python
 with tf.Session() as sess:
     print(sess.run(x))
-> 0.0
+> 1.0
 ```
 
 ### A word about [variable scopes](https://www.tensorflow.org/versions/r0.12/how_tos/variable_scope/#the_problem)

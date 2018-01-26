@@ -49,11 +49,18 @@ a.post-preview:hover div.post-preview-title {
 }
 
 
-.module-header {
+.module-h1 {
+  font-weight: 600;
   font-size: 32px;
   color: #B70B14;
   text-align: center;
-  margin-bottom: 25px;
+}
+
+.module-h2 {
+  font-size: 25px;
+  color: black;
+  text-align: center;
+  margin: 5px;
 }
 
 .post-preview-title {

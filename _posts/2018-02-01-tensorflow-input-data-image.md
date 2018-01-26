@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "TensorFlow: building an image data pipeline"
+title:  "Building an image data pipeline"
 description: "Tutorial for the TensorFlow part of the starter code on how to input image data"
 excerpt: "How to feed image data with tf.data"
 author: "Olivier Moindrot"
