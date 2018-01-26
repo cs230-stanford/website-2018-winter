@@ -84,13 +84,202 @@ Once you get the high-level idea, depending on your task and dataset, you might 
 Once you get something working for your dataset, feel free to edit any part of the code to suit your own needs.
 
 
+## Graph, Session and nodes
+
+When designing a Model in Tensorflow, there are [basically 2 steps](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial)
+1. building the computational graph, the nodes and operations and how they are connected to each other
+2. evaluating / running this graph on some data
+
+As an example of __step 1__, if we define a TF constant (=a graph node), when we print it, we get a *Tensor* object (= a node) and not its value
+
+```python
+x = tf.constant(1., dtype=tf.float32, name="my-node-x")
+print(x)
+> Tensor("my-node-x:0", shape=(), dtype=float32)
+```
+
+Now, let's get to __step 2__, and evaluate this node. We'll need to create a `tf.Session` that will take care of actually evaluating the graph
+
+```python
+with tf.Session() as sess:
+    print(sess.run(x))
+> 0.0
+```
+
+
+__A word about [variable scopes](https://www.tensorflow.org/versions/r0.12/how_tos/variable_scope/#the_problem)__
+When creating a node, Tensorflow will have a name for it. You can add a prefix to the nodes names. This is done with the `variable_scope` mechanism
+
+```python
+with tf.variable_scope('model'):
+    x1 = tf.get_variable('x', [], dtype=tf.float32) # get or create variable with name 'model/x:0'
+    print(x1)
+> <tf.Variable 'model/x:0' shape=() dtype=float32_ref>
+```
+
+> What happens if I instantiate `x` twice ?
+
+```python
+with tf.variable_scope('model'):
+    x2 = tf.get_variable('x', [], dtype=tf.float32)
+> ValueError: Variable model/x already exists, disallowed.
+```
+
+When trying to create a new variable named `model/x`, we run into an Exception as a variable with the same name already exists. Thanks to this naming mechanism, you can actually controll which value you give to the different nodes, and at different points of your code, decide to have 2 python objects correspond to the same node !
+
+```python
+with tf.variable_scope('model', reuse=True):
+    x2 = tf.get_variable('x', [], dtype=tf.float32)
+    print(x2)
+> <tf.Variable 'model/x:0' shape=() dtype=float32_ref>
+```
+
+We can check that they indeed have the same value
+```python
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer()) # Initialize the Variables
+    sess.run(tf.assign(x1, tf.constant(2.)))    # Change the value of x1
+    print("x1 = ", sess.run(x1), " x2 = ", sess.run(x2))
+
+> x1 =  2.0  x2 =  2.0
+```
+
+> Starter-code design choice: theoretically, the graphs you define for training and inference can be different, but they still need to share their weights. To remedy this issue, there are two possibilities:
+1. re-build the graph, create a new session and reload the weights from some file when we switch between training and inference
+2. create all the nodes for training and inference in the graph and make sure that the python code does not create the nodes twice by using the `reuse=True` trick explained above.
+We decided to go for this option. For those interested in the problem of making training and eval graphs coexist, you can read this [discussion](https://www.tensorflow.org/tutorials/seq2seq#building_training_eval_and_inference_graphs).
+
 ## Creating the input data pipeline
 
+You can read the [official tutorial](https://www.tensorflow.org/programmers_guide/datasets). The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Previous data pipelines had to wait for the CPU to load the data.
+
+### Introduction to `tf.data` with a Text Example
+
+
+Let's go over a quick example. Let's say we have a `.txt` file containing sentences
+
+```
+I use Tensorflow
+You use PyTorch
+Both are great
+```
+
+Let's read this file with the `tf.data` API:
+
+```python
+dataset = tf.data.TextLineDataset("file.txt")
+```
+
+Let's try to iterate over it
+
+```python
+for line in dataset:
+    print(line)
+```
+
+We get an error
+```python
+> TypeError: 'TextLineDataset' object is not iterable
+```
+
+> Wait... What just happened ? I thought it was supposed to read the data.
+
+What's really happening is that `dataset` is a node of the Tensorflow `Graph` that contains instructions to read the file. We need to initialize the graph and evaluate this node in a Session if we want to read it. While this may sound awfully complicated, this is quite the oposite : now, even the dataset object is a part of the graph, so you don't need to worry about how to feed the data into your model !
+
+We need to add a few things to make it work. First, let's create an `iterator` object over the dataset
+
+```
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+```
+
+Now, `next_element` is a graph's node that will contain the next element of iterator over the Dataset at each execution. Now, let's run it
+
+```python
+with tf.Session() as sess:
+    for i in range(3):
+        print(sess.run(next_element))
+
+>'I use Tensorflow'
+>'You use PyTorch'
+>'Both are great'
+```
+
+
+Now that you understand the idea behind the `tf.data` API, let's quickly review some more advanced tricks. First, you can easily apply transformations to your dataset. For instance, splitting words by space is as easy as adding one line
+```python
+dataset = dataset.map(lambda string: tf.string_split([string]).values)
+```
+
+Shuffling the dataset is also straightforward
+
+```python
+dataset = dataset.shuffle(buffer_size=3)
+```
+
+It will load 3 elements, shuffle them, iterate over them, load 3 new elements, etc.
+
+You can also create batches
+
+```
+dataset = dataset.batch(2)
+```
+
+and pre-fetch the data on the GPU (in other words, it will always have one batch ready on the GPU).
+
+```
+dataset = dataset.prefetch(1)
+```
+
+Now, let's see what our iterator has become
+
+```python
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+with tf.Session() as sess:
+    print(sess.run(next_element))
+
+>[['Both' 'are' 'great']
+  ['You' 'use' 'PyTorch']]
+ ```
+
+and as you can see, we now have a shuffled batch !
+
+### Design choice of the starter-code
+
+As you'll see in the `input_fn.py` files, we decided to use an initializable iterator.
+
+```python
+dataset = tf.data.TextLineDataset("file.txt")
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+init_op = iterator.initializer
+```
+
+Its behavior is similar to the one above, but thanks to the `init_op` we can chose to "restart" from the beginning. This will become quite handy when we want to perform multiple epochs !
+
+```python
+with tf.Session() as sess:
+    # Initialize the iterator
+    sess.run(init_op)
+    print(sess.run(next_element))
+    print(sess.run(next_element))
+    # Move the iterator back to the beginning
+    sess.run(init_op)
+    print(sess.run(next_element))
+
+> 'I use Tensorflow'
+  'You use PyTorch'
+  'I use Tensorflow'
+```
+
+> As we use only one session over the different epochs, we need to be able to restart the iterator. Some other approaches (like `tf.Estimator`) alleviate the need of using `initializable` iterators by recreating a session at each new epoch. But this comes at a cost: the weights and the graph must be re-loaded and re-initialized with each new Session !
+
 <!-- #TODO: -->
-- explain `tf.data`
+<!-- - explain `tf.data`
   - refer to tensorflow tutorials (we won't go into all the details)
 - explain shuffling
-- explain initializable iterator, why we did this (training / eval)
+- explain initializable iterator, why we did this (training / eval) -->
 
 
 ## Defining the model
