@@ -160,12 +160,12 @@ We decided to go for this option. For those interested in the problem of making 
 
 ## Creating the input data pipeline
 
-You can read the [official tutorial](https://www.tensorflow.org/programmers_guide/datasets). The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Previous data pipelines had to wait for the CPU to load the data.
+You can read the [official tutorial](https://www.tensorflow.org/programmers_guide/datasets). The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Former data pipelines made the GPU wait for the CPU to load the data, leading to performance issues.
 
 ### Introduction to `tf.data` with a Text Example
 
 
-Let's go over a quick example. Let's say we have a `.txt` file containing sentences
+Let's go over a quick example. Let's say we have a `file.txt` file containing sentences
 
 ```
 I use Tensorflow
@@ -254,7 +254,7 @@ with tf.Session() as sess:
   ['You' 'use' 'PyTorch']]
  ```
 
-and as you can see, we now have a shuffled batch !
+and as you can see, we now have a batch created from the shuffled Dataset !
 
 ### Why we use `initializable` iterators
 
