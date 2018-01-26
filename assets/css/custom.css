@@ -108,7 +108,6 @@ a.post-preview:hover div.post-preview-title {
     margin-bottom: 5px;
     margin-right: 5px;
     display: inline-block;
-    float: left;
 }
 
 @media(min-width: 768px) {
