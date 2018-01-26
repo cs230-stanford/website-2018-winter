@@ -73,9 +73,9 @@ Run `deactivate` if you want to leave the virtual environment. Next time you wan
 
 #### If you have a GPU
 
-TODO: add instructions if GPU
-- for tensorflow, `pip install tensorflow-gpu`
-- for pytorch, ??
+<!-- TODO: add instructions if GPU -->
+- for tensorflow, just run `pip install tensorflow-gpu`. When both `tensorflow` and `tensorflow-gpu` are installed, if a GPU is available, `tensorflow` will automatically use it, making it transparent for you to use. Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
+<!-- - for pytorch, ?? -->
 
 
 ### Download the data
@@ -133,18 +133,19 @@ kaggle/
 
 3. __[kaggle and small] Build the vocabulary__ For both datasets, `data/small` and `data/kaggle` you need to build the vocabulary, with
 ```
-python build_vocab.py --data_dir="data/small"
+python build_vocab.py --data_dir  data/small
 ```
 or
 ```
-python build_vocab.py --data_dir="data/kaggle"
+python build_vocab.py --data_dir data/kaggle
 ```
 
 ---
 
 ## Structure of the code
 
-#TODO: copy this to tensorflow / pytorch post and add more details (model folder)
+<!-- TODO: copy this to tensorflow / pytorch post and add more details (model folder) -->
+
 The code for each example shares a common structure:
 ```
 data/
@@ -255,7 +256,7 @@ with a `params.json` file that contains the other hyperparameters. Then, by call
 
 
 ```
-python search_hyperparams.py --parent_dir="experiments/learning_rate"
+python search_hyperparams.py --parent_dir experiments/learning_rate
 ```
 
 It will train and evaluate a model with different values of learning rate defined in `search_hyperparams.py` and create a new directory for each experiment under `experiments/learning_rate/`, like
@@ -275,7 +276,7 @@ experiments/
 If you want to aggregate the metrics computed in each experiment (the `metrics_eval_best_weights.json` files), simply run
 
 ```
-python synthesize_results.py --parent_dir="experiments/learning_rate"
+python synthesize_results.py --parent_dir experiments/learning_rate
 ```
 
 It will display a table synthesizing the results like this that is compatible with markdown:
