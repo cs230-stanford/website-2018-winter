@@ -34,12 +34,16 @@ This tutorial has multiple parts:
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
 - [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
 
-#### Goals of the starter code
+__Goals of the starter code__
 
 - help students kickstart their project with a working codebase
 - in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
 - through this codebase, explain and demonstrate the best practices for structuring a deep learning project
 
+__Table of Content__
+
+* TOC
+{:toc}
 
 
 ---
@@ -71,7 +75,7 @@ pip install -r requirements.txt
 
 Run `deactivate` if you want to leave the virtual environment. Next time you want to work on the project, just re-run `source .env/bin/activate`.
 
-#### If you have a GPU
+### If you have a GPU
 
 <!-- TODO: add instructions if GPU -->
 - for tensorflow, just run `pip install tensorflow-gpu`. When both `tensorflow` and `tensorflow-gpu` are installed, if a GPU is available, `tensorflow` will automatically use it, making it transparent for you to use. Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
@@ -295,9 +299,9 @@ It will display a table synthesizing the results like this that is compatible wi
 | experiments/learning_rate/learning_rate_0.001 |   0.979    | 0.0623    |
 ```
 
+---
 
-
-### Tensorflow or PyTorch ?
+## Tensorflow or PyTorch ?
 
 Both framework have their pros and cons:
 

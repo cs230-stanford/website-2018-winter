@@ -30,13 +30,21 @@ This tutorial is among a series explaining the starter code:
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
 - [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
 
-#### Goals of this tutorial
+__Goals of this tutorial__
 - learn more about TensorFlow
 - learn how to correctly structure a deep learning project in TensorFlow
 - fully understand the code to be able to use it for your projects
 
+__Table of Content__
 
-## Resources
+* TOC
+{:toc}
+
+---
+
+## Getting Started
+
+### Resources
 
 For an official __introduction__ to the tensorflow concepts of `Graph()` and `Session()`, check out the [official introduction on tensorflow.org](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial).
 
@@ -48,8 +56,7 @@ For a __more advanced use__ with concrete examples and code, we recommend readin
 
 You might also be interested in [Stanford's CS20 class: Tensorflow for Deep Learning Research](http://web.stanford.edu/class/cs20si/) and its [github repo](https://github.com/chiphuyen/stanford-tensorflow-tutorials) containing some cool examples.
 
-
-## Getting Started
+### Structure of the code
 
 The code for each Tensorflow example shares a common structure:
 ```
@@ -84,7 +91,7 @@ Once you get the high-level idea, depending on your task and dataset, you might 
 Once you get something working for your dataset, feel free to edit any part of the code to suit your own needs.
 
 
-## Graph, Session and nodes
+### Graph, Session and nodes
 
 When designing a Model in Tensorflow, there are [basically 2 steps](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial)
 1. building the computational graph, the nodes and operations and how they are connected to each other
@@ -106,8 +113,8 @@ with tf.Session() as sess:
 > 0.0
 ```
 
+### A word about [variable scopes](https://www.tensorflow.org/versions/r0.12/how_tos/variable_scope/#the_problem)
 
-__A word about [variable scopes](https://www.tensorflow.org/versions/r0.12/how_tos/variable_scope/#the_problem)__
 When creating a node, Tensorflow will have a name for it. You can add a prefix to the nodes names. This is done with the `variable_scope` mechanism
 
 ```python
@@ -149,6 +156,8 @@ with tf.Session() as sess:
 2. create all the nodes for training and inference in the graph and make sure that the python code does not create the nodes twice by using the `reuse=True` trick explained above.
 We decided to go for this option. For those interested in the problem of making training and eval graphs coexist, you can read this [discussion](https://www.tensorflow.org/tutorials/seq2seq#building_training_eval_and_inference_graphs).
 
+---
+
 ## Creating the input data pipeline
 
 You can read the [official tutorial](https://www.tensorflow.org/programmers_guide/datasets). The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Previous data pipelines had to wait for the CPU to load the data.
@@ -183,6 +192,8 @@ We get an error
 ```
 
 > Wait... What just happened ? I thought it was supposed to read the data.
+
+### Iterators and transformations
 
 What's really happening is that `dataset` is a node of the Tensorflow `Graph` that contains instructions to read the file. We need to initialize the graph and evaluate this node in a Session if we want to read it. While this may sound awfully complicated, this is quite the oposite : now, even the dataset object is a part of the graph, so you don't need to worry about how to feed the data into your model !
 
@@ -245,7 +256,7 @@ with tf.Session() as sess:
 
 and as you can see, we now have a shuffled batch !
 
-### Design choice of the starter-code
+### Why we use `initializable` iterators
 
 As you'll see in the `input_fn.py` files, we decided to use an initializable iterator.
 
@@ -281,6 +292,7 @@ with tf.Session() as sess:
 - explain shuffling
 - explain initializable iterator, why we did this (training / eval) -->
 
+---
 
 ## Defining the model
 
@@ -292,6 +304,7 @@ with tf.Session() as sess:
 - explain `model_spec`
 - explain `is_training` --> `model_fn` will be called twice
 
+---
 
 ## Training and evaluation
 
