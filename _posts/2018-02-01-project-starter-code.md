@@ -235,6 +235,12 @@ We can now train an example model with the parameters provided in the configurat
 python train.py --model_dir experiments/base_model
 ```
 
+The console output will look like
+
+{% include image.html url="/assets/project-starter-code/training.png" description="Training" size="80%" %}
+
+
+
 Once training is done, we can evaluate on the test set:
 ```bash
 python evaluate.py --model_dir experiments/base_model
