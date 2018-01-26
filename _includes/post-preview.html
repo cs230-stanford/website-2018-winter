@@ -1,6 +1,6 @@
 {% for post in site.posts %}
   {% if post.id == include.id %}
-    <li>
+    <li class="post-preview">
       <a class="post-preview" href="{{ post.url | relative_url }}">
         <span class="post-meta post-metadata">
           <div class="post-date">{{ post.date | date: "%b %-d, %Y" }}</div>
