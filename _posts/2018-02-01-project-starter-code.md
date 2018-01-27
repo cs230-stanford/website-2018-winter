@@ -78,8 +78,9 @@ Run `deactivate` if you want to leave the virtual environment. Next time you wan
 ### If you have a GPU
 
 <!-- TODO: add instructions if GPU -->
-- for tensorflow, just run `pip install tensorflow-gpu`. When both `tensorflow` and `tensorflow-gpu` are installed, if a GPU is available, `tensorflow` will automatically use it, making it transparent for you to use. Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
-<!-- - for pytorch, ?? -->
+- for tensorflow, just run `pip install tensorflow-gpu`. When both `tensorflow` and `tensorflow-gpu` are installed, if a GPU is available, `tensorflow` will automatically use it, making it transparent for you to use.
+- for PyTorch, follow the instructions [here](https://www.pytorch.org).
+Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 
 ### Download the data
