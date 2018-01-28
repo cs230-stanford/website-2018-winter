@@ -243,7 +243,7 @@ python train.py --model_dir experiments/base_model
 
 The console output will look like
 
-{% include image.html url="/assets/project-starter-code/training.png" description="Training" size="80%" %}
+{% include image.html url="/assets/project-starter-code/training.png" description="Training" size="60%" %}
 
 
 
