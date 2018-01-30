@@ -311,14 +311,16 @@ __Tensorflow__
 - mature, most of the models and layers are already implemented in the library.
 - documented and plenty of code / tutorials online
 - built for large-scale deployment and used by a lot of companies
-- has some very useful tools like Tensorboard for visualization
+- has some very useful tools like Tensorboard for visualization (though you can also use [Tensorboard with PyTorch](https://github.com/lanpa/tensorboard-pytorch))
 - but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
 - transparent use of the GPU
+- can be harder to debug
 
 __PyTorch__
 - younger, but also well documented and fast-growing community
 - more pythonic and numpy-like approach, easier to get used to the dynamic-graph paradigm
 - designed for faster prototyping and research
+- transparent use of the GPU
 - easy to debug
 
 
