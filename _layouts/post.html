@@ -9,7 +9,7 @@ layout: default
     <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
     <div class="tags" style="margin-right: 10px">
       {% for tag in page.tags %}
-        <div class="tag"> {{ tag }}</div>
+        <div class="tag" style="float: none"> {{ tag }}</div>
       {% endfor %}
     </div>
     {% if page.github %} <a class="post-github" style="float: none; margin-left: 10px" href="{{ page.github }}">github</a> {% endif %}

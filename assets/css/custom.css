@@ -108,6 +108,7 @@ a.post-preview:hover div.post-preview-title {
     margin-bottom: 5px;
     margin-right: 5px;
     display: inline-block;
+    float: left;
 }
 
 @media(min-width: 768px) {
@@ -140,6 +141,7 @@ a.post-preview:hover div.post-preview-title {
   border-radius: 15px;
   margin-bottom: 5px;
   border: 1px solid rgba(0,0,0,0.4);
+  float: right;
 }
 
 a.post-github {
