@@ -261,7 +261,7 @@ We provide an example that will call `train.py` with different values of learnin
 ```
 experiments/
     learning_rate/
-        params.jon
+        params.json
 ```
 
 with a `params.json` file that contains the other hyperparameters. Then, by calling
