@@ -113,6 +113,13 @@ with tf.Session() as sess:
 > 1.0
 ```
 
+
+In the starter code,
+
+- __step 1__ `model/input_fn.py` and `model/model_fn`
+
+- __step 2__ `model/training.py` and `model/evaluation.py`
+
 ### A word about [variable scopes](https://www.tensorflow.org/versions/r0.12/how_tos/variable_scope/#the_problem)
 
 When creating a node, Tensorflow will have a name for it. You can add a prefix to the nodes names. This is done with the `variable_scope` mechanism
@@ -256,6 +263,8 @@ with tf.Session() as sess:
 
 and as you can see, we now have a batch created from the shuffled Dataset !
 
+__All the nodes in the Graph are assumed to be batched, in other words every Tensor will have `shape = [None, ...]` where None corresponds to the (variable) batch dimension__
+
 ### Why we use `initializable` iterators
 
 As you'll see in the `input_fn.py` files, we decided to use an initializable iterator.
@@ -292,57 +301,223 @@ with tf.Session() as sess:
 - explain shuffling
 - explain initializable iterator, why we did this (training / eval) -->
 
+
+### Where do I find the data pipeline in the starter-code ?
+
+The `model/input_fn.py` defines a function `input_fn` that returns a dictionnary that looks like
+
+```python
+images, labels = iterator.get_next()
+iterator_init_op = iterator.initializer
+
+inputs = {'images': images, 'labels': labels, 'iterator_init_op': iterator_init_op}
+```
+
+<!-- TODO : add the relevant links -->
+Look at the [Computer Vision][tf-vision] or [NLP][tf-nlp] posts for more details. At this point, just assume that this `input` dictionnary is correctly initialized in `train.py` and passed to the `model_fn` that defines the model and the different training operations !
+
 ---
 
 ## Defining the model
 
-<!-- #TODO: -->
-- explain `tf.layers`
-- explain train op + optimization
-- explain metrics
-- explain tensorboard
-- explain `model_spec`
-- explain `is_training` --> `model_fn` will be called twice
+Great, now we have this `input` dictionnary containing the Tensor corresponding to the data, let's explain how we build the model.
+
+
+### Introduction to `tf.layers`
+
+This high-level tensorflow API lets you build and prototype models in a few lines. You can have a look at the [official tutorial for computer vision](https://www.tensorflow.org/tutorials/layers), or at the [list of available layers](https://www.tensorflow.org/api_docs/python/tf/layers). The idea is quite simple so we'll just give an example.
+
+
+Let's get an input Tensor with a similar mechanism than the one explained in the previous part. Remember that __None__ corresponds to the batch dimension.
+
+```python
+# shape = [None, 64, 64, 3]
+images = inputs["images"]
+```
+
+Now, let's apply a convolution, a relu activation and a max-pooling. This is as simple as
+
+```python
+out = images
+out = tf.layers.conv2d(out, 16, 3, padding='same')
+out = tf.nn.relu(out)
+out = tf.layers.max_pooling2d(out, 2, 2)
+```
+
+Finally, use this final tensor to predict the labels of the image (6 classes). We first need to reshape the output of the max-pooling to a vector
+
+```python
+# First, reshape the output into [batch_size, flat_size]
+out = tf.reshape(out, [-1, 32 * 32 * 16])
+# Now, logits is [batch_size, 6]
+logits = tf.layers.dense(out, 6)
+```
+> Note the use of `-1`: Tensorflow will compute the corresponding dimension so that the total size is preserved.
+
+The logits will be *unnormalized* scores for each example.
+
+> In the starter code, the transformation from `inputs` to `logits` is done in the `build_model` function.
+
+### Training ops
+
+
+At this point, we have defined the `logits` of the model. We need to define our predictions, our loss, etc. You can have a look at the `model_fn` in `model/model_fn.py`.
+
+
+```python
+# Get the labels from the input data pipeline
+labels = inputs['labels']
+labels = tf.cast(labels, tf.int64)
+
+# Define the prediction as the argmax of the scores
+predictions = tf.argmax(logits, 1)
+
+# Define the loss
+loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
+```
+>The `1` in `tf.argmax` tells Tensorflow to take the argmax on the axis = 1 (remember that axis = 0 is the batch dimension)
+
+Now, let's use Tensorflow built-in functions to create nodes and operators that will train our model at each iteration !
+
+```python
+# Create an optimizer that will take care of the Gradient Descent
+optimizer = tf.train.AdamOptimizer(0.01)
+
+# Create the training operation
+train_op = optimizer.minimize(loss)
+```
+> All these nodes are created by `model_fn` that returns a dictionnary `model_spec` containing all the necessary nodes and operators of the graph. This dictionnary will later be used for actually running the training operations etc.
+
+
+And that's all ! Our model is ready to be trained. Remember that all the objects we defined so far are nodes or operators that are part of the Tensorflow graph. To evaluate them, we actually need to execute them in a session. Simply run
+
+```python
+with tf.Session() as sess:
+    for i in range(num_batches):
+        _, loss_val = sess.run([train_op, loss])
+```
+> Notice how we don't need to feed data to the session as the `tf.data` nodes automatically iterate over the dataset !
+At every iteration of the loop, it will move to the next batch (remember the `tf.data` part), compute the loss, and execute the `train_op` that will perform one update of the weights !
+
+
+For more details, have a look at the `model/training.py` file that defines the `train_and_evaluate` function.
+
+
+### Putting `input_fn` and `model_fn` together
+
+
+To summarize the different steps, we just give a high-level overview of what needs to be done in `train.py`
+
+```python
+# 1. Create the iterators over the Training and Evaluation datasets
+train_inputs = input_fn(True, train_filenames, train_labels, params)
+eval_inputs = input_fn(False, eval_filenames, eval_labels, params)
+
+# 2. Define the model
+logging.info("Creating the model...")
+train_model_spec = model_fn('train', train_inputs, params)
+eval_model_spec = model_fn('eval', eval_inputs, params, reuse=True)
+
+# 3. Train the model (where a session will actually run the different ops)
+logging.info("Starting training for {} epoch(s)".format(params.num_epochs))
+train_and_evaluate(train_model_spec, eval_model_spec, args.model_dir, params, args.restore_from)
+```
+
+The `train_and_evaluate` function performs a given number of epochs (= full pass of the `train_inputs`). At the end of each epoch, it evaluates the performance on the development set (`dev` or `train-dev` in the course material).
+
+> Remember the discussion about different graphs for Training and evaluation. Here, notice how the `eval_model_spec` is given the `reuse=True` argument. It will make sure that the nodes of the Evaluation graph that must share weights with the Training graph __do__ share their weights.
+
+
+### Evalution and `tf.metrics`
+
+
+So far, we explained how we input data to the graph, how we define the different nodes and training ops, but we don't know (yet) how to compute some metrics on our dataset. There are basically 2 possibilities
+
+1. __[run evaluation outside the Tensorflow graph]__ Evaluate the prediction over the training dataset by running `sess.run(prediction)` and use them to evaluate your model (without Tensorflow, with pure python code). This option can also be used if you need to write a file with all the predicitons and use a script (distributed by a conference for instance) to evaluate the performance of your model.
+2. __[use Tensorflow]__ As the above method can be quite complicated for simple metrics, Tensorflow hopefully has some built-in tools to run evaluation. Again, we are going to create nodes and operations in the Graph. The concept is simple : we will use the `tf.metrics` API to build those, the idea being that we need to update the metric on each batch. At the end of the epoch, we can just query the updated metric !
+
+
+We'll cover method 2 as this is the one we implemented in the starter code (but you can definitely go with option 1 by modifying `model/evaluation.py`). As most of the nodes of the graph, we define these *metrics* nodes and ops in `model/model_fn.py`.
+
+```python
+# Define the different metrics
+with tf.variable_scope("metrics"):
+    metrics = {
+        'accuracy': tf.metrics.accuracy(labels=labels, predictions=predictions,
+        'loss': tf.metrics.mean(loss)
+    }
+
+# Group the update ops for the tf.metrics, so that we can run only one op to update them all
+update_metrics_op = tf.group(*[op for _, op in metrics.values()])
+
+# Get the op to reset the local variables used in tf.metrics, for when we restart an epoch
+metric_variables = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES, scope="metrics")
+metrics_init_op = tf.variables_initializer(metric_variables)
+```
+> Notice that we define the metrics, a *grouped* update op and an initializer.
+> Notice also how we define the metrics in a special `variable_scope` so that we can query the variables by name when we create the initializer !
+
+Now, to evaluate the metrics on a dataset, we'll just need to run them in a session as we loop over our dataset
+
+```python
+with tf.Session() as sess:
+    # Run the initializer to reset the metrics to zero
+    sess.run(metrics_init_op)
+
+    # Update the metrics over the dataset
+    for _ in range(num_steps):
+        sess.run(update_metrics_op)
+
+    # Get the values of the metrics
+    metrics_values = {k: v[0] for k, v in metrics.items()}
+    metrics_val = sess.run(metrics_values)
+```
+
+And that's all ! If you want to compute new metrics for which you can find a [tensorflow implementation](https://www.tensorflow.org/api_docs/python/tf/metrics), you can define it in the `model_fn.py` (add it to the `metrics` dictionnary). It will automatically be updated during the training and will be displayed at the end of each epoch.
 
 ---
 
-## Training and evaluation
+## Tensorflow Tips and Tricks
 
-### Training
+### Be careful with initialization
 
-<!-- #TODO -->
-- put input_data + model together
-- train + evaluate every epoch
-- careful with the initialization in TensorFlow
-  - initialize metric ops each epoch
-  - initialize variables only once
-- `sess.run()` without `feed_dict` (no placeholders)
+So far, we mentionned 3 different *initializer* operators.
 
-### Evaluation
+```python
+# 1. For all the variables (the weights etc.)
+tf.global_variables_initializer()
 
-<!-- #TODO -->
+# 2. For the dataset, so that we can chose to move the iterator back at the beginning
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+iterator_init_op = iterator.initializer
 
-If you want to compute new metrics for which you can find a [tensorflow implementation](https://www.tensorflow.org/api_docs/python/tf/metrics), you can define it in the `model_fn.py` (add it to the `metrics` dictionnary). It will automatically be updated during the training and will be displayed at the end of each epoch.
+# 3. For the metrics variables, so that we can reset them to 0 at the beginning of each epoch
+metrics_init_op = tf.variables_initializer(metric_variables)
+```
 
-- explain the `tf.metrics`
-  - run on the whole dataset, `update_op`
-- ...
+During `train_and_evaluate` we perform the following schedule, all in one session
 
-## Other small stuff
+1. Loop over the training set, updating the weights and computing the metrics
+2. Loop over the evaluation set, computing the metrics
+3. Go back to step 1.
 
-<!-- #TODO -->
-- logging
-- saving
-- Params
+We thus need to run
+- `tf.global_variable_initializer()` at the beginning of the first step 1.
+- `iterator_init_op` at the beginning of every loop (step 1 or step 2)
+- `metrics_init_op` at the beginning of every loop, to reset the metrics to zero (we don't want to compute the metrics averaged over the different epochs or different datasets !)
 
-## Hyperparameter search
+You can indeed check that this is what we do in `model/evaluation.py` or `model/training.py` when we actually run the graph !
 
-<!-- #TODO: -->
-- explain how to use `hyperparam_search.py`
-- tips for how to train?
-  - put in a separate post??
-  - we begin to have a lot of posts
+### Saving
 
+
+### Tensorboard and summaries
+
+
+## Logging, Params and `search_hyperparams`
+
+<!-- #TODO move to other post as this is in common with other posts -->
 
 
 <!-- Links -->
