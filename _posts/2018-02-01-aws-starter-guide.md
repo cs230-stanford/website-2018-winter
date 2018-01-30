@@ -6,7 +6,7 @@ excerpt: "How to set up AWS for deep learning projects"
 author: "Russell Kaplan"
 date:   2018-01-24
 mathjax: true
-published: false
+published: true
 tags: tensorflow pytorch
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
