@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Introducing the Project Starter Code"
+title:  "AWS setup"
 description: "How to set up AWS for deep learning projects"
-excerpt: "Introduction and installation"
+excerpt: "How to set up AWS for deep learning projects"
 author: "Russell Kaplan"
 date:   2018-01-24
 mathjax: true
