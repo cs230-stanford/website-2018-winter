@@ -511,8 +511,44 @@ You can indeed check that this is what we do in `model/evaluation.py` or `model/
 
 ### Saving
 
+[Official guide](https://www.tensorflow.org/programmers_guide/saved_model)
+
+Training a model and evaluating is fine, but what about re-using the weights? Also, maybe at some point of the training, our performance started to get worse on the validation set and we want to use the best weights we got during training.
+
+Saving models is easy in Tensorflow.  Look at the outline below
+
+```python
+# We need to create an instance of saver
+saver = tf.train.Saver()
+
+for epoch in range(10):
+    for batch in range(10):
+      _ = sess.run(train_op)
+
+    # Save weights
+    save_path = os.path.join(model_dir, 'last_weights', 'after-epoch')
+    saver.save(sess, last_save_path, global_step=epoch + 1)
+```
+
+There is not much to say, except that the `saver.save()` method takes a session as input. In our implementation, we use 2 savers. A `last_saver = tf.train.Saver()` that will keep the weights at the end of the last 5 epochs and a `best_saver = tf.train.Saver(max_to_keep=1)` that only keeps checkpoint corresponding to the weights that achieved the best performance on the validation set !
+
+
+Later on, to restore the weights of your model, you need to reload the weights thanks to a saver instance, as in
+
+```python
+with tf.Session() as sess:
+    # Get the latest checkpoint in the directory
+    restore_from = tf.train.latest_checkpoint("model/last_weights")
+    # Reload the weights into the variables of the graph
+    saver.restore(sess, restore_from)
+```
+
+> You can look at the files `model/training.py` and `model/evaluation.py` for more details.
 
 ### Tensorboard and summaries
+
+[Official guide](https://www.tensorflow.org/programmers_guide/summaries_and_tensorboard)
+
 
 
 ## Logging, Params and `search_hyperparams`
@@ -520,6 +556,7 @@ You can indeed check that this is what we do in `model/evaluation.py` or `model/
 <!-- #TODO move to other post as this is in common with other posts -->
 
 
+<!-- TODO : have convention for links to code as well as actually include some links -->
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [post-1]: https://cs230-stanford.github.io/project-starter-code.html
