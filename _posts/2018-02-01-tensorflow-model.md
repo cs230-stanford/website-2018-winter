@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Creating and training the model"
-description: "How to create the model and train it in TensorFlow"
-excerpt: "How to create the model and train it in TensorFlow"
+title:  "Create and train a Model"
+description: "Create and train a Model in Tensorflow using tf.layers, tf.train, tf.metrics, Tensorboard"
+excerpt: "Using tf.layers, tf.train, tf.metrics, Tensorboard"
 author: "Guillaume Genthial, Olivier Moindrot"
 date: 2018-01-30
 mathjax: true
@@ -24,7 +24,7 @@ We will explain here how to easily define a deep learning model in TensorFlow us
 The entire code examples can be found in our [github repository][github].
 
 
-This tutorial is among a series explaining the starter code:
+This tutorial is among a series explaining how to structure a deep learning project:
 <!-- #TODO: add here links to different posts -->
 - [first post][post-1]: installation, get started with the code for the projects
 - [second post][post-2] (TensorFlow only): explain the global structure of the code
@@ -82,7 +82,7 @@ logits = tf.layers.dense(out, 6)
 
 The logits will be *unnormalized* scores for each example.
 
-> In the starter code, the transformation from `inputs` to `logits` is done in the `build_model` function.
+> In the code examples, the transformation from `inputs` to `logits` is done in the `build_model` function.
 
 ### Training ops
 
@@ -164,7 +164,7 @@ So far, we explained how we input data to the graph, how we define the different
 2. __[use Tensorflow]__ As the above method can be quite complicated for simple metrics, Tensorflow luckily has some built-in tools to run evaluation. Again, we are going to create nodes and operations in the Graph. The concept is simple: we will use the `tf.metrics` API to build those, the idea being that we need to update the metric on each batch. At the end of the epoch, we can just query the updated metric !
 
 
-We'll cover method 2 as this is the one we implemented in the starter code (but you can definitely go with option 1 by modifying `model/evaluation.py`). As most of the nodes of the graph, we define these *metrics* nodes and ops in `model/model_fn.py`.
+We'll cover method 2 as this is the one we implemented in the code examples (but you can definitely go with option 1 by modifying `model/evaluation.py`). As most of the nodes of the graph, we define these *metrics* nodes and ops in `model/model_fn.py`.
 
 ```python
 # Define the different metrics
@@ -292,7 +292,7 @@ tensorboard --logdir="expirements/base_model"
 
 Then, navigate to <a href="http://127.0.0.1:6006/">http://127.0.0.1:6006/</a> and you'll see the different plots.
 
-In the starter code, we add the summaries in `model/model_fn.py`
+In the code examples, we add the summaries in `model/model_fn.py`
 
 ```python
 # Compute different scalars to plot

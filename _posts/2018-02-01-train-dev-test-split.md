@@ -3,7 +3,7 @@ layout: post
 title:  "Splitting into train, dev and test sets"
 description: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
 excerpt: "Best practices to split your dataset into train, dev and test sets"
-author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
+author: "Olivier Moindrot, Guillaume Genthial"
 date:   2018-01-24
 mathjax: true
 published: true
@@ -12,51 +12,47 @@ github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
 
-<!-- TODOs: -->
-<!--     - should we include train-dev here? -->
-<!--       no, we should only include it if train and dev don't come from the same distribution -->
-<!--     - check if we use train/dev or train / dev -->
-
 Splitting your data into training, dev and test sets can be disastrous if not done correctly.
 In this short tutorial, we will explain the best practices when splitting your dataset.
 
-<!-- TODO: add link to part 3 -->
-This follows part 3 of the class on "Structuring your Machine Learning Project", and adds code examples to the theoretical content.
+This post follows part 3 of the class on ["Structuring your Machine Learning Project"][coursera], and adds code examples to the theoretical content.
 
+This tutorial is among a series of tutorials explaining how to structure a deep learning project. Please see the full list of posts on the [main page][main].
 
-<!-- TODO: also have the list of posts here? -->
-This tutorial has multiple parts:
-#TODO: add here links to different posts
-- this post: installation, get started with the code for the projects
-- [second post][tf-post]: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+__Table of Content__
 
+* TOC
+{:toc}
 
 
 ---
 ## Theory: how to choose the train, train-dev, dev and test sets
 
-TODO: summarize content from the class
+_Please refer to the [course content][coursera] for a full overview._
 
-TODO: insist on having same distribution for train / dev / test if possible, or at least dev / test
-- make sure that the code does it correctly
-- bad example: `dev = filenames[:100]`, but the first 100 filenames are all of the same label
-- introduce `train-dev` and when we need it
+Setting up the training, development and test sets have a huge impact on productivity. It is important to choose the development and test sets from the __same distribution__ and it must be taken randomly from all the data.
+
+__Guideline__: Choose a development set and test set to reflect data you expect to get in the future.
+
+The size of the dev and test set should be big enough for the dev and test results to be representative of the performance of the model. If the dev set has 100 examples, the dev accuracy can vary a lot depending on the chosen dev set. For bigger datasets (>1M examples), the dev and test set can have around 10,000 examples each for instance (only 1% of the total data).
+
+__Guideline__: The dev and test sets should be just big enough to represent accurately the performance of the model
+
+If the training set and dev sets have different distributions, it is good practice to introduce a __train-dev set__ that has the same distribution as the training set. This train-dev set will be used to measure how much the model is overfitting. Again, refer to the [course content][coursera] for a full overview.
 
 
-### Objectives
+### Objectives in practice
 
+These guidelines translate into best practices for code:
 
-- the split between train / dev / test should **always be the same** across experiments
+- the split between train / dev / test should __always be the same__ across experiments
   - otherwise, different models are not evaluated in the same conditions
-- the **dev** and **test** sets should come from the same distribution
-- if **train** and **dev** sets have different distributions, include a **train-dev** set
-    - the **train** and **train-dev** sets should come from the same distribution
+  - we should have a __reproducible script__ to create the train / dev / test split
+- we need to test if the __dev__ and __test__ sets should come from the same distribution
 
 
 ---
-## Practice: have a reproducible script
+## Have a reproducible script
 
 The best and most secure way to split the data into these three sets is to have one directory for train, one for dev and one for test.
 
@@ -87,7 +83,7 @@ A good practice that is true for every software, but especially in machine learn
 It should be possible to start the project again from scratch and create the same exact split between train, dev and test sets.
 
 The cleanest way to do it is to have a `build_dataset.py` file that will be called once at the start of the project and will create the split into train, dev and test. Optionally, calling `build_dataset.py` can also download the dataset.  
-We need to make sure that any randomness involved in `build_dataset.py` uses a **fixed seed**, so that every call to `python build_dataset.py` will result in the same output.
+We need to make sure that any randomness involved in `build_dataset.py` uses a __fixed seed__ so that every call to `python build_dataset.py` will result in the same output.
 
 >Never do the split manually (by moving files into different folders one by one), because you wouldn't be able to reproduce it.
 
@@ -126,7 +122,7 @@ dev_filenames = filenames[split_1:split_2]
 test_filenames = filenames[split_2:]
 ```
 
-This should give approximately the same distribution for train, dev and test sets. If necessary, it is also possible to split each class into 80%/10%/10% so that the distribution is **exactly** the same in each set.
+This should give approximately the same distribution for train, dev and test sets. If necessary, it is also possible to split each class into 80%/10%/10% so that the distribution is __exactly__ the same in each set.
 
 
 #### Make it reproducible
@@ -155,17 +151,12 @@ The call to `filenames.sort()` makes sure that if you build `filenames` in a dif
 
 
 ### References
-TODO: add references
-- coursera
-- our github
+- [course content][coursera]
+- [CS230 code examples][github]
 
 
+[main]: https://cs230-stanford.github.io/
+[coursera]: https://www.coursera.org/learn/machine-learning-projects
 [github]: https://github.com/cs230-stanford/cs230-starter-code
-<!-- TODO: put correct link -->
-[tf-post]: https://cs230-stanford.github.io/
-<!-- TODO: put correct link -->
-[tf-vision]: https://cs230-stanford.github.io/
-<!-- TODO: put correct link -->
-[tf-nlp]: https://cs230-stanford.github.io/
 
 [build-dataset]: https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/build_dataset.py
