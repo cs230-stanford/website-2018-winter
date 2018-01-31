@@ -11,6 +11,14 @@ tags: tensorflow image nlp tf.data
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
+If you haven't read the previous post,
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-getting-started.html"><h3>> Introduction to Tensorflow</h3></a></div>
+
+<br/>
+
+
+__Motivation__
 
 Building the input pipeline in a machine learning project is always long and painful, and can take more time than building the actual model.
 In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` to build efficient pipelines for images and text.
@@ -21,7 +29,7 @@ This tutorial is among a series explaining the starter code:
 <!-- TODO: add here links to different posts -->
 - [first post][post-1]: installation, get started with the code for the projects
 - [second post][post-2]: (TensorFlow) explain the global structure of the code
-- __this post__: (TensorFlow) how to build the data pipeline
+- __this post: (TensorFlow) how to build the data pipeline__
 - [fourth post][post-4]: (Tensorflow) how to build the model and train it
 
 __Goals of this tutorial__
@@ -52,6 +60,8 @@ Before explaining how `tf.data` works with a simple example, we'll share some gr
 - [Performance guide][performance-guide]: advanced guide to improve performance of the data pipeline
 - [Official blog post][blog-post-tf-data] introducing Datasets and Estimators: if you are using our [starter code][post-1], you can ignore the part about Estimators
 - [Slides from the creator of tf.data][slides] explaining the API, best practices (don't forget to read the speaker notes below the slides)
+- [Origin github issue][github-issue-tf-data] for Datasets: a bit of history on the origin of `tf.data`
+- [Stackoverflow][stackoverflow] tag for the Datasets API
 
 ### Introduction to tf.data with a Text Example
 
@@ -174,7 +184,7 @@ with tf.Session() as sess:
 
 > 'I use Tensorflow'
   'You use PyTorch'
-  'I use Tensorflow'
+  'I use Tensorflow' # Iterator moved back at the beginning
 ```
 
 > As we use only one session over the different epochs, we need to be able to restart the iterator. Some other approaches (like `tf.Estimator`) alleviate the need of using `initializable` iterators by creating a new session at each epoch. But this comes at a cost: the weights and the graph must be re-loaded and re-initialized with each call to `estimator.train()` or `estimator.evaluate()`.
@@ -191,7 +201,7 @@ iterator_init_op = iterator.initializer
 inputs = {'images': images, 'labels': labels, 'iterator_init_op': iterator_init_op}
 ```
 
-This dictionay of inputs will be passed to the model function, which we will detail in the [next post][post-4].  
+This dictionay of inputs will be passed to the model function, which we will detail in the [next post][post-4].
 
 
 ## Building an image data pipeline
@@ -351,23 +361,20 @@ To summarize, one good order for the different transformations is:
 4. batch
 5. prefetch
 
-
-## Resources
-
-- [API docs][api-tf-data] for `tf.data`
-- [API docs][api-tf-contrib-data] for `tf.contrib.data`: new features still in beta mode. Contains useful functions that will soon be added to the main `tf.data`
-- [Datasets Quick Start][quick-start-tf-data]: gentle introduction to `tf.data`
-- [Programmer's guide][programmer-guide-tf-data]: more advanced and detailed guide to the best practices when using Datasets in TensorFlow
-- [Performance guide][performance-guide]: advanced guide to improve performance of the data pipeline
-- [Official blog post][blog-post-tf-data] introducing Datasets and Estimators: if you are using our [starter code][post-1], you can ignore the part about Estimators
-- [Slides from the creator of tf.data][slides] explaining the API, best practices (don't forget to read the speaker notes below the slides)
-- [Origin github issue][github-issue-tf-data] for Datasets: a bit of history on the origin of `tf.data`
-- [Stackoverflow][stackoverflow] tag for the Datasets API
-
+<!--
 TODO:
 - our github tensorflow/image tensorflow/text
-- seq2seq official tutorial
+- seq2seq official tutorial -->
 
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+Now that we can input data to our model, let's actually see how we define it
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-model.html"><h3>> Creating and Training a Model</h3></a></div>
 
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code

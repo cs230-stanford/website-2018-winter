@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Starter-code"
+title:  "Introduction to Tensorflow"
 description: "Tutorial for the TensorFlow part of the starter code"
-excerpt: "Introduction to Tensorflow"
+excerpt: "Graph, Session, Nodes and variable scope"
 author: "Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-24
 mathjax: true
@@ -40,8 +40,6 @@ __Table of Content__
 {:toc}
 
 ---
-
-## Getting Started
 
 ### Resources
 
@@ -179,6 +177,15 @@ For those interested in the problem of making training and eval graphs coexist, 
 
 > As a side note, option 1 is also the one used in [`tf.Estimator`](https://www.tensorflow.org/get_started/estimator).
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+Now, let's see how we can input data to our model.
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-input-data.html"><h3>> Building the input data pipeline</h3></a></div>
 
 
 <!-- TODO : have convention for links to code as well as actually include some links -->
