@@ -8,7 +8,7 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow tf.data
-github: https://github.com/cs230-stanford/cs230-code-examples
+github: https://github.com/cs230-stanford/cs230-code-examples/tree/master/tensorflow
 module: Tutorials
 ---
 If you haven't read the previous post,

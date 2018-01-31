@@ -31,9 +31,9 @@ tensorflow/
 This tutorial has multiple parts:
 
 - __this post: installation, get started with the code for the projects__
-- [second post][tf-post]: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+- [second post][tf-post]: (Tensorflow) Introduction to the concepts of Graph, Session, etc.
+- [third post][tf-data]: (Tensorflow) How to build a data pipeline for vision and text inputs
+- [fourth post][tf-model]: (Tensorflow) How to create and train a Model
 
 __Goals of the code examples__
 
@@ -346,10 +346,10 @@ Which one will you [choose][matrix] ?
 
 
 [github]: https://github.com/cs230-stanford/cs230-code-examples
-[tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
+[tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
-[tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
-[tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
+[tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
+[tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- TODO: add a public link -->
 [SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
