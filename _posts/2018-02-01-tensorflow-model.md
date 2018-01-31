@@ -278,7 +278,7 @@ with tf.Session() as sess:
 
 Tensorflow comes with an excellent visualization tool called __Tensorboard__ that enables you to plot different scalars (and much more) in real-time, as you train your model.
 
-{% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorboard overview" size="80%" %}
+{% include image.html url="/assets/tensorflow-model/tensorboard.png" description="Tensorboard overview" size="80%" %}
 
 The mechanism of Tensorboard is the following
 1. define some *summaries* (nodes of the graph) that will tell Tensorflow which values we want to plot

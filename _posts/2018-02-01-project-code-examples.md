@@ -86,7 +86,7 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 #### Vision
 
-_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/README.md)_
+_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md)_
 
 For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
 
@@ -110,7 +110,7 @@ Once the download is complete, move the dataset into `data/SIGNS`. Run the scrip
 
 #### Natural Language Processing (NLP)
 
-*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/nlp/README.md)*
+*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md)*
 
 We provide a small subset of the kaggle dataset (30 sentences) for testing in `data/small` but you are encouraged to download the original version on the [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) website.
 
@@ -238,7 +238,7 @@ python train.py --model_dir experiments/base_model
 
 The console output will look like
 
-{% include image.html url="/assets/project-starter-code/training.png" description="Training" size="60%" %}
+{% include image.html url="/assets/project-code-examples/training.png" description="Training" size="60%" %}
 
 
 
