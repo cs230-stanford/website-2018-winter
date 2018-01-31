@@ -8,7 +8,7 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: best-practice
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
@@ -82,7 +82,7 @@ You will therefore have to build yourself the train/dev split before beginning y
 A good practice that is true for every software, but especially in machine learning, is to make every step of your project reproducible.
 It should be possible to start the project again from scratch and create the same exact split between train, dev and test sets.
 
-The cleanest way to do it is to have a `build_dataset.py` file that will be called once at the start of the project and will create the split into train, dev and test. Optionally, calling `build_dataset.py` can also download the dataset.  
+The cleanest way to do it is to have a `build_dataset.py` file that will be called once at the start of the project and will create the split into train, dev and test. Optionally, calling `build_dataset.py` can also download the dataset.
 We need to make sure that any randomness involved in `build_dataset.py` uses a __fixed seed__ so that every call to `python build_dataset.py` will result in the same output.
 
 >Never do the split manually (by moving files into different folders one by one), because you wouldn't be able to reproduce it.
@@ -92,7 +92,7 @@ _An example `build_dataset.py` file is the one used [here][build-dataset] in the
 ---
 ## Details of implementation
 
-Let's illustrate the good practices with a simple example. We have filenames of images that we want to split into train, dev and test.  
+Let's illustrate the good practices with a simple example. We have filenames of images that we want to split into train, dev and test.
 Here is a way to split the data into three sets: 80% train, 10% dev and 10% test.
 ```python
 filenames = ['img_000.jpg', 'img_001.jpg', ...]
@@ -159,4 +159,4 @@ The call to `filenames.sort()` makes sure that if you build `filenames` in a dif
 [coursera]: https://www.coursera.org/learn/machine-learning-projects
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 
-[build-dataset]: https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/build_dataset.py
+[build-dataset]: https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/build_dataset.py

@@ -8,7 +8,7 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow pytorch
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
@@ -53,8 +53,8 @@ Each of the four examples (TensorFlow / PyTorch + Vision / NLP) is self-containe
 Suppose you want to work with TensorFlow on a project involving computer vision. You can first clone the whole github repository and only keep the `tensorflow/vision` folder:
 
 ```bash
-git clone https://github.com/cs230-stanford/cs230-starter-code
-cd cs230-starter-code/tensorflow/vision
+git clone https://github.com/cs230-stanford/cs230-code-examples
+cd cs230-code-examples/tensorflow/vision
 ```
 
 ### Create your virtual environment
@@ -339,11 +339,11 @@ Which one will you [choose][matrix] ?
 </div>
 
 
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
-[tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
-[tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
+[tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
+[tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- TODO: add a public link -->
 [SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
