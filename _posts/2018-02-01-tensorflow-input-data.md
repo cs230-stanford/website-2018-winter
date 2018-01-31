@@ -309,15 +309,146 @@ def input_fn(is_training, filenames, params):
 
 ## Building a text data pipeline
 
+Have a look at the Tensorflow seq2seq tutorial using the tf.data pipeline
+- [documentation](https://www.tensorflow.org/tutorials/seq2seq)
+- [github](https://github.com/tensorflow/nmt/)
+
+
+### Files format
+
+We've covered a simple example in the __Overview of tf.data__ section. Now, let's cover a more advanced example. Let's assume that our task is [Named Entity Recognition](https://en.wikipedia.org/wiki/Named-entity_recognition). In other words, our input is a sentence, and our output is a label for each word, like in
+
+```
+John   lives in New   York
+B-PER  O     O  B-LOC I-LOC
+```
+
+Our dataset will thus need to load both the sentences and the labels. We will store those in 2 different files, a `sentence.txt` file containing the sentences (one per line) and a `labels.txt` containing the labels. For example
+
+```
+# sentences.txt
+John lives in New York
+Where is John ?
+```
+
+```
+# labels.txt
+B-PER O O B-LOC I-LOC
+O O B-PER O
+```
+
+Constructing `tf.data` objects that iterate over these files is easy
+
+```python
+# Load txt file, one example per line
+sentences = tf.data.TextLineDataset("sentences.txt")
+labels = tf.data.TextLineDataset("labels.txt")
+```
+
+### Zip datasets together
+
+At this stage, we might want to iterate over these 2 files *at the same time*. This operation is usually known as a *"zip"*. Luckilly, the `tf.data` comes with such a function
+
+
+```python
+# Zip the sentence and the labels together
+dataset = tf.data.Dataset.zip((sentences, labels))
+
+# Create a one shot iterator over the zipped dataset
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+# Actually run in a session
+with tf.Session() as sess:
+    for i in range(2):
+        print(sess.run(dataset))
+
+> ('John lives in New York', 'B-PER O O B-LOC I-LOC')
+  ('Where is John ?', 'O O B-PER O')
+```
+
 ### Creating the vocabulary
-- Creating the vocabulary
-- Creating the dataset
-- See post on train-dev-test split
 
-### TensorFlow's Datasets for text
+Great, now we can get the sentence and the labels as we iterate. Let's see how we can transform this string into a sequence of words and then in a sequence of ids.
+> Most NLP systems rely on ids as input for the words, meaning that you'll eventually have to convert your sentence into a sequence of ids.
 
+Here we assume that we ran some script, like `build_vocab.py` that created some vocabulary files in our `/data` directory. We'll need one file for the words and one file for the labels. They will contain one token per line. For instance
+
+```
+# words.txt
+John
+lives
+in
+...
+```
+
+and
+
+```
+# tags.txt
+B-PER
+B-LOC
+...
+```
+
+
+Tensorflow has a cool built-in tool to take care of the mapping. We simply define 2 lookup tables
+
+```python
+words = tf.contrib.lookup.index_table_from_file("data/words.txt", num_oov_buckets=1)
+tags = tf.contrib.lookup.index_table_from_file("data/tags.txt")
+````
+> The parameter `num_oov_buckets` specifies the number of buckets created for unknow words. The id will be determined by Tensorflow and we don't have to worry about it. As in most of the cases, we just want to have one id reserved for the out-of-vocabulary words, we just use `num_oov_buckets=1`.
+
+
+Now that we initialized this lookup table, we are going to transform the way we read the files, by adding these extra lines
+
+```python
+# Convert line into list of tokens, splitting by white space
+sentences = sentences.map(lambda string: tf.string_split([string]).values)
+
+# Lookup tokens to return their ids
+sentences = sentences.map(lambda tokens: (words.lookup(tokens), tf.size(tokens)))
+```
+> Be careful that  `tf.string_split`  returns a `tf.SparseTensor`, that's why we need to extract the `values`.
+
+### Creating padded batches
+
+Great! Now we can iterate and get a list of ids of words and labels for each sentence. We just need to take care of one final thing: __batches__! But here comes a problem: *sentences have different length.* Thus, we need to perform an extra __padding__ operation that will add special token to shorter sentences so that our final batch Tensor is a tensor of shape `[batch_size, max_len_of_sentence_in_the_batch]`.
+
+We first need to specify the padding shapes and values
+
+```python
+# Create batches and pad the sentences of different length
+padded_shapes = (tf.TensorShape([None]),   # sentence of unknown size
+                 tf.TensorShape([None]))  # labels of unknown size
+
+padding_values = (params.id_pad_word,   # sentence padded on the right with id_pad_word
+                  params.id_pad_tag)    # labels padded on the right with id_pad_tag
+```
+> Note that the padding_values must be in the vocabulary (otherwise we might have a problem later on). That's why we get the id of the special "\<pad\>" token in `train.py` with `id_pad_word = words.lookup(tf.constant('<pad>'))`.
+
+
+Then, we can just use the `tf.data` `padded_batch` method, that takes care of the padding !
+
+```python
+# Shuffle the dataset and then create the padded batches
+dataset = (dataset
+        .shuffle(buffer_size=buffer_size)
+        .padded_batch(32, padded_shapes=padded_shapes, padding_values=padding_values)
+    )
+```
 
 ## Best practices
+
+Is that all that we need in general ? Not quite. As we mentionned padding, we have to make sure that our model does not take the extra padded-tokens into account when computing its prediction. A common way of solving this issue is to add extra information to our data iterator and give the length of the input sentence as input. Later on, we will be able to give this argument to the `dynamic_rnn` function or create binary masks with `tf.sequence_mask`.
+
+Look at the `model/input_fn.py` file for more details. But basically, it boils down to adding one line, using `tf.size`
+
+```python
+sentences = sentences.map(lambda tokens: (vocab.lookup(tokens), tf.size(tokens)))
+```
+
 
 ### Switch between train and validation
 - how to have one tensor `inputs` for train and validation
