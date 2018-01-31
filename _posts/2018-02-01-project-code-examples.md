@@ -28,9 +28,9 @@ tensorflow/
 This tutorial is the introduction to a series explaining how to structure a deep learning project:
 
 - __this post: installation, get started with the code for the projects__
-- [second post][post-2]: (TensorFlow) explain the global structure of the code
-- [third post][post-3]: (Tensorflow) how to build the data pipeline
-- [fourth post][post-4]: (Tensorflow) how to build the model and train it
+- [second post][tf-post]: (TensorFlow) introduction to Tensorflow
+- [third post][tf-data]: (Tensorflow) how to build the data pipeline with tf.data
+- [fourth post][tf-model]: (Tensorflow) how to create and train a model
 
 __Goals of the code examples__
 
@@ -64,7 +64,7 @@ It is a good practice to have multiple virtual environments to work on different
 If you are on Mac OS X, you can do this using [Homebrew](https://brew.sh) with `brew install python3`. You can find instructions for Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
 
 **Virtual environment**: If we don't have it already, install `virtualenv` using `sudo pip install virtualenv` (or `pip install --user virtualenv` if you don't have sudo).
-Here we create a virtual environment named `.env`.
+Here we create a virtual environment named `.env`. __Run this command inside each example repo__ for instance in `tensorflow/nlp`
 ```bash
 virtualenv -p python3 .env
 source .env/bin/activate
@@ -83,6 +83,8 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 
 ### Download the data
+
+__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) etc.
 
 #### Vision
 
