@@ -523,9 +523,9 @@ During `train_and_evaluate` we perform the following schedule, all in one sessio
 3. Go back to step 1.
 
 We thus need to run
-- `tf.global_variable_initializer()` at the beginning of the first step 1.
-- `iterator_init_op` at the beginning of every loop (step 1 or step 2)
-- `metrics_init_op` at the beginning of every loop, to reset the metrics to zero (we don't want to compute the metrics averaged over the different epochs or different datasets !)
+- `tf.global_variable_initializer()` at the very beginning (before the first occurence of step 1)
+- `iterator_init_op` at the beginning of every loop (step 1 and step 2)
+- `metrics_init_op` at the beginning of every loop (step 1 and step 2), to reset the metrics to zero (we don't want to compute the metrics averaged over the different epochs or different datasets !)
 
 You can indeed check that this is what we do in `model/evaluation.py` or `model/training.py` when we actually run the graph !
 
@@ -550,7 +550,7 @@ for epoch in range(10):
     saver.save(sess, last_save_path, global_step=epoch + 1)
 ```
 
-There is not much to say, except that the `saver.save()` method takes a session as input. In our implementation, we use 2 savers. A `last_saver = tf.train.Saver()` that will keep the weights at the end of the last 5 epochs and a `best_saver = tf.train.Saver(max_to_keep=1)` that only keeps checkpoint corresponding to the weights that achieved the best performance on the validation set !
+There is not much to say, except that the `saver.save()` method takes a session as input. In our implementation, we use 2 savers. A `last_saver = tf.train.Saver()` that will keep the weights at the end of the last 5 epochs and a `best_saver = tf.train.Saver(max_to_keep=1)` that only keeps one checkpoint corresponding to the weights that achieved the best performance on the validation set !
 
 
 Later on, to restore the weights of your model, you need to reload the weights thanks to a saver instance, as in
@@ -571,7 +571,7 @@ with tf.Session() as sess:
 
 Tensorflow comes with an excellent visualization tool called __Tensorboard__ that enables you to plot different scalars (and much more) in real-time, as you train your model.
 
-{% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorflow overview" size="80%" %}
+{% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorboard overview" size="80%" %}
 
 The mechanism of Tensorboard is the following
 1. define some *summaries* (nodes of the graph) that will tell Tensorflow which values we want to plot
@@ -624,7 +624,9 @@ They'll write summaries for both the training and the evaluation, letting you pl
 
 ### A note about the global_step
 
-In order to keep track of how far we are in the training, we use one of Tensorflow's training utilities, the [`global_step`](https://www.tensorflow.org/api_docs/python/tf/train/Optimizer#minimize). Once initialized, we give it to the `optimizer.minimize()` as explained below. Thus, each time the `Session()` will run `sess.run(train_op)`, it will increment the `global_step` by 1. This is very useful for summaries (notice how in the Tensorboard part we give the global step to the `writer`).
+[Official doc](https://www.tensorflow.org/api_docs/python/tf/train/Optimizer#minimize)
+
+In order to keep track of how far we are in the training, we use one of Tensorflow's training utilities, the `global_step`. Once initialized, we give it to the `optimizer.minimize()` as explained below. Thus, each time we will run `sess.run(train_op)`, it will increment the `global_step` by 1. This is very useful for summaries (notice how in the Tensorboard part we give the global step to the `writer`).
 
 ```python
 global_step = tf.train.get_or_create_global_step()
@@ -637,7 +639,7 @@ train_op = optimizer.minimize(loss, global_step=global_step)
 
 ### Logging
 
-A common problem when building a project is to forget about logging. In other words, as long as you write stuff in files and print things to console, people assume they're going to be fine. A better practice is to write __everything__ that you print to the terminal in a `log` file.
+A common problem when building a project is to forget about logging. In other words, as long as you write stuff in files and print things to the shell, people assume they're going to be fine. A better practice is to write __everything__ that you print to the terminal in a `log` file.
 
 That's why in `train.py` and `evaluate.py` we initialize a `logger` using the `logging` package with
 
@@ -652,6 +654,8 @@ For instance, it will create a `train.log` file in `experiments/base_model/`. Yo
 logging.info("It will be printed both to the Terminal and written in the .log file")
 ```
 
+
+That way, you'll be able to both see it in the Terminal and remember it in the future when you'll need to read the `train.log` file.
 
 ### Params
 
