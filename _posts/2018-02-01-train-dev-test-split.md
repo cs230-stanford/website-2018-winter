@@ -159,4 +159,4 @@ The call to `filenames.sort()` makes sure that if you build `filenames` in a dif
 [coursera]: https://www.coursera.org/learn/machine-learning-projects
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 
-[build-dataset]: https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/build_dataset.py
+[build-dataset]: https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/build_dataset.py

@@ -152,7 +152,7 @@ and by running `python synthesize_results.py --model_dir experiments/learning_ra
 
 <!-- Links -->
 [main]: https://cs230-stanford.github.io
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
 [tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html

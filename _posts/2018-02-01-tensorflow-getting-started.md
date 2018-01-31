@@ -191,8 +191,8 @@ Now, let's see how we can input data to our model.
 
 <!-- TODO : have convention for links to code as well as actually include some links -->
 <!-- Links -->
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html
 [post-4]: https://cs230-stanford.github.io/tensorflow-model.html
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html

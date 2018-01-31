@@ -345,7 +345,7 @@ Which one will you [choose][matrix] ?
 </div>
 
 
-[github]: https://github.com/cs230-stanford/cs230-starter-code
+[github]: https://github.com/cs230-stanford/cs230-code-examples
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
 [pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
 [tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
