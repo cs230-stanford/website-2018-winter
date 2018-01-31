@@ -12,7 +12,6 @@ github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
 
-<!-- TODO: comment -->
 Building the input pipeline in a machine learning project is always long and painful, and can take more time than building the actual model.
 In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` to build efficient pipelines for images and text.
 
@@ -21,7 +20,7 @@ In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` 
 This tutorial is among a series explaining the starter code:
 <!-- TODO: add here links to different posts -->
 - [getting started][post-1]: installation, get started with the code for the projects
-- this post: (TensorFlow) explain the global structure of the code
+- __this post__: (TensorFlow) explain the global structure of the code
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
 - [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
 

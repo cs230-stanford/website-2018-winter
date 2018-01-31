@@ -7,7 +7,7 @@ author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
 mathjax: true
 published: true
-tags: theory
+tags: best-practice
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
