@@ -1,13 +1,13 @@
 ---
 layout: post
 title:  "Building the data pipeline"
-description: "How to feed data to the model with tf.data"
-excerpt: "How to feed data to the model with tf.data"
+description: "Tutorial explaining how to use Tensorflow tf.data for text and images"
+excerpt: "Using Tensorflow tf.data for text and images"
 author: "Olivier Moindrot, Guillaume Genthial"
 date:   2018-01-24
 mathjax: true
 published: true
-tags: tensorflow image nlp tf.data
+tags: tensorflow tf.data image nlp
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
