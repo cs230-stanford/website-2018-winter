@@ -321,7 +321,7 @@ __PyTorch__
 - more pythonic and numpy-like approach, easier to get used to the dynamic-graph paradigm
 - designed for faster prototyping and research
 - transparent use of the GPU
-- easy to debug
+- easy to debug and customize
 
 
 Which one will you [choose][matrix] ?
