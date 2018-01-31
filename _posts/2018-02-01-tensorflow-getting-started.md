@@ -8,11 +8,9 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow
-github: https://github.com/cs230-stanford/cs230-starter-code/tree/master/tensorflow
+github: https://github.com/cs230-stanford/cs230-code-examples/tree/master/tensorflow
 module: Tutorials
 ---
-
-<!-- TODO: comment -->
 
 This post follows the [main post][post-1] announcing the release of the CS230 code examples.
 We will explain here the TensorFlow part of the code, in our [github repository][github].
@@ -189,10 +187,9 @@ Now, let's see how we can input data to our model.
 <div align="right"><a href="https://cs230-stanford.github.io/tensorflow-input-data.html"><h3>> Building the input data pipeline</h3></a></div>
 
 
-<!-- TODO : have convention for links to code as well as actually include some links -->
 <!-- Links -->
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html
 [post-4]: https://cs230-stanford.github.io/tensorflow-model.html
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html

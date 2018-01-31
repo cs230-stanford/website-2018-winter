@@ -8,7 +8,7 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow pytorch
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
@@ -37,7 +37,7 @@ Follow Amazon's [getting started guide][aws-tutorial] for creating a Deep Learni
 It's not required to base your project on our code examples, but it might be helpful. (Some of you might be using existing code from another GitHub repo instead, for example.)
 For an introduction to the code examples, see [our tutorial][post-1]. To clone, run this command inside your SSH session with the amazon server:
 ```
-git clone https://github.com/cs230-stanford/cs230-starter-code.git
+git clone https://github.com/cs230-stanford/cs230-code-examples.git
 ```
 
 
@@ -48,5 +48,5 @@ You're ready to start training! Follow the instructions in the [project tutorial
 
 
 <!-- Links -->
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [aws-tutorial]: https://aws.amazon.com/blogs/machine-learning/get-started-with-deep-learning-using-the-aws-deep-learning-ami/

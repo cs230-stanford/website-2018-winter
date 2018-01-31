@@ -1,18 +1,18 @@
 ---
 layout: post
 title:  "Logging and Hyperparameters"
-description: "Best practice to log, load hyperparameters and do random search"
-excerpt: "Best practice to log, load hyperparameters and do random search"
+description: "Best practices to log, load hyperparameters and do random search"
+excerpt: "Best practices to log, load hyperparameters and do random search"
 author: "Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-24
 mathjax: true
 published: true
 tags: best-practice
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
-Logging your outputs to a file is a general good practice in any project.  
+Logging your outputs to a file is a general good practice in any project.
 An even more important good practice is to handle correctly the multiple hyperparameters that arise in any deep learning project. We need to be able to store them in a file and know the full set of hyperparameters used in any past experiment.
 
 This tutorial is among a series of tutorials explaining how to structure a deep learning project.
@@ -152,7 +152,7 @@ and by running `python synthesize_results.py --model_dir experiments/learning_ra
 
 <!-- Links -->
 [main]: https://cs230-stanford.github.io
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
 [tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html

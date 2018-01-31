@@ -1,14 +1,14 @@
 ---
 layout: post
-title:  "Building the data pipeline"
+title:  "Building a data pipeline"
 description: "Tutorial explaining how to use Tensorflow tf.data for text and images"
 excerpt: "Using Tensorflow tf.data for text and images"
 author: "Olivier Moindrot, Guillaume Genthial"
 date:   2018-01-24
 mathjax: true
 published: true
-tags: tensorflow tf.data image nlp
-github: https://github.com/cs230-stanford/cs230-starter-code
+tags: tensorflow tf.data
+github: https://github.com/cs230-stanford/cs230-code-examples/tree/master/tensorflow
 module: Tutorials
 ---
 If you haven't read the previous post,
@@ -535,8 +535,8 @@ Now that we can input data to our model, let's actually see how we define it
 <div align="right"><a href="https://cs230-stanford.github.io/tensorflow-model.html"><h3>> Creating and Training a Model</h3></a></div>
 
 <!-- Links -->
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [post-2]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [post-4]: https://cs230-stanford.github.io/tensorflow-model.html
 [train-dev-test]: https://cs230-stanford.github.io/train-dev-test-split.html

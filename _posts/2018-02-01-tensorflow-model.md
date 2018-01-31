@@ -8,7 +8,7 @@ date: 2018-01-30
 mathjax: true
 published: true
 tags: tensorflow
-github: https://github.com/cs230-stanford/cs230-starter-code/tree/master/tensorflow
+github: https://github.com/cs230-stanford/cs230-code-examples/tree/master/tensorflow
 module: Tutorials
 ---
 
@@ -29,7 +29,7 @@ This tutorial is among a series explaining how to structure a deep learning proj
 - [first post][post-1]: installation, get started with the code for the projects
 - [second post][post-2] (TensorFlow only): explain the global structure of the code
 - [third post][post-3] (TensorFlow only): how to feed data into the model using `tf.data`
-- __this post__: how to create the model and train it
+- __this post: how to create the model and train it__
 
 __Goals of this tutorial__
 - learn more about TensorFlow
@@ -278,7 +278,7 @@ with tf.Session() as sess:
 
 Tensorflow comes with an excellent visualization tool called __Tensorboard__ that enables you to plot different scalars (and much more) in real-time, as you train your model.
 
-{% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorboard overview" size="80%" %}
+{% include image.html url="/assets/tensorflow-model/tensorboard.png" description="Tensorboard overview" size="80%" %}
 
 The mechanism of Tensorboard is the following
 1. define some *summaries* (nodes of the graph) that will tell Tensorflow which values we want to plot
@@ -343,7 +343,7 @@ train_op = optimizer.minimize(loss, global_step=global_step)
 
 <!-- TODO : have convention for links to code as well as actually include some links -->
 <!-- Links -->
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [post-2]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html

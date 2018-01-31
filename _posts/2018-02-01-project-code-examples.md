@@ -1,20 +1,18 @@
 ---
 layout: post
-title:  "Introducing the Project Starter Code"
-description: "Tutorial for the CS230 project starter code: introduction and installation"
+title:  "Introducing the Project Code Examples"
+description: "Introduction and installation"
 excerpt: "Introduction and installation"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow pytorch
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
-<!-- TODO: comment -->
-
-We are happy to introduce the project starter code for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
+We are happy to introduce the project code examples for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
 
 The code contains examples for TensorFlow and PyTorch, in vision and NLP. The structure of the repository is the following:
 ```
@@ -27,18 +25,18 @@ tensorflow/
     nlp/
 ```
 
-This tutorial has multiple parts:
+This tutorial is the introduction to a series explaining how to structure a deep learning project:
 
 - __this post: installation, get started with the code for the projects__
-- [second post][tf-post]: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+- [second post][tf-post]: (TensorFlow) introduction to Tensorflow
+- [third post][tf-data]: (Tensorflow) how to build the data pipeline with tf.data
+- [fourth post][tf-model]: (Tensorflow) how to create and train a model
 
-__Goals of the starter code__
+__Goals of the code examples__
 
+- through these code examples, explain and demonstrate the best practices for structuring a deep learning project
 - help students kickstart their project with a working codebase
 - in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
-- through this codebase, explain and demonstrate the best practices for structuring a deep learning project
 
 __Table of Content__
 
@@ -55,8 +53,8 @@ Each of the four examples (TensorFlow / PyTorch + Vision / NLP) is self-containe
 Suppose you want to work with TensorFlow on a project involving computer vision. You can first clone the whole github repository and only keep the `tensorflow/vision` folder:
 
 ```bash
-git clone https://github.com/cs230-stanford/cs230-starter-code
-cd cs230-starter-code/tensorflow/vision
+git clone https://github.com/cs230-stanford/cs230-code-examples
+cd cs230-code-examples/tensorflow/vision
 ```
 
 ### Create your virtual environment
@@ -66,7 +64,7 @@ It is a good practice to have multiple virtual environments to work on different
 If you are on Mac OS X, you can do this using [Homebrew](https://brew.sh) with `brew install python3`. You can find instructions for Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
 
 **Virtual environment**: If we don't have it already, install `virtualenv` using `sudo pip install virtualenv` (or `pip install --user virtualenv` if you don't have sudo).
-Here we create a virtual environment named `.env`.
+Here we create a virtual environment named `.env`. __Run this command inside each example repo__ for instance in `tensorflow/nlp`
 ```bash
 virtualenv -p python3 .env
 source .env/bin/activate
@@ -86,9 +84,11 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 ### Download the data
 
+__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) etc.
+
 #### Vision
 
-*All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/README.md)*
+_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md)_
 
 For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
 
@@ -112,7 +112,7 @@ Once the download is complete, move the dataset into `data/SIGNS`. Run the scrip
 
 #### Natural Language Processing (NLP)
 
-*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/nlp/README.md)*
+*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md)*
 
 We provide a small subset of the kaggle dataset (30 sentences) for testing in `data/small` but you are encouraged to download the original version on the [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) website.
 
@@ -150,8 +150,6 @@ python build_vocab.py --data_dir data/kaggle
 
 ## Structure of the code
 
-<!-- TODO: copy this to tensorflow / pytorch post and add more details (model folder) -->
-
 The code for each example shares a common structure:
 ```
 data/
@@ -168,7 +166,6 @@ synthesize_results.py
 evaluate.py
 ```
 
-<!-- TODO: check that the structure is still this -->
 Here is each file or directory's purpose:
 - `data/`: will contain all the data of the project (generally not stored on github), with an explicit train/dev/test split
 - `experiments`: contains the different experiments (will be explained in the following section)
@@ -243,7 +240,7 @@ python train.py --model_dir experiments/base_model
 
 The console output will look like
 
-{% include image.html url="/assets/project-starter-code/training.png" description="Training" size="60%" %}
+{% include image.html url="/assets/project-code-examples/training.png" description="Training" size="60%" %}
 
 
 
@@ -312,7 +309,7 @@ __Tensorflow__
 - documented and plenty of code / tutorials online
 - built for large-scale deployment and used by a lot of companies
 - has some very useful tools like Tensorboard for visualization (though you can also use [Tensorboard with PyTorch](https://github.com/lanpa/tensorboard-pytorch))
-- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
+- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have code examples that take care of these subtleties)*
 - transparent use of the GPU
 - can be harder to debug
 
@@ -344,11 +341,11 @@ Which one will you [choose][matrix] ?
 </div>
 
 
-[github]: https://github.com/cs230-stanford/cs230-starter-code
-[tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
+[github]: https://github.com/cs230-stanford/cs230-code-examples
+[tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
-[tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
-[tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
+[tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
+[tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- TODO: add a public link -->
 [SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
