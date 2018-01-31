@@ -8,11 +8,11 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: best-practice
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
-Logging your outputs to a file is a general good practice in any project.  
+Logging your outputs to a file is a general good practice in any project.
 An even more important good practice is to handle correctly the multiple hyperparameters that arise in any deep learning project. We need to be able to store them in a file and know the full set of hyperparameters used in any past experiment.
 
 This tutorial is among a series of tutorials explaining how to structure a deep learning project.

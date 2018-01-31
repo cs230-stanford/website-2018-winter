@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Introducing the Project Starter Code"
+title:  "Project Code Examples"
 description: "Tutorial for the CS230 project starter code: introduction and installation"
 excerpt: "Introduction and installation"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
@@ -8,13 +8,14 @@ date:   2018-01-24
 mathjax: true
 published: true
 tags: tensorflow pytorch
-github: https://github.com/cs230-stanford/cs230-starter-code
+github: https://github.com/cs230-stanford/cs230-code-examples
 module: Tutorials
 ---
 
 <!-- TODO: comment -->
 
-We are happy to introduce the project starter code for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
+We are happy to introduce some code examples that you can use for your CS230 projects. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
+
 
 The code contains examples for TensorFlow and PyTorch, in vision and NLP. The structure of the repository is the following:
 ```
@@ -34,9 +35,9 @@ This tutorial has multiple parts:
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
 - [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
 
-__Goals of the starter code__
+__Goals of the code examples__
 
-- help students kickstart their project with a working codebase
+- help students kickstart their project with a working codebase.
 - in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
 - through this codebase, explain and demonstrate the best practices for structuring a deep learning project
 
@@ -55,8 +56,8 @@ Each of the four examples (TensorFlow / PyTorch + Vision / NLP) is self-containe
 Suppose you want to work with TensorFlow on a project involving computer vision. You can first clone the whole github repository and only keep the `tensorflow/vision` folder:
 
 ```bash
-git clone https://github.com/cs230-stanford/cs230-starter-code
-cd cs230-starter-code/tensorflow/vision
+git clone https://github.com/cs230-stanford/cs230-code-examples
+cd cs230-code-examples/tensorflow/vision
 ```
 
 ### Create your virtual environment
@@ -312,7 +313,7 @@ __Tensorflow__
 - documented and plenty of code / tutorials online
 - built for large-scale deployment and used by a lot of companies
 - has some very useful tools like Tensorboard for visualization (though you can also use [Tensorboard with PyTorch](https://github.com/lanpa/tensorboard-pytorch))
-- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
+- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a these code examples that take care of these subtleties)*
 - transparent use of the GPU
 - can be harder to debug
 
