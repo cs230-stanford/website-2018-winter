@@ -12,8 +12,15 @@ github: https://github.com/cs230-stanford/cs230-starter-code/tree/master/tensorf
 module: Tutorials
 ---
 
-This post is part of a series of post explaining how to structure a deep learning project in TensorFlow.  
-We will explain here how to easily define a deep learning model in TensorFlow using `tf.layers`, and how to train it.  
+If you haven't read the previous post,
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-input-data.html"><h3>> Building the data pipeline</h3></a></div>
+
+<br/>
+
+
+This post is part of a series of post explaining how to structure a deep learning project in TensorFlow.
+We will explain here how to easily define a deep learning model in TensorFlow using `tf.layers`, and how to train it.
 The entire code examples can be found in our [github repository][github].
 
 

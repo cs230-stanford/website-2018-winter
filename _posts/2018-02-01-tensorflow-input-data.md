@@ -11,6 +11,14 @@ tags: tensorflow image nlp tf.data
 github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
+If you haven't read the previous post,
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-getting-started.html"><h3>> Introduction to Tensorflow</h3></a></div>
+
+<br/>
+
+
+__Motivation__
 
 Building the input pipeline in a machine learning project is always long and painful, and can take more time than building the actual model.
 In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` to build efficient pipelines for images and text.
@@ -19,10 +27,10 @@ In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` 
 <!-- TODO: keep the links? update them -->
 This tutorial is among a series explaining the starter code:
 <!-- TODO: add here links to different posts -->
-- [getting started][post-1]: installation, get started with the code for the projects
-- __this post__: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+- [first post][post-1]: installation, get started with the code for the projects
+- [second post][post-2]: (TensorFlow) explain the global structure of the code
+- __this post: (TensorFlow) how to build the data pipeline__
+- [fourth post][post-4]: (Tensorflow) how to build the model and train it
 
 __Goals of this tutorial__
 - learn how to use `tf.data` and the best practices
@@ -36,16 +44,164 @@ __Table of contents__
 
 
 
+---
+
 ## An overview of tf.data
 
-#TODO:
-- explain `tf.data`
-  - refer to tensorflow tutorials (we won't go into all the details)
-  - refer to the very good [slides][slides] by the creator of `tf.data`
-  - high level view: with tf.estimator...
-- explain `tf.data.Dataset`
-- explain `tf.data.Iterator`
-- explain initializable iterator, why we did this (training / eval)
+The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization).
+It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Former data pipelines made the GPU wait for the CPU to load the data, leading to performance issues.
+
+
+Before explaining how `tf.data` works with a simple example, we'll share some great official resources:
+- [API docs][api-tf-data] for `tf.data`
+- [API docs][api-tf-contrib-data] for `tf.contrib.data`: new features still in beta mode. Contains useful functions that will soon be added to the main `tf.data`
+- [Datasets Quick Start][quick-start-tf-data]: gentle introduction to `tf.data`
+- [Programmer's guide][programmer-guide-tf-data]: more advanced and detailed guide to the best practices when using Datasets in TensorFlow
+- [Performance guide][performance-guide]: advanced guide to improve performance of the data pipeline
+- [Official blog post][blog-post-tf-data] introducing Datasets and Estimators: if you are using our [starter code][post-1], you can ignore the part about Estimators
+- [Slides from the creator of tf.data][slides] explaining the API, best practices (don't forget to read the speaker notes below the slides)
+- [Origin github issue][github-issue-tf-data] for Datasets: a bit of history on the origin of `tf.data`
+- [Stackoverflow][stackoverflow] tag for the Datasets API
+
+### Introduction to tf.data with a Text Example
+
+
+Let's go over a quick example. Let's say we have a `file.txt` file containing sentences
+
+```
+I use Tensorflow
+You use PyTorch
+Both are great
+```
+
+Let's read this file with the `tf.data` API:
+
+```python
+dataset = tf.data.TextLineDataset("file.txt")
+```
+
+Let's try to iterate over it
+
+```python
+for line in dataset:
+    print(line)
+```
+
+We get an error
+```
+> TypeError: 'TextLineDataset' object is not iterable
+```
+
+> Wait... What just happened ? I thought it was supposed to read the data.
+
+### Iterators and transformations
+
+What's really happening is that `dataset` is a node of the Tensorflow `Graph` that contains instructions to read the file. We need to initialize the graph and evaluate this node in a Session if we want to read it. While this may sound awfully complicated, this is quite the oposite : now, even the dataset object is a part of the graph, so you don't need to worry about how to feed the data into your model !
+
+We need to add a few things to make it work. First, let's create an `iterator` object over the dataset
+
+```
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+```
+
+Now, `next_element` is a graph's node that will contain the next element of iterator over the Dataset at each execution. Now, let's run it
+
+```python
+with tf.Session() as sess:
+    for i in range(3):
+        print(sess.run(next_element))
+
+>'I use Tensorflow'
+>'You use PyTorch'
+>'Both are great'
+```
+
+
+Now that you understand the idea behind the `tf.data` API, let's quickly review some more advanced tricks. First, you can easily apply transformations to your dataset. For instance, splitting words by space is as easy as adding one line
+```python
+dataset = dataset.map(lambda string: tf.string_split([string]).values)
+```
+
+Shuffling the dataset is also straightforward
+
+```python
+dataset = dataset.shuffle(buffer_size=3)
+```
+
+It will load elements 3 by 3 and shuffle them at each iteration.
+
+You can also create batches
+
+```
+dataset = dataset.batch(2)
+```
+
+and pre-fetch the data (in other words, it will always have one batch ready to be loaded).
+
+```
+dataset = dataset.prefetch(1)
+```
+
+Now, let's see what our iterator has become
+
+```python
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+with tf.Session() as sess:
+    print(sess.run(next_element))
+
+>[['Both' 'are' 'great']
+  ['You' 'use' 'PyTorch']]
+ ```
+
+and as you can see, we now have a batch created from the shuffled Dataset !
+
+__All the nodes in the Graph are assumed to be batched: every Tensor will have `shape = [None, ...]` where None corresponds to the (unspecified) batch dimension__
+
+### Why we use initializable iterators
+
+As you'll see in the `input_fn.py` files, we decided to use an initializable iterator.
+
+```python
+dataset = tf.data.TextLineDataset("file.txt")
+iterator = dataset.make_initializable_iterator()
+next_element = iterator.get_next()
+init_op = iterator.initializer
+```
+
+Its behavior is similar to the one above, but thanks to the `init_op` we can chose to "restart" from the beginning. This will become quite handy when we want to perform multiple epochs !
+
+```python
+with tf.Session() as sess:
+    # Initialize the iterator
+    sess.run(init_op)
+    print(sess.run(next_element))
+    print(sess.run(next_element))
+    # Move the iterator back to the beginning
+    sess.run(init_op)
+    print(sess.run(next_element))
+
+> 'I use Tensorflow'
+  'You use PyTorch'
+  'I use Tensorflow' # Iterator moved back at the beginning
+```
+
+> As we use only one session over the different epochs, we need to be able to restart the iterator. Some other approaches (like `tf.Estimator`) alleviate the need of using `initializable` iterators by creating a new session at each epoch. But this comes at a cost: the weights and the graph must be re-loaded and re-initialized with each call to `estimator.train()` or `estimator.evaluate()`.
+
+
+### Where do I find the data pipeline in the code examples ?
+
+The `model/input_fn.py` defines a function `input_fn` that returns a dictionnary that looks like
+
+```python
+images, labels = iterator.get_next()
+iterator_init_op = iterator.initializer
+
+inputs = {'images': images, 'labels': labels, 'iterator_init_op': iterator_init_op}
+```
+
+This dictionay of inputs will be passed to the model function, which we will detail in the [next post][post-4].
 
 
 ## Building an image data pipeline
@@ -153,15 +309,146 @@ def input_fn(is_training, filenames, params):
 
 ## Building a text data pipeline
 
+Have a look at the Tensorflow seq2seq tutorial using the tf.data pipeline
+- [documentation](https://www.tensorflow.org/tutorials/seq2seq)
+- [github](https://github.com/tensorflow/nmt/)
+
+
+### Files format
+
+We've covered a simple example in the __Overview of tf.data__ section. Now, let's cover a more advanced example. Let's assume that our task is [Named Entity Recognition](https://en.wikipedia.org/wiki/Named-entity_recognition). In other words, our input is a sentence, and our output is a label for each word, like in
+
+```
+John   lives in New   York
+B-PER  O     O  B-LOC I-LOC
+```
+
+Our dataset will thus need to load both the sentences and the labels. We will store those in 2 different files, a `sentence.txt` file containing the sentences (one per line) and a `labels.txt` containing the labels. For example
+
+```
+# sentences.txt
+John lives in New York
+Where is John ?
+```
+
+```
+# labels.txt
+B-PER O O B-LOC I-LOC
+O O B-PER O
+```
+
+Constructing `tf.data` objects that iterate over these files is easy
+
+```python
+# Load txt file, one example per line
+sentences = tf.data.TextLineDataset("sentences.txt")
+labels = tf.data.TextLineDataset("labels.txt")
+```
+
+### Zip datasets together
+
+At this stage, we might want to iterate over these 2 files *at the same time*. This operation is usually known as a *"zip"*. Luckilly, the `tf.data` comes with such a function
+
+
+```python
+# Zip the sentence and the labels together
+dataset = tf.data.Dataset.zip((sentences, labels))
+
+# Create a one shot iterator over the zipped dataset
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+# Actually run in a session
+with tf.Session() as sess:
+    for i in range(2):
+        print(sess.run(dataset))
+
+> ('John lives in New York', 'B-PER O O B-LOC I-LOC')
+  ('Where is John ?', 'O O B-PER O')
+```
+
 ### Creating the vocabulary
-- Creating the vocabulary
-- Creating the dataset
-- See post on train-dev-test split
 
-### TensorFlow's Datasets for text
+Great, now we can get the sentence and the labels as we iterate. Let's see how we can transform this string into a sequence of words and then in a sequence of ids.
+> Most NLP systems rely on ids as input for the words, meaning that you'll eventually have to convert your sentence into a sequence of ids.
 
+Here we assume that we ran some script, like `build_vocab.py` that created some vocabulary files in our `/data` directory. We'll need one file for the words and one file for the labels. They will contain one token per line. For instance
+
+```
+# words.txt
+John
+lives
+in
+...
+```
+
+and
+
+```
+# tags.txt
+B-PER
+B-LOC
+...
+```
+
+
+Tensorflow has a cool built-in tool to take care of the mapping. We simply define 2 lookup tables
+
+```python
+words = tf.contrib.lookup.index_table_from_file("data/words.txt", num_oov_buckets=1)
+tags = tf.contrib.lookup.index_table_from_file("data/tags.txt")
+````
+> The parameter `num_oov_buckets` specifies the number of buckets created for unknow words. The id will be determined by Tensorflow and we don't have to worry about it. As in most of the cases, we just want to have one id reserved for the out-of-vocabulary words, we just use `num_oov_buckets=1`.
+
+
+Now that we initialized this lookup table, we are going to transform the way we read the files, by adding these extra lines
+
+```python
+# Convert line into list of tokens, splitting by white space
+sentences = sentences.map(lambda string: tf.string_split([string]).values)
+
+# Lookup tokens to return their ids
+sentences = sentences.map(lambda tokens: (words.lookup(tokens), tf.size(tokens)))
+```
+> Be careful that  `tf.string_split`  returns a `tf.SparseTensor`, that's why we need to extract the `values`.
+
+### Creating padded batches
+
+Great! Now we can iterate and get a list of ids of words and labels for each sentence. We just need to take care of one final thing: __batches__! But here comes a problem: *sentences have different length.* Thus, we need to perform an extra __padding__ operation that will add special token to shorter sentences so that our final batch Tensor is a tensor of shape `[batch_size, max_len_of_sentence_in_the_batch]`.
+
+We first need to specify the padding shapes and values
+
+```python
+# Create batches and pad the sentences of different length
+padded_shapes = (tf.TensorShape([None]),   # sentence of unknown size
+                 tf.TensorShape([None]))  # labels of unknown size
+
+padding_values = (params.id_pad_word,   # sentence padded on the right with id_pad_word
+                  params.id_pad_tag)    # labels padded on the right with id_pad_tag
+```
+> Note that the padding_values must be in the vocabulary (otherwise we might have a problem later on). That's why we get the id of the special "\<pad\>" token in `train.py` with `id_pad_word = words.lookup(tf.constant('<pad>'))`.
+
+
+Then, we can just use the `tf.data` `padded_batch` method, that takes care of the padding !
+
+```python
+# Shuffle the dataset and then create the padded batches
+dataset = (dataset
+        .shuffle(buffer_size=buffer_size)
+        .padded_batch(32, padded_shapes=padded_shapes, padding_values=padding_values)
+    )
+```
 
 ## Best practices
+
+Is that all that we need in general ? Not quite. As we mentionned padding, we have to make sure that our model does not take the extra padded-tokens into account when computing its prediction. A common way of solving this issue is to add extra information to our data iterator and give the length of the input sentence as input. Later on, we will be able to give this argument to the `dynamic_rnn` function or create binary masks with `tf.sequence_mask`.
+
+Look at the `model/input_fn.py` file for more details. But basically, it boils down to adding one line, using `tf.size`
+
+```python
+sentences = sentences.map(lambda tokens: (vocab.lookup(tokens), tf.size(tokens)))
+```
+
 
 ### Switch between train and validation
 - how to have one tensor `inputs` for train and validation
@@ -170,6 +457,9 @@ def input_fn(is_training, filenames, params):
   - (in our code, we used initializable iterators because we train multiple epochs, one by one)
 
 ### Shuffle and repeat
+
+When training on a dataset, we need to repeat it for multiple epochs and we need to shuffle it.
+
 - explain shuffling: buffer size big enough
   - cf. [stackoverflow post][stackoverflow-buffer-size]
   - best to already shuffle the filenames at the beginning
@@ -202,38 +492,34 @@ To summarize, one good order for the different transformations is:
 4. batch
 5. prefetch
 
-
-## Resources
-
-- [API docs][api-tf-data] for `tf.data`
-- [API docs][api-tf-contrib-data] for `tf.contrib.data`: new features still in beta mode. Contains useful functions that will soon be added to the main `tf.data`
-- [Datasets Quick Start][quick-start-tf-data]: gentle introduction to `tf.data`
-- [Programmer's guide][programmer-guide-tf-data]: more advanced and detailed guide to the best practices when using Datasets in TensorFlow
-- [Official blog post][blog-post-tf-data] introducing Datasets and Estimators: if you are using our [starter code][post-1], you can ignore the part about Estimators
-- [Slides from the creator of tf.data][slides] explaining the API, best practices (don't forget to read the speaker notes below the slides)
-- [Origin github issue][github-issue-tf-data] for Datasets: a bit of history on the origin of `tf.data`
-- [Stackoverflow][stackoverflow] tag for the Datasets API
-
+<!--
 TODO:
 - our github tensorflow/image tensorflow/text
-- seq2seq official tutorial
+- seq2seq official tutorial -->
 
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+Now that we can input data to our model, let's actually see how we define it
+
+<div align="right"><a href="https://cs230-stanford.github.io/tensorflow-model.html"><h3>> Creating and Training a Model</h3></a></div>
 
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [post-1]: https://cs230-stanford.github.io/project-starter-code.html
 <!-- TODO: put correct link -->
-[tf-post]: https://cs230-stanford.github.io/
-<!-- TODO: put correct link -->
-[tf-vision]: https://cs230-stanford.github.io/
-<!-- TODO: put correct link -->
-[tf-nlp]: https://cs230-stanford.github.io/
+[post-2]: https://cs230-stanford.github.io/tensorflow-getting-started.html
+[post-4]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- Resources for tf.data -->
 [api-tf-data]: https://www.tensorflow.org/api_docs/python/tf/data
 [api-tf-contrib-data]: https://www.tensorflow.org/api_docs/python/tf/contrib/data
 [quick-start-tf-data]: https://www.tensorflow.org/get_started/datasets_quickstart
 [programmer-guide-tf-data]: https://www.tensorflow.org/programmers_guide/datasets
+[performance-guide]: https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization
 [blog-post-tf-data]: https://developers.googleblog.com/2017/09/introducing-tensorflow-datasets.html
 [slides]: https://docs.google.com/presentation/d/16kHNtQslt-yuJ3w8GIx-eEH6t_AvFeQOchqGRFpAD7U
 [github-issue-tf-data]: https://github.com/tensorflow/tensorflow/issues/7951

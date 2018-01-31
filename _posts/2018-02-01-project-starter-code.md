@@ -29,7 +29,7 @@ tensorflow/
 
 This tutorial has multiple parts:
 
-- this post: installation, get started with the code for the projects
+- __this post: installation, get started with the code for the projects__
 - [second post][tf-post]: (TensorFlow) explain the global structure of the code
 - [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
 - [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
