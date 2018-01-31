@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Creating and training the model"
-description: "How to create the model and train it in TensorFlow"
-excerpt: "How to create the model and train it in TensorFlow"
+title:  "Create and train a Model"
+description: "Create and train a Model in Tensorflow using tf.layers, tf.train, tf.metrics, Tensorboard"
+excerpt: "Using tf.layers, tf.train, tf.metrics, Tensorboard"
 author: "Guillaume Genthial, Olivier Moindrot"
 date: 2018-01-30
 mathjax: true
