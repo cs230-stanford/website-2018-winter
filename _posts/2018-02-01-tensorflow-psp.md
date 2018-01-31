@@ -549,7 +549,67 @@ with tf.Session() as sess:
 
 [Official guide](https://www.tensorflow.org/programmers_guide/summaries_and_tensorboard)
 
+Tensorflow comes with an excellent visualization tool called __Tensorboard__ that enables you to plot different scalars (and much more) in real-time, as you train your model.
 
+{% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorflow overview" size="80%" %}
+
+The mechanism of Tensorboard is the following
+1. define some *summaries* (nodes of the graph) that will tell tensorflow which values we want to plot
+2. evaluate these nodes in the `session`
+3. write the output to a file thanks to a `tf.summary.FileWriter`
+
+Then, you only need to launch tensorboard in your web-browser by opening a terminal and writing for instance
+```
+tensorboard --logdir="expirements/base_model"
+```
+
+Then, navigate to <a href="http://127.0.0.1:6006/">http://127.0.0.1:6006/</a> and you'll see the different plots.
+
+In the starter code, we add the summaries in `model/model_fn.py`
+
+```python
+# Compute different scalars to plot
+loss = tf.reduce_mean(losses)
+accuracy = tf.reduce_mean(tf.cast(tf.equal(labels, predictions), tf.float32))
+
+# Summaries for training
+tf.summary.scalar('loss', loss)
+tf.summary.scalar('accuracy', accuracy)
+```
+> Note that we don't use the metrics that we defined earlier. The reason being that the `tf.metrics` return the running average, but Tensorboard already takes care of the smoothing, so we don't want to add any smoothing. It's actually rather the opposite: we are interested in real-time progress
+
+Once these nodes are added to the `model_spec` dictionnary, we need to evaluate them in a session. In our implementation, this is done every `params.save_summary_steps` as you'll notice in the `model/training.py` file.
+
+
+```python
+if i % params.save_summary_steps == 0:
+    # Perform a mini-batch update
+    _, _, loss_val, summ, global_step_val = sess.run([train_op, update_metrics, loss,
+                                                      summary_op, global_step])
+    # Write summaries for tensorboard
+    writer.add_summary(summ, global_step_val)
+else:
+    _, _, loss_val = sess.run([train_op, update_metrics, loss])
+```
+
+You'll notice that we have 2 different writers
+
+```python
+train_writer = tf.summary.FileWriter(os.path.join(model_dir, 'train_summaries'), sess.graph)
+eval_writer = tf.summary.FileWriter(os.path.join(model_dir, 'eval_summaries'), sess.graph)
+```
+
+They'll write summaries for both the training and the evaluation, letting you plot both plots on the same graph !
+
+
+### A note about the global_step
+
+In order to keep track of how far we are in the training, we use one of Tensorflow's training utilities, the [`global_step`](https://www.tensorflow.org/api_docs/python/tf/train/Optimizer#minimize). Once initialized, we give it to the `optimizer.minimize()` as explained below. Thus, each time the `Session()` will run `sess.run(train_op)`, it will increment the `global_step` by 1. This is very useful for summaries (notice how in the Tensorboard part we give the global step to the `writer`).
+
+```python
+global_step = tf.train.get_or_create_global_step()
+train_op = optimizer.minimize(loss, global_step=global_step)
+```
 
 ## Logging, Params and `search_hyperparams`
 

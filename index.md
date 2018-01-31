@@ -6,4 +6,4 @@ layout: home
 ---
 
 
-These notes are meant to cover the lectures of Stanford's class [CS230 (Deep Learning)](http://cs230.stanford.edu) taught by Andrew Ng and Kian Katanforoosh. For questions / typos / bugs, use Piazza. You can also submit a pull request directly to our [github](https://github.com/cs230-stanford/cs230-stanford.github.io).
+These notes and tutorials are meant to complement the material of Stanford's class [CS230 (Deep Learning)](http://cs230.stanford.edu) taught by Andrew Ng and Kian Katanforoosh. For questions / typos / bugs, use Piazza. You can also submit a pull request directly to our [github](https://github.com/cs230-stanford/cs230-stanford.github.io).
