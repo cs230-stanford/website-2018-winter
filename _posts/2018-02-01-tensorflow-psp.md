@@ -27,13 +27,12 @@ This tutorial is among a series explaining the starter code:
 <!-- #TODO: add here links to different posts -->
 - [getting started][post-1]: installation, get started with the code for the projects
 - this post: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+- [third post][tf-data]: how to feed data into the model
 
 __Goals of this tutorial__
 - learn more about TensorFlow
-- learn how to correctly structure a deep learning project in TensorFlow
-- fully understand the code to be able to use it for your projects
+- learn an example of how to correctly structure a deep learning project in TensorFlow
+- fully understand the code to be able to use it for your own projects
 
 __Table of Content__
 
@@ -731,9 +730,5 @@ and by running `python synthesize_results.py --model_dir experiments/learning_ra
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [post-1]: https://cs230-stanford.github.io/project-starter-code.html
-<!-- TODO: put correct link -->
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
-<!-- TODO: put correct link -->
-[tf-vision]: https://cs230-stanford.github.io/tensorflow-input-data-image.html
-<!-- TODO: put correct link -->
-[tf-nlp]: https://cs230-stanford.github.io/tensorflow-input-data-text.html
+[tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
