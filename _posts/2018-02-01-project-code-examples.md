@@ -342,10 +342,10 @@ Which one will you [choose][matrix] ?
 
 
 [github]: https://github.com/cs230-stanford/cs230-code-examples
-[post-2]: https://cs230-stanford.github.io/tensorflow-getting-started.html
+[tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
-[post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html
-[post-4]: https://cs230-stanford.github.io/tensorflow-model.html
+[tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
+[tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- TODO: add a public link -->
 [SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
