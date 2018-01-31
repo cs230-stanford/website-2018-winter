@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Logging and Hyperparameters"
-description: "Best practice to log, load hyperparameters and do random search"
-excerpt: "Best practice to log, load hyperparameters and do random search"
+description: "Best practices to log, load hyperparameters and do random search"
+excerpt: "Best practices to log, load hyperparameters and do random search"
 author: "Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-24
 mathjax: true

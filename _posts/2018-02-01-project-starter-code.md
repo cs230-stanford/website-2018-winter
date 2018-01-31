@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Introducing the Project Starter Code"
-description: "Tutorial for the CS230 project starter code: introduction and installation"
+title:  "Introducing the Project Code Examples"
+description: "Introduction and installation"
 excerpt: "Introduction and installation"
 author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
@@ -12,9 +12,7 @@ github: https://github.com/cs230-stanford/cs230-starter-code
 module: Tutorials
 ---
 
-<!-- TODO: comment -->
-
-We are happy to introduce the project starter code for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
+We are happy to introduce the project code examples for CS230. All the code used in the tutorial can be found on the corresponding [github repository][github]. The code has been well commented and detailed, so we recommend reading it entirely at some point if you want to use it for your project.
 
 The code contains examples for TensorFlow and PyTorch, in vision and NLP. The structure of the repository is the following:
 ```
@@ -27,18 +25,18 @@ tensorflow/
     nlp/
 ```
 
-This tutorial has multiple parts:
+This tutorial is the introduction to a series explaining how to structure a deep learning project:
 
 - __this post: installation, get started with the code for the projects__
-- [second post][tf-post]: (TensorFlow) explain the global structure of the code
-- [third post][tf-vision]: (Tensorflow - Vision) details for the computer vision example
-- [fourth post][tf-nlp]: (Tensorflow - NLP) details for the NER example
+- [second post][post-2]: (TensorFlow) explain the global structure of the code
+- [third post][post-3]: (Tensorflow) how to build the data pipeline
+- [fourth post][post-4]: (Tensorflow) how to build the model and train it
 
-__Goals of the starter code__
+__Goals of the code examples__
 
+- through these code examples, explain and demonstrate the best practices for structuring a deep learning project
 - help students kickstart their project with a working codebase
 - in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
-- through this codebase, explain and demonstrate the best practices for structuring a deep learning project
 
 __Table of Content__
 
@@ -88,7 +86,7 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 #### Vision
 
-*All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/README.md)*
+_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-starter-code/blob/master/tensorflow/vision/README.md)_
 
 For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
 
@@ -150,8 +148,6 @@ python build_vocab.py --data_dir data/kaggle
 
 ## Structure of the code
 
-<!-- TODO: copy this to tensorflow / pytorch post and add more details (model folder) -->
-
 The code for each example shares a common structure:
 ```
 data/
@@ -168,7 +164,6 @@ synthesize_results.py
 evaluate.py
 ```
 
-<!-- TODO: check that the structure is still this -->
 Here is each file or directory's purpose:
 - `data/`: will contain all the data of the project (generally not stored on github), with an explicit train/dev/test split
 - `experiments`: contains the different experiments (will be explained in the following section)
@@ -312,7 +307,7 @@ __Tensorflow__
 - documented and plenty of code / tutorials online
 - built for large-scale deployment and used by a lot of companies
 - has some very useful tools like Tensorboard for visualization (though you can also use [Tensorboard with PyTorch](https://github.com/lanpa/tensorboard-pytorch))
-- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have a starter code that takes care of these subtleties)*
+- but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have code examples that take care of these subtleties)*
 - transparent use of the GPU
 - can be harder to debug
 
