@@ -196,44 +196,54 @@ This dictionay of inputs will be passed to the model function, which we will det
 
 ## Building an image data pipeline
 
-#TOOD
-- code examples
-- preprocess(...)
-- train_preprocess()
-- eval_preprocess()
 
+Here is what a Dataset for images might look like. Here we already have a list of `filenames` to jpeg images and a corresponding list of `labels`. We apply the following steps for training:
+
+1. Create the dataset from slices of the filenames and labels
+2. Shuffle the data with a buffer size equal to the length of the dataset. This ensures good shuffling (cf. [this answer][stackoverflow-buffer-size])
+3. Parse the images from filename to the pixel values. Use multiple threads to improve the speed of preprocessing
+4. (Optional for training) Data augmentation for the images. Use multiple threads to improve the speed of preprocessing
+5. Batch the images
+6. Prefetch one batch to make sure that a batch is ready to be served at all time
 
 
 ```python
-def _parse_function(filename, label):
-    """Obtain the image from the filename (for both training and validation).
+dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+dataset = dataset.shuffle(len(filenames))
+dataset = dataset.map(parse_function, num_parallel_calls=4)
+dataset = dataset.map(train_preprocess, num_parallel_calls=4)
+dataset = dataset.batch(batch_size)
+dataset = dataset.prefetch(1)
+```
 
-    The following operations are applied:
-        - Decode the image from jpeg format
-        - Convert to float and to range [0, 1]
-        - Resize the image to size (224, 224)
-    """
+The `parse_function` will do the following:
+- read the content of the file
+- decode using jpeg format
+- convert to float values in `[0, 1]`
+- resize to size `(64, 64)`
+
+
+```python
+def parse_function(filename, label):
     image_string = tf.read_file(filename)
 
     # Don't use tf.image.decode_image, or the output shape will be undefined
-    image_decoded = tf.image.decode_jpeg(image_string, channels=3)
+    image = tf.image.decode_jpeg(image_string, channels=3)
 
     # This will convert to float values in [0, 1]
-    image = tf.image.convert_image_dtype(image_decoded, tf.float32)
+    image = tf.image.convert_image_dtype(image, tf.float32)
 
-    resized_image = tf.image.resize_images(image, [224, 224])
+    image = tf.image.resize_images(image, [64, 64])
     return resized_image, label
 ```
 
 
+And finally the `train_preprocess` can be optionally used during training to perform data augmentation:
+- Horizontally flip the image with probability 1/2
+- Apply random brightness and saturation
+
 ```python
 def train_preprocess(image, label):
-    """Image preprocessing for training.
-
-    Apply the following operations:
-        - Horizontally flip the image with probability 1/2
-        - Apply random brightness and saturation
-    """
     image = tf.image.random_flip_left_right(image)
 
     image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
@@ -246,58 +256,13 @@ def train_preprocess(image, label):
 ```
 
 
-```python
-def input_fn(is_training, filenames, params):
-    """Input function for the SIGNS dataset.
-
-    The filenames have format "{label}_IMG_{id}.jpg".
-    For instance: "data_dir/2_IMG_4584.jpg".
-
-    Args:
-        is_training: (bool) whether to use the train or test pipeline.
-                     At training, we shuffle the data and have multiple epochs
-        filenames: (list) filenames of the images, as ["data_dir/{label}_IMG_{id}.jpg"...]
-        params: (Params) contains hyperparameters of the model (ex: `params.num_epochs`)
-    """
-    num_samples = len(filenames)
-    # Labels will be between 0 and 5 included (6 classes in total)
-    labels = [int(filename.split('/')[-1][0]) for filename in filenames]
-
-    # Create a Dataset serving batches of images and labels
-    # We don't repeat for multiple epochs because we always train and evaluate for one epoch
-    if is_training:
-        dataset = (tf.data.Dataset.from_tensor_slices((tf.constant(filenames), tf.constant(labels)))
-            .shuffle(num_samples)  # whole dataset into the buffer ensures good shuffling
-            .map(_parse_function, num_parallel_calls=params.num_parallel_calls)
-            .map(train_preprocess, num_parallel_calls=params.num_parallel_calls)
-            .batch(params.batch_size)
-            .prefetch(1)  # make sure you always have one batch ready to serve
-        )
-    else:
-        dataset = (tf.data.Dataset.from_tensor_slices((tf.constant(filenames), tf.constant(labels)))
-            .map(_parse_function)
-            .batch(params.batch_size)
-            .prefetch(1)  # make sure you always have one batch ready to serve
-        )
-
-    # Create reinitializable iterator from dataset
-    iterator = dataset.make_initializable_iterator()
-    images, labels = iterator.get_next()
-    iterator_init_op = iterator.initializer
-
-    if mode == 'predict':
-        return {'images': images}
-
-    inputs = {'images': images, 'labels': labels, 'iterator_init_op': iterator_init_op}
-    return inputs
-```
-
 
 
 ### Data augmentation
 
 
 ## Building a text data pipeline
+
 
 ### Creating the vocabulary
 - Creating the vocabulary
@@ -309,15 +274,15 @@ def input_fn(is_training, filenames, params):
 
 ## Best practices
 
-### Switch between train and validation
-- how to have one tensor `inputs` for train and validation
-- use initializable iterators
-- also possible (and better?) to use one shot iterators, and have one for training, one for validation
-  - (in our code, we used initializable iterators because we train multiple epochs, one by one)
-
 ### Shuffle and repeat
 
-When training on a dataset, we need to repeat it for multiple epochs and we need to shuffle it.
+When training on a dataset, we often need to repeat it for multiple epochs and we need to shuffle it.
+
+One big caveat when shuffling is to make sure that the `buffer_size` argument is big enough.
+The bigger it is, the longer it is going to take to load the data at the beginning.
+However a low buffer size can be disastrous for training. Here is a good [answer][stackoverflow-buffer-size] on stackoverflow detailing an example of why.
+
+The best way to avoid this kind of error might be to split the dataset into train / dev / test in advance and already shuffle the data there (see our other [post][train-dev-test].
 
 - explain shuffling: buffer size big enough
   - cf. [stackoverflow post][stackoverflow-buffer-size]
@@ -372,9 +337,9 @@ TODO:
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [post-1]: https://cs230-stanford.github.io/project-starter-code.html
-<!-- TODO: put correct link -->
 [post-2]: https://cs230-stanford.github.io/tensorflow-getting-started.html
 [post-4]: https://cs230-stanford.github.io/tensorflow-model.html
+[train-dev-test]: https://cs230-stanford.github.io/train-dev-test-split.html
 
 <!-- Resources for tf.data -->
 [api-tf-data]: https://www.tensorflow.org/api_docs/python/tf/data
