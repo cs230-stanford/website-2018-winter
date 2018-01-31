@@ -439,7 +439,7 @@ dataset = (dataset
     )
 ```
 
-## Best practices
+### Computing the sentence's size
 
 Is that all that we need in general ? Not quite. As we mentionned padding, we have to make sure that our model does not take the extra padded-tokens into account when computing its prediction. A common way of solving this issue is to add extra information to our data iterator and give the length of the input sentence as input. Later on, we will be able to give this argument to the `dynamic_rnn` function or create binary masks with `tf.sequence_mask`.
 
@@ -449,6 +449,69 @@ Look at the `model/input_fn.py` file for more details. But basically, it boils d
 sentences = sentences.map(lambda tokens: (vocab.lookup(tokens), tf.size(tokens)))
 ```
 
+
+### Advanced use - extracting characters
+
+Now, let's try to perform a more complicated operation. We want to extract characters from each word, maybe because our NLP system relies on characters. Our input is a file that looks like
+
+```
+1 22
+3333 4 55
+```
+
+We first create a dataset that yields the words for each sentence, as usual
+
+```python
+dataset = tf.data.TextLineDataset("file.txt")
+dataset = dataset.map(lambda token: tf.string_split([token]).values)
+```
+
+Now, we are going to reuse the `tf.string_split` function. However, it outputs a sparse tensor, a convenient data representation in general but which doesn't seem do be supported (yet) by `tf.data`. Thus, we need to convert this `SparseTensor` to a regular `Tensor`
+
+```python
+def extract_char(token, default_value="<pad_char>"):
+    # Split characters
+    out = tf.string_split(token, delimiter='')
+    # Convert to Dense tensor, filling with default value
+    out = tf.sparse_tensor_to_dense(out, default_value=default_value)
+    return out
+
+# Dataset yields word and characters
+dataset = dataset.map(lambda token: (token, extract_char(token)))
+```
+> Notice how we specified a `default_value` to the `tf.sparse_tensor_to_dense` function: words have different lengths, thus the `SparseTensor` that we need to convert has some *unspecified* entries !
+
+Creating the padded batches is still as easy as above
+
+```python
+# Creating the padded batch
+padded_shapes = (tf.TensorShape([None]),       # padding the words
+                 tf.TensorShape([None, None])) # padding the characters for each word
+padding_values = ('<pad_word>',  # sentences padded on the right with <pad>
+                  '<pad_char>')  # arrays of characters padded on the right with <pad>
+
+dataset = dataset.padded_batch(2, padded_shapes=padded_shapes, padding_values=padding_values)
+```
+
+and you can test that the output matches your expectations
+
+```python
+iterator = dataset.make_one_shot_iterator()
+next_element = iterator.get_next()
+
+with tf.Session() as sess:
+    for i in range(1):
+        sentences, characters = sess.run(next_element))
+        print(sentences[0])
+        print(characters[0][1])
+
+> ['1', '22', '<pad_word>'] # sentence 1 (words)
+  ['2', '2', '<pad_char>', '<pad_char>']  # sentence 1 word 2 (chars)
+```
+> Can you explain why we have 2 `<pad_char>` and 1 `<pad_word>` in the first batch ?
+
+
+## Best Practices
 
 ### Switch between train and validation
 - how to have one tensor `inputs` for train and validation
