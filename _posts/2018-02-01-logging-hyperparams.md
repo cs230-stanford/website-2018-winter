@@ -70,7 +70,7 @@ This quickly becomes unmanageable. Plus, how do you even keep track of the param
 3. Write all your parameters in a file (we used `.json` but could be anything else) and store this file in the directory containing your experiment.
 If you need to go back to your experiment later, you can quickly review which parameters yielded the performance etc.
 
-We chose to take this third approach in our code, and define class `Params` in `utils.py`.
+We chose to take this third approach in our code. We define a class `Params` in `utils.py`.
 
 Loading the parameters is as simple as writing
 
@@ -108,16 +108,30 @@ elif params.model_version == "simple_convolutions":
     logits = bulid_model_simple_convolutions(inputs, params)
 ```
 
-which will be quite handy to have different functions and behavior depending on a set of parameters !
+which will be quite handy to have different functions and behaviors depending on a set of parameters !
 
 
 ## Hyperparameter search
 
-A important part of any Machine Learning project is hyperparameter tuning. In other words, you want to see how your model performs on the development set on different sets of hyperparameters. There are basically 2 ways to implement this:
+An important part of any Machine Learning project is hyperparameter tuning. In other words, you want to see how your model performs on the development set on different sets of hyperparameters. There are basically 2 ways to implement this:
 
-1. Have a python loop over the different set of hyperparameters and at each iteration of the loop, run the `train_and_evaluate(model_spec, params, ...)` function.
+1. Have a python loop over the different set of hyperparameters and at each iteration of the loop, run the `train_and_evaluate(model_spec, params, ...)` function, like
+```python
+for lr in [0.1, 0.01, 0.001]:
+    params.learning_rate = lr
+    train_and_evaluate(model_spec, params, ...)
+```
 
 2. Have a more general script that will create a subfolder for each set of hyperparameteres and launch a training job using the `python train.py` command. While there is not much difference in the simplest setting, some more advanced clusters have some job managers and instead of running multiple `python train.py`, they instead do something like `job-manager-submit train.py` which will run the jobs concurrently, making the hyperparameter tuning much faster !
+```python
+for lr in [0.1, 0.01, 0.001]:
+    params.learning_rate = lr
+    # Create new experiment directory and save the relevant params.json
+    subfolder = create_subfolder("lr_{}".format(lr))
+    export_params_to_json(params, subfolder)
+    # Launch a training in this directory -- it will call `train.py`
+    lauch_training_job(model_dir=subfolder, ...)
+```
 
 This is what the `search_hyperparams.py` file does. It is basically a python script that runs other python scripts. Once all the sub-jobs have ended, you'll have the results of each experiment in a `metrics_eval_best_weights.json` file for each experiment directory.
 
