@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Building the data pipeline"
-description: "Tutorial for the TensorFlow part of the starter code on how to input image data"
+description: "How to feed data to the model with tf.data"
 excerpt: "How to feed data to the model with tf.data"
 author: "Olivier Moindrot, Guillaume Genthial"
 date:   2018-01-24
@@ -25,7 +25,7 @@ In this tutorial we will learn how to use TensorFlow's Dataset module `tf.data` 
 
 
 <!-- TODO: keep the links? update them -->
-This tutorial is among a series explaining the starter code:
+This tutorial is among a series explaining how to structure a deep learning project:
 <!-- TODO: add here links to different posts -->
 - [first post][post-1]: installation, get started with the code for the projects
 - [second post][post-2]: (TensorFlow) explain the global structure of the code
@@ -48,7 +48,7 @@ __Table of contents__
 
 ## An overview of tf.data
 
-The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization).
+The `Dataset` API allows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization).
 It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Former data pipelines made the GPU wait for the CPU to load the data, leading to performance issues.
 
 
@@ -58,7 +58,7 @@ Before explaining how `tf.data` works with a simple example, we'll share some gr
 - [Datasets Quick Start][quick-start-tf-data]: gentle introduction to `tf.data`
 - [Programmer's guide][programmer-guide-tf-data]: more advanced and detailed guide to the best practices when using Datasets in TensorFlow
 - [Performance guide][performance-guide]: advanced guide to improve performance of the data pipeline
-- [Official blog post][blog-post-tf-data] introducing Datasets and Estimators: if you are using our [starter code][post-1], you can ignore the part about Estimators
+- [Official blog post][blog-post-tf-data] introducing Datasets and Estimators. We don't use Estimators in our [code examples][github] so you can safely ignore them for now.
 - [Slides from the creator of tf.data][slides] explaining the API, best practices (don't forget to read the speaker notes below the slides)
 - [Origin github issue][github-issue-tf-data] for Datasets: a bit of history on the origin of `tf.data`
 - [Stackoverflow][stackoverflow] tag for the Datasets API

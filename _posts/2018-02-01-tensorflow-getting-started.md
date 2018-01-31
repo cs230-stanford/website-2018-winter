@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Introduction to Tensorflow"
-description: "Tutorial for the TensorFlow part of the starter code"
+description: "Graph, Session, Nodes and variable scope"
 excerpt: "Graph, Session, Nodes and variable scope"
 author: "Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-24
@@ -14,7 +14,7 @@ module: Tutorials
 
 <!-- TODO: comment -->
 
-This post follows the [main post][post-1] announcing the CS230 Project Starter Code.
+This post follows the [main post][post-1] announcing the release of the CS230 code examples.
 We will explain here the TensorFlow part of the code, in our [github repository][github].
 
 ```
@@ -23,11 +23,12 @@ tensorflow/
     nlp/
 ```
 
-This tutorial is among a series explaining the starter code:
-<!-- #TODO: add here links to different posts -->
-- [getting started][post-1]: installation, get started with the code for the projects
+This tutorial is among a series explaining how to structure a deep learning project:
+- [first post][post-1]: installation, get started with the code for the projects
 - __this post: (TensorFlow) explain the global structure of the code__
-- [third post][tf-data]: how to feed data into the model
+- [third post][post-3]: (TensorFlow) how to build the data pipeline
+- [fourth post][post-4]: (Tensorflow) how to build the model and train it
+
 
 __Goals of this tutorial__
 - learn more about TensorFlow
@@ -111,7 +112,7 @@ with tf.Session() as sess:
 ```
 
 
-In the starter code,
+In the code examples,
 
 - __step 1__ `model/input_fn.py` and `model/model_fn`
 
@@ -159,7 +160,7 @@ with tf.Session() as sess:
 
 ### How we deal with different Training / Evaluation Graphs
 
-Starter-code design choice: theoretically, the graphs you define for training and inference can be different, but they still need to share their weights. To remedy this issue, there are two possibilities
+Code examples design choice: theoretically, the graphs you define for training and inference can be different, but they still need to share their weights. To remedy this issue, there are two possibilities
 
 1. re-build the graph, create a new session and reload the weights from some file when we switch between training and inference.
 2. create all the nodes for training and inference in the graph and make sure that the python code does not create the nodes twice by using the `reuse=True` trick explained above.
@@ -192,5 +193,7 @@ Now, let's see how we can input data to our model.
 <!-- Links -->
 [github]: https://github.com/cs230-stanford/cs230-starter-code
 [post-1]: https://cs230-stanford.github.io/project-starter-code.html
+[post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html
+[post-4]: https://cs230-stanford.github.io/tensorflow-model.html
 [tf-post]: https://cs230-stanford.github.io/tensorflow-psp.html
 [tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
