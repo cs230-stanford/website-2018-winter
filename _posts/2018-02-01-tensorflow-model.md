@@ -29,7 +29,7 @@ This tutorial is among a series explaining how to structure a deep learning proj
 - [first post][post-1]: installation, get started with the code for the projects
 - [second post][post-2] (TensorFlow only): explain the global structure of the code
 - [third post][post-3] (TensorFlow only): how to feed data into the model using `tf.data`
-- __this post__: how to create the model and train it
+- __this post: how to create the model and train it__
 
 __Goals of this tutorial__
 - learn more about TensorFlow
