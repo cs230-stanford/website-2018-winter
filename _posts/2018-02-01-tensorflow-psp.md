@@ -46,7 +46,7 @@ __Table of Content__
 
 ### Resources
 
-For an official __introduction__ to the tensorflow concepts of `Graph()` and `Session()`, check out the [official introduction on tensorflow.org](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial).
+For an official __introduction__ to the Tensorflow concepts of `Graph()` and `Session()`, check out the [official introduction on tensorflow.org](https://www.tensorflow.org/get_started/get_started#tensorflow_core_tutorial).
 
 For a __simple example on MNIST__, read [the official tutorial](https://www.tensorflow.org/get_started/mnist/beginners), but keep in mind that some of the techniques are not recommended for big projects (they use `placeholders` instead of the new `tf.data` pipeline, they don't use `tf.layers`, etc.).
 
@@ -139,7 +139,7 @@ with tf.variable_scope('model'):
 > ValueError: Variable model/x already exists, disallowed.
 ```
 
-When trying to create a new variable named `model/x`, we run into an Exception as a variable with the same name already exists. Thanks to this naming mechanism, you can actually controll which value you give to the different nodes, and at different points of your code, decide to have 2 python objects correspond to the same node !
+When trying to create a new variable named `model/x`, we run into an Exception as a variable with the same name already exists. Thanks to this naming mechanism, you can actually control which value you give to the different nodes, and at different points of your code, decide to have 2 python objects correspond to the same node !
 
 ```python
 with tf.variable_scope('model', reuse=True):
@@ -152,24 +152,44 @@ We can check that they indeed have the same value
 ```python
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer()) # Initialize the Variables
-    sess.run(tf.assign(x1, tf.constant(2.)))    # Change the value of x1
+    sess.run(tf.assign(x1, tf.constant(1.)))    # Change the value of x1
+    sess.run(tf.assign(x2, tf.constant(2.)))    # Change the value of x2
     print("x1 = ", sess.run(x1), " x2 = ", sess.run(x2))
 
 > x1 =  2.0  x2 =  2.0
 ```
 
-> Starter-code design choice: theoretically, the graphs you define for training and inference can be different, but they still need to share their weights. To remedy this issue, there are two possibilities:
-1. re-build the graph, create a new session and reload the weights from some file when we switch between training and inference
+
+### How we deal with different Training / Evaluation Graphs
+
+Starter-code design choice: theoretically, the graphs you define for training and inference can be different, but they still need to share their weights. To remedy this issue, there are two possibilities
+
+1. re-build the graph, create a new session and reload the weights from some file when we switch between training and inference.
 2. create all the nodes for training and inference in the graph and make sure that the python code does not create the nodes twice by using the `reuse=True` trick explained above.
-We decided to go for this option. For those interested in the problem of making training and eval graphs coexist, you can read this [discussion](https://www.tensorflow.org/tutorials/seq2seq#building_training_eval_and_inference_graphs).
+
+We decided to go for this option. As you'll notice in `train.py` we give an extra argument when we build our graphs
+
+```python
+train_model_spec = model_fn('train', train_inputs, params)
+eval_model_spec = model_fn('eval', eval_inputs, params, reuse=True)
+```
+
+When we create the graph for the evaluation (`eval_model_spec`), the `model_fn` will encapsulate all the nodes in a `tf.variable_scope("model", reuse=True)` so that the nodes that have the same names than in the training graph share their weights !
+
+For those interested in the problem of making training and eval graphs coexist, you can read this [discussion](https://www.tensorflow.org/tutorials/seq2seq#building_training_eval_and_inference_graphs) which advocates for the other option.
+
+> As a side note, option 1 is also the one used in [`tf.Estimator`](https://www.tensorflow.org/get_started/estimator).
+
 
 ---
 
 ## Creating the input data pipeline
 
-You can read the [official tutorial](https://www.tensorflow.org/programmers_guide/datasets). The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Former data pipelines made the GPU wait for the CPU to load the data, leading to performance issues.
+[Official guide](https://www.tensorflow.org/programmers_guide/datasets)
 
-### Introduction to `tf.data` with a Text Example
+The `Dataset` API alows you to build an asynchronous, highly optimized data pipeline to prevent your GPU from [data starvation](https://www.tensorflow.org/performance/performance_guide#input_pipeline_optimization). It loads data from the disk (images or text), applies optimized transformations, creates batches and sends it to the GPU. Former data pipelines made the GPU wait for the CPU to load the data, leading to performance issues.
+
+### Introduction to tf.data with a Text Example
 
 
 Let's go over a quick example. Let's say we have a `file.txt` file containing sentences
@@ -263,9 +283,9 @@ with tf.Session() as sess:
 
 and as you can see, we now have a batch created from the shuffled Dataset !
 
-__All the nodes in the Graph are assumed to be batched, in other words every Tensor will have `shape = [None, ...]` where None corresponds to the (variable) batch dimension__
+__All the nodes in the Graph are assumed to be batched: every Tensor will have `shape = [None, ...]` where None corresponds to the (unspecified) batch dimension__
 
-### Why we use `initializable` iterators
+### Why we use initializable iterators
 
 As you'll see in the `input_fn.py` files, we decided to use an initializable iterator.
 
@@ -297,7 +317,7 @@ with tf.Session() as sess:
 
 <!-- #TODO: -->
 <!-- - explain `tf.data`
-  - refer to tensorflow tutorials (we won't go into all the details)
+  - refer to Tensorflow tutorials (we won't go into all the details)
 - explain shuffling
 - explain initializable iterator, why we did this (training / eval) -->
 
@@ -323,9 +343,9 @@ Look at the [Computer Vision][tf-vision] or [NLP][tf-nlp] posts for more details
 Great, now we have this `input` dictionnary containing the Tensor corresponding to the data, let's explain how we build the model.
 
 
-### Introduction to `tf.layers`
+### Introduction to tf.layers
 
-This high-level tensorflow API lets you build and prototype models in a few lines. You can have a look at the [official tutorial for computer vision](https://www.tensorflow.org/tutorials/layers), or at the [list of available layers](https://www.tensorflow.org/api_docs/python/tf/layers). The idea is quite simple so we'll just give an example.
+This high-level Tensorflow API lets you build and prototype models in a few lines. You can have a look at the [official tutorial for computer vision](https://www.tensorflow.org/tutorials/layers), or at the [list of available layers](https://www.tensorflow.org/api_docs/python/tf/layers). The idea is quite simple so we'll just give an example.
 
 
 Let's get an input Tensor with a similar mechanism than the one explained in the previous part. Remember that __None__ corresponds to the batch dimension.
@@ -403,7 +423,7 @@ At every iteration of the loop, it will move to the next batch (remember the `tf
 For more details, have a look at the `model/training.py` file that defines the `train_and_evaluate` function.
 
 
-### Putting `input_fn` and `model_fn` together
+### Putting input_fn and model_fn together
 
 
 To summarize the different steps, we just give a high-level overview of what needs to be done in `train.py`
@@ -423,18 +443,19 @@ logging.info("Starting training for {} epoch(s)".format(params.num_epochs))
 train_and_evaluate(train_model_spec, eval_model_spec, args.model_dir, params, args.restore_from)
 ```
 
-The `train_and_evaluate` function performs a given number of epochs (= full pass of the `train_inputs`). At the end of each epoch, it evaluates the performance on the development set (`dev` or `train-dev` in the course material).
+The `train_and_evaluate` function performs a given number of epochs (= full pass on the `train_inputs`). At the end of each epoch, it evaluates the performance on the development set (`dev` or `train-dev` in the course material).
 
-> Remember the discussion about different graphs for Training and evaluation. Here, notice how the `eval_model_spec` is given the `reuse=True` argument. It will make sure that the nodes of the Evaluation graph that must share weights with the Training graph __do__ share their weights.
+> Remember the discussion about different graphs for Training and Evaluation. Here, notice how the `eval_model_spec` is given the `reuse=True` argument. It will make sure that the nodes of the Evaluation graph that must share weights with the Training graph __do__ share their weights.
 
 
-### Evalution and `tf.metrics`
+### Evalution and tf.metrics
 
+[Tensorflow doc](https://www.tensorflow.org/api_docs/python/tf/metrics)
 
 So far, we explained how we input data to the graph, how we define the different nodes and training ops, but we don't know (yet) how to compute some metrics on our dataset. There are basically 2 possibilities
 
-1. __[run evaluation outside the Tensorflow graph]__ Evaluate the prediction over the training dataset by running `sess.run(prediction)` and use them to evaluate your model (without Tensorflow, with pure python code). This option can also be used if you need to write a file with all the predicitons and use a script (distributed by a conference for instance) to evaluate the performance of your model.
-2. __[use Tensorflow]__ As the above method can be quite complicated for simple metrics, Tensorflow hopefully has some built-in tools to run evaluation. Again, we are going to create nodes and operations in the Graph. The concept is simple : we will use the `tf.metrics` API to build those, the idea being that we need to update the metric on each batch. At the end of the epoch, we can just query the updated metric !
+1. __[run evaluation outside the Tensorflow graph]__ Evaluate the prediction over the dataset by running `sess.run(prediction)` and use it to evaluate your model (without Tensorflow, with pure python code). This option can also be used if you need to write a file with all the predicitons and use a script (distributed by a conference for instance) to evaluate the performance of your model.
+2. __[use Tensorflow]__ As the above method can be quite complicated for simple metrics, Tensorflow luckily has some built-in tools to run evaluation. Again, we are going to create nodes and operations in the Graph. The concept is simple: we will use the `tf.metrics` API to build those, the idea being that we need to update the metric on each batch. At the end of the epoch, we can just query the updated metric !
 
 
 We'll cover method 2 as this is the one we implemented in the starter code (but you can definitely go with option 1 by modifying `model/evaluation.py`). As most of the nodes of the graph, we define these *metrics* nodes and ops in `model/model_fn.py`.
@@ -473,7 +494,7 @@ with tf.Session() as sess:
     metrics_val = sess.run(metrics_values)
 ```
 
-And that's all ! If you want to compute new metrics for which you can find a [tensorflow implementation](https://www.tensorflow.org/api_docs/python/tf/metrics), you can define it in the `model_fn.py` (add it to the `metrics` dictionnary). It will automatically be updated during the training and will be displayed at the end of each epoch.
+And that's all ! If you want to compute new metrics for which you can find a [Tensorflow implementation](https://www.tensorflow.org/api_docs/python/tf/metrics), you can define it in the `model_fn.py` (add it to the `metrics` dictionnary). It will automatically be updated during the training and will be displayed at the end of each epoch.
 
 ---
 
@@ -554,7 +575,7 @@ Tensorflow comes with an excellent visualization tool called __Tensorboard__ tha
 {% include image.html url="/assets/tensorflow-psp/tensorboard.png" description="Tensorflow overview" size="80%" %}
 
 The mechanism of Tensorboard is the following
-1. define some *summaries* (nodes of the graph) that will tell tensorflow which values we want to plot
+1. define some *summaries* (nodes of the graph) that will tell Tensorflow which values we want to plot
 2. evaluate these nodes in the `session`
 3. write the output to a file thanks to a `tf.summary.FileWriter`
 
@@ -611,7 +632,7 @@ global_step = tf.train.get_or_create_global_step()
 train_op = optimizer.minimize(loss, global_step=global_step)
 ```
 
-## Logging, Params and `search_hyperparams`
+## Logging, Params and search_hyperparams
 
 <!-- #TODO move to other post as this is in common with other posts -->
 
