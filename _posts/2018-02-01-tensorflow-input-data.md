@@ -505,7 +505,7 @@ with tf.Session() as sess:
         print(sentences[0])
         print(characters[0][1])
 
-> ['1', '22', '<pad_word>'] # sentence 1 (words)
+> ['1', '22', '<pad_word>']               # sentence 1 (words)
   ['2', '2', '<pad_char>', '<pad_char>']  # sentence 1 word 2 (chars)
 ```
 > Can you explain why we have 2 `<pad_char>` and 1 `<pad_word>` in the first batch ?
