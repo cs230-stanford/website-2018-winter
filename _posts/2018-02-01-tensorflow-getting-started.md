@@ -26,7 +26,7 @@ tensorflow/
 This tutorial is among a series explaining the starter code:
 <!-- #TODO: add here links to different posts -->
 - [getting started][post-1]: installation, get started with the code for the projects
-- this post: (TensorFlow) explain the global structure of the code
+- __this post: (TensorFlow) explain the global structure of the code__
 - [third post][tf-data]: how to feed data into the model
 
 __Goals of this tutorial__
