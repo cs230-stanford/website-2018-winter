@@ -28,9 +28,16 @@ tensorflow/
 This tutorial is the introduction to a series explaining how to structure a deep learning project:
 
 - __this post: installation, get started with the code for the projects__
-- [second post][tf-post]: (TensorFlow) introduction to Tensorflow
-- [third post][tf-data]: (Tensorflow) how to build the data pipeline with tf.data
-- [fourth post][tf-model]: (Tensorflow) how to create and train a model
+
+#### Tensorflow
+- [second post][tf-post]: introduction to Tensorflow
+- [third post][tf-data]: how to build the data pipeline with tf.data
+- [fourth post][tf-model]: how to create and train a model
+
+#### PyTorch
+- [second post][pt-post]: introduction to PyTorch
+- [third post][pt-vision]: Vision- predicting labels from images of hand signs
+- [fourth post][pt-nlp]: NLP- Named Entity Recognition (NER) tagging for sentences
 
 __Goals of the code examples__
 
@@ -249,7 +256,7 @@ Once training is done, we can evaluate on the test set:
 python evaluate.py --model_dir experiments/base_model
 ```
 
-This was just a quick example, so please refer to the detailed [TensorFlow][tf-post] / [PyTorch][pytorch-post] tutorials for an in-depth explanation of the code.
+This was just a quick example, so please refer to the detailed [TensorFlow][tf-post] / [PyTorch][pt-post] tutorials for an in-depth explanation of the code.
 
 
 ### Hyperparameters search
@@ -343,7 +350,9 @@ Which one will you [choose][matrix] ?
 
 [github]: https://github.com/cs230-stanford/cs230-code-examples
 [tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
-[pytorch-post]: https://cs230-stanford.github.io/pytorch-getting-started.html
+[pt-post]: https://cs230-stanford.github.io/pytorch-getting-started.html
+[pt-vision]: https://cs230-stanford.github.io/pytorch-vision.html
+[pt-nlp]: https://cs230-stanford.github.io/pytorch-nlp.html
 [tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
 [tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 

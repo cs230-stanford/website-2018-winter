@@ -87,11 +87,11 @@ Once you get something working for your dataset, feel free to edit any part of t
 
 ### Tensors and Variables
 
-Before going further, I strongly suggest you go through this [60 Minute Blitz with PyTorch](http://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html) to gain an understanding of PyTorch basics. 
+Before going further, I strongly suggest you go through this [60 Minute Blitz with PyTorch](http://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html) to gain an understanding of PyTorch basics. Here's a sneak peak.
 
-PyTorch Tensors are similar in behaviour to NumPy’s arrays. 
+PyTorch Tensors are similar in behaviour to NumPy’s arrays.
 ```python
->>> import Tensor
+>>> import torch
 >>> a = torch.Tensor([[1,2],[3,4]])
 >>> print(a)
  1  2

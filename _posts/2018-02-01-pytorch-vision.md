@@ -26,7 +26,7 @@ This tutorial is among a series explaining the code examples:
 
 __Goals of this tutorial__
 - learn how to use PyTorch to load image data efficiently
-- specify a convolutional network
+- specify a convolutional neural network
 - understand the key aspects of the code well-enough to modify it to suit your needs
 
 __Table of Contents__
