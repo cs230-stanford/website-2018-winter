@@ -238,6 +238,9 @@ PyTorch makes the use of the GPU explicit and transparent using these commands. 
 
 ### Painless Debugging 
 
+With its clean and minimal design, PyTorch makes debugging a breeze. You can place breakpoints using `pdb.set_trace()` at any line in your code. You can then execute further computations, examine the PyTorch Tensors/Variables and pinpoint the root cause of the error.
+
+
 <div style="height:5px;font-size:1px;">&nbsp;</div>
 
 ---

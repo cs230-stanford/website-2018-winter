@@ -125,7 +125,6 @@ Now that we have figured out how to load our images, let's have a look at the *p
 import torch.nn as nn
 import torch.nn.functional as F
 
-
 class Net(nn.Module):
   def __init__(self):
     # we define convolutional layers 
@@ -172,6 +171,10 @@ In this example, we explicitly specify each of the values. In order to make the 
 We pass the image through 3 layers of `conv > bn > max_pool > relu`, followed by flattening the image and then applying 2 fully connected layers. The output is a log_softmax over the 6 labels for each example in the batch.
 
 And that's it! We use an appropriate loss function (Negative Loss Likelihood, since the output is already softmax-ed and log-ed) and train the model as discussed in the [previous][pt-start] post. Remember, you can set a breakpoint using `pdb.set_trace()` at any place in the forward function, examine the dimensions of the Variables, tinker around and diagnose what's going wrong. That's the beauty of PyTorch :).
+
+### Resources
+- [Data Loading and Processing Tutorial](http://pytorch.org/tutorials/beginner/data_loading_tutorial.html): an official tutorial from the PyTorch website
+- [ImageNet](https://github.com/pytorch/examples/blob/master/imagenet/main.py): Code for training on ImageNet in PyTorch
 
 <div style="height:5px;font-size:1px;">&nbsp;</div>
 
