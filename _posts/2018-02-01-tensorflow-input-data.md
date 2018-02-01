@@ -104,6 +104,7 @@ We need to add a few things to make it work. First, let's create an `iterator` o
 iterator = dataset.make_one_shot_iterator()
 next_element = iterator.get_next()
 ```
+> The `one_shot_iterator` method creates an iterator that will be able to iteratoe once over the dataset. In other words, once we reach the end of the dataset, it will stop yielding elements and raise an Exception.
 
 Now, `next_element` is a graph's node that will contain the next element of iterator over the Dataset at each execution. Now, let's run it
 
@@ -485,7 +486,7 @@ One big caveat when shuffling is to make sure that the `buffer_size` argument is
 The bigger it is, the longer it is going to take to load the data at the beginning.
 However a low buffer size can be disastrous for training. Here is a good [answer][stackoverflow-buffer-size] on stackoverflow detailing an example of why.
 
-The best way to avoid this kind of error might be to split the dataset into train / dev / test in advance and already shuffle the data there (see our other [post][train-dev-test].
+The best way to avoid this kind of error might be to split the dataset into train / dev / test in advance and already shuffle the data there (see our other [post][train-dev-test]).
 
 - explain shuffling: buffer size big enough
   - cf. [stackoverflow post][stackoverflow-buffer-size]

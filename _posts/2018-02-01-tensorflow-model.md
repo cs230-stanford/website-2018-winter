@@ -181,8 +181,9 @@ update_metrics_op = tf.group(*[op for _, op in metrics.values()])
 metric_variables = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES, scope="metrics")
 metrics_init_op = tf.variables_initializer(metric_variables)
 ```
-> Notice that we define the metrics, a *grouped* update op and an initializer.
-> Notice also how we define the metrics in a special `variable_scope` so that we can query the variables by name when we create the initializer !
+> Notice that we define the metrics, a *grouped* update op and an initializer. The use of the `*` in [`tf.group`](https://www.tensorflow.org/api_docs/python/tf/group) is a pythonic way to tell that the argument given to the function corresponds to an optional *positional* argument.
+
+> Notice also how we define the metrics in a special `variable_scope` so that we can query the variables by name when we create the initializer ! When you create nodes, the variables are added to some pre-defined collections of variables (TRAINABLE_VARIABLES, etc.). The variables we need to reset for `tf.metrics` are in the [`tf.GraphKeys.LOCAL_VARIABLES`](https://www.tensorflow.org/api_docs/python/tf/GraphKeys) collection. Thus, to query the variables, we get the collection of variables in the right scope !
 
 Now, to evaluate the metrics on a dataset, we'll just need to run them in a session as we loop over our dataset
 

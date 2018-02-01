@@ -188,7 +188,7 @@ Now, let's see how we can input data to our model.
 
 
 <!-- Links -->
-[github]: https://github.com/cs230-stanford/cs230-code-examples
+[github]: https://github.com/cs230-stanford/cs230-code-examples/tree/master/tensorflow
 [post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [post-3]: https://cs230-stanford.github.io/tensorflow-input-data.html
 [post-4]: https://cs230-stanford.github.io/tensorflow-model.html

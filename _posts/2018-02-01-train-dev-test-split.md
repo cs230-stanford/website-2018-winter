@@ -75,9 +75,7 @@ data/
 
 #### Build it in a reproducible way
 
-Often a dataset will come either in one big set that you will split into train, dev and test. Academic dataests often come already with a train/test split (to be able to compare different models on a common test set).
-
-You will therefore have to build yourself the train/dev split before beginning your project.
+Often a dataset will come either in one big set that you will split into train, dev and test. Academic dataests often come already with a train/test split (to be able to compare different models on a common test set). You will therefore have to build yourself the train/dev split before beginning your project.
 
 A good practice that is true for every software, but especially in machine learning, is to make every step of your project reproducible.
 It should be possible to start the project again from scratch and create the same exact split between train, dev and test sets.
@@ -122,7 +120,7 @@ dev_filenames = filenames[split_1:split_2]
 test_filenames = filenames[split_2:]
 ```
 
-This should give approximately the same distribution for train, dev and test sets. If necessary, it is also possible to split each class into 80%/10%/10% so that the distribution is __exactly__ the same in each set.
+This should give approximately the same distribution for train, dev and test sets. If necessary, it is also possible to split each class into 80%/10%/10% so that the distribution is the same in each set.
 
 
 #### Make it reproducible

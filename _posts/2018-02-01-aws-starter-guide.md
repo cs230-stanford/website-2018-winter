@@ -26,7 +26,7 @@ If no one on your team has requested AWS credit yet, please follow the instructi
 
 ### Create a Deep Learning EC2 instance
 
-Follow Amazon's [getting started guide][aws-tutorial] for creating a Deep Learning instance. Be sure to pick the Ubuntu version of the deep learning AMI at the third screen. For the instance type, we recommend using p2.xlarge. Follow the instructions to SSH into the instance.
+Follow Amazon's [getting started guide][aws-tutorial] for creating a __Deep Learning instance__. Be sure to pick the Ubuntu version of the deep learning AMI at the third screen. For the instance type, we recommend using p2.xlarge. Follow the instructions to SSH into the instance.
 
 **IMPORTANT**: Be sure to **turn off your instance** when you are not using it! If you leave it running, you will be billed continuously for the hours it is left on and you will run out of credits very quickly.
 
