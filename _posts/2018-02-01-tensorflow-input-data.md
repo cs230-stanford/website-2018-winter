@@ -104,7 +104,7 @@ We need to add a few things to make it work. First, let's create an `iterator` o
 iterator = dataset.make_one_shot_iterator()
 next_element = iterator.get_next()
 ```
-> The `one_shot_iterator` method creates an iterator that will be able to iteratoe once over the dataset. In other words, once we reach the end of the dataset, it will stop yielding elements and raise an Exception.
+> The `one_shot_iterator` method creates an iterator that will be able to iterate once over the dataset. In other words, once we reach the end of the dataset, it will stop yielding elements and raise an Exception.
 
 Now, `next_element` is a graph's node that will contain the next element of iterator over the Dataset at each execution. Now, let's run it
 
