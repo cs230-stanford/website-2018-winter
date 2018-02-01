@@ -268,10 +268,6 @@ def train_preprocess(image, label):
 
 
 
-
-### Data augmentation
-
-
 ## Building a text data pipeline
 
 Have a look at the Tensorflow seq2seq tutorial using the tf.data pipeline
@@ -476,7 +472,16 @@ with tf.Session() as sess:
 > Can you explain why we have 2 `<pad_char>` and 1 `<pad_word>` in the first batch ?
 
 
+---
+
 ## Best Practices
+
+One general tip mentioned in [the performance guide][performance-guide] is to put all the data processing pipeline on the CPU to make sure that the GPU is only used for training the deep neural network model:
+
+```python
+with tf.device('/cpu:0'):
+    dataset = ...
+```
 
 ### Shuffle and repeat
 
@@ -488,42 +493,55 @@ However a low buffer size can be disastrous for training. Here is a good [answer
 
 The best way to avoid this kind of error might be to split the dataset into train / dev / test in advance and already shuffle the data there (see our other [post][train-dev-test]).
 
-- explain shuffling: buffer size big enough
-  - cf. [stackoverflow post][stackoverflow-buffer-size]
-  - best to already shuffle the filenames at the beginning
-  - ex: if you have 100 files of text data, shuffle them before feeding to `tf.data`
-- choose ordering between shuffle and repeat
+<br/>
+In general, it is good to have the shuffling and repeat at the beginning of the pipeline. For instance if the input to the dataset is a list of filenames, if we directly shuffle after that the buffer of `tf.data.Dataset.shuffle()` will only contain filenames, which is very light on memory.
 
-- good to have shuffle + repeat at the beginning of the pipeline
-  - because if shuffle has a big buffer
+When choosing the ordering between shuffle and repeat, you may consider two options:
+- __shuffle then repeat__: we shuffle the dataset in a certain way, and repeat this shuffling for multiple epochs (ex: `[1, 3, 2, 1, 3, 2]` for 2 epochs with 3 elements in the dataset)
+- __repeat then shuffle__: we repeat the dataset for multiple epochs and then shuffle (ex: `[1, 2, 1, 3, 3, 2]` for 2 epochs with 3 elements in the dataset)
+
+The second method provides a better shuffling, but you might wait multiple epochs without seeing an example.
+The first method makes sure that you always see every element in the dataset at each epoch.
+You can also use [`tf.contrib.data.shuffle_and_repeat()`](https://www.tensorflow.org/versions/master/api_docs/python/tf/contrib/data/shuffle_and_repeat) to perform shuffle and repeat.
 
 
 ### Parallelization: using multiple threads
-- add `num_parallel_calls` to `dataset.map()`
+
+Parallelization of the data processing pipeline using multiple threads is almost transparent when using the `tf.data` module. We only need to add a `num_parallel_calls` argument to every `dataset.map()` call.
+
+```python
+num_threads = 4
+dataset = dataset.map(parse_function, num_parallel_calls=num_threads)
+```
 
 ### Prefetch data
 
-- enable consumer / producer overlap
-  - consumer = deep learning model
-  - producer = threads preprocessing data
-- the model should never wait for the next batch of data
-  - we want the GPU to be 100% used
-- add `dataset.prefetch(1)` at the end of the pipeline (after batching) to always have one batch ready
-  - could use more than 1 if the duration of the preprocessing varies a lot (it would average out the process, instead of sometimes waiting for longer batches)
+When the GPU is working on forward / backward propagation on the current batch, we want the CPU to process the next batch of data so that it is immediately ready.
+As the most expensive part of the computer, we want the GPU to be fully used all the time during training.
+We call this consumer / producer overlap, where the consumer is the GPU and the producer is the CPU.
+
+With `tf.data`, you can do this with a simple call to `dataset.prefetch(1)` at the end of the pipeline (after batching).
+This will always prefetch one batch of data and make sure that there is always one ready.
+
+```python
+dataset = dataset.batch(64)
+dataset = dataset.prefetch(1)
+```
+
+In some cases, it can be useful to prefetch more than one batch. For instance if the duration of the preprocessing varies a lot, prefetching 10 batches would average out the processing time over 10 batches, instead of sometimes waiting for longer batches.
+
+To give a concrete example, suppose than 10% of the batches take 10s to compute, and 90% take 1s. If the GPU takes 2s to train on one batch, by prefetching multiple batches you make sure that we never wait for these rare longer batches.
+
 
 ### Order of the operations
 
 To summarize, one good order for the different transformations is:
-1. shuffle
-2. repeat
-3. map with the actual work (preprocessing, augmentation...)
-4. batch
-5. prefetch
-
-<!--
-TODO:
-- our github tensorflow/image tensorflow/text
-- seq2seq official tutorial -->
+1. create the dataset
+2. shuffle (with a big enough buffer size)
+3. repeat
+4. map with the actual work (preprocessing, augmentation...) using multiple parallel calls
+5. batch
+6. prefetch 
 
 
 <br/>
@@ -553,4 +571,3 @@ Now that we can input data to our model, let's actually see how we define it
 [github-issue-tf-data]: https://github.com/tensorflow/tensorflow/issues/7951
 [stackoverflow]: https://stackoverflow.com/questions/tagged/tensorflow-datasets
 [stackoverflow-buffer-size]: https://stackoverflow.com/a/48096625/5098368
-
