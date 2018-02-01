@@ -8,16 +8,16 @@ date:   2018-01-31
 mathjax: true
 published: true
 tags: pytorch vision
-github: https://github.com/cs230-stanford/cs230-starter-code/tree/master/pytorch/vision
+github: https://github.com/cs230-stanford/cs230-code-examples/tree/master/pytorch/vision
 module: Tutorials
 ---
 
 <!-- TODO: comment -->
 
-This post follows the [main post][post-1] announcing the CS230 Project Starter Code and the [PyTorch Introduction][pt-start] to the Starter Code. In this post, we go through an example from Computer Vision, in which we learn how to load images of hand signs and classify them.
+This post follows the [main post][post-1] announcing the CS230 Project Code Examples and the [PyTorch Introduction][pt-start]. In this post, we go through an example from Computer Vision, in which we learn how to load images of hand signs and classify them.
 
 
-This tutorial is among a series explaining the starter code:
+This tutorial is among a series explaining the code examples:
 <!-- #TODO: add here links to different posts -->
 - [getting started][post-1]: installation, getting started with the code for the projects
 - [PyTorch Introduction][pt-start]: global structure of the PyTorch code examples
@@ -26,7 +26,7 @@ This tutorial is among a series explaining the starter code:
 
 __Goals of this tutorial__
 - learn how to use PyTorch to load image data efficiently
-- specify a convolutional networ
+- specify a convolutional network
 - understand the key aspects of the code well-enough to modify it to suit your needs
 
 __Table of Contents__
@@ -86,7 +86,7 @@ train_transformer = transforms.Compose([
   transforms.ToTensor()])             # transform it into a PyTorch Tensor
 ```
 
-When we apply `self.transform(image)` in `__getitem__`, we pass it through the above transformations before using it as a training example. The final output is a PyTorch Tensor. To augment the dataset during training, we also use the `RandomHorizontalFlip` transform when loading the image. We specify a similar `eval_transformer` for evaluation without the random flip. To load a `Dataset` object for the different splits of our data, we simply use:
+When we apply `self.transform(image)` in `__getitem__`, we pass it through the above transformations before using it as a training example. The final output is a PyTorch Tensor. To augment the dataset during training, we also use the `RandomHorizontalFlip` transform when loading the image. We can specify a similar `eval_transformer` for evaluation without the random flip. To load a `Dataset` object for the different splits of our data, we simply use:
 
 ```python
 train_dataset = SIGNSDataset(train_data_path, train_transformer)
@@ -96,7 +96,7 @@ test_dataset = SIGNSDataset(test_data_path, eval_transformer)
 
 ### Loading Batches of Data
 
-`torch.utils.data.DataLoader` provides an interator that takes in a `Dataset` object and performs batching, shuffling and loading of the data in parallel using multiprocessing workers. This is crucial when images are big in size and take time to load. In such a case, our GPU can be left idling while the CPU fetches the images, applies the transforms and then loads them onto the GPU. In contrast, the DataLoader class asynchronously fetches the data and keeps it ready to be sent to the GPU. Initialising the `DataLoader` is quite easy:
+`torch.utils.data.DataLoader` provides an iterator that takes in a `Dataset` object and performs batching, shuffling and loading of the data. This is crucial when images are big in size and take time to load. In such a case, the GPU can be left idling while the CPU fetches the images from file and then applies the transforms. In contrast, the DataLoader class (using multiprocessing) fetches the data asynchronously and prefetches batches to be sent to the GPU. Initialising the `DataLoader` is quite easy:
 
 ```python
 train_dataloader = DataLoader(SIGNSDataset(train_data_path, train_transformer), 
@@ -115,11 +115,11 @@ for train_batch, labels_batch in train_dataloader:
   ...
 ```
 
-Applying transformations on the data load them as PyTorch Tensors. Since we need to add them to our computational graph, we convert them to PyTorch Variables before passing them into the model. The `for` loop ends after one pass over the data, i.e. after one epoch. We can use similar data loaders for validation and test data.
+Applying transformations on the data loads them as PyTorch Tensors. We wrap them in PyTorch Variables before passing them into the model. The `for` loop ends after one pass over the data, i.e. after one epoch. It can be reused again for another epoch without any changes. We can use similar data loaders for validation and test data.
 
 ### Convolutional Network Model
 
-Now that we have figured out how to load our images, let's have a look at the *pièce de résitance*- the CNN model. As mentioned in the [previous][pt-start] post, we first define the components of our model, followed by its functional form. Let's have a look at the `__init__` function for our model that takes in a `3x64x64` image:
+Now that we have figured out how to load our images, let's have a look at the *pièce de résistance*- the CNN model. As mentioned in the [previous][pt-start] post, we first define the components of our model, followed by its functional form. Let's have a look at the `__init__` function for our model that takes in a `3x64x64` image:
 
 ```python
 import torch.nn as nn
@@ -158,7 +158,7 @@ In this example, we explicitly specify each of the values. In order to make the 
     s = F.relu(F.max_pool2d(s, 2))     # batch_size x 128 x 8 x 8
             
     # flatten the output for each image
-    s = s.view(-1, 8*8*self.num_channels*4)  # batch_size x 8*8*128
+    s = s.view(-1, 8*8*128)  # batch_size x 8*8*128
             
     # apply 2 fully connected layers with dropout
     s = F.dropout(F.relu(self.fcbn1(self.fc1(s))), 
@@ -168,7 +168,7 @@ In this example, we explicitly specify each of the values. In order to make the 
     return F.log_softmax(s, dim=1)
 ```
 
-We pass the image through 3 layers of `conv > bn > max_pool > relu`, followed by flattening the image and then applying 2 fully connected layers. The output is a log_softmax over the 6 labels for each example in the batch.
+We pass the image through 3 layers of `conv > bn > max_pool > relu`, followed by flattening the image and then applying 2 fully connected layers. In flattening the output of the convolution layers to a single vector per image, we use `s.view(-1, 8*8*128)`. Here the size `-1` is implicitly inferred from the other dimension (batch size in this case). The output is a log\_softmax over the 6 labels for each example in the batch. We use log\_softmax since it is numerically more stable than first taking the softmax and then the log.
 
 And that's it! We use an appropriate loss function (Negative Loss Likelihood, since the output is already softmax-ed and log-ed) and train the model as discussed in the [previous][pt-start] post. Remember, you can set a breakpoint using `pdb.set_trace()` at any place in the forward function, examine the dimensions of the Variables, tinker around and diagnose what's going wrong. That's the beauty of PyTorch :).
 

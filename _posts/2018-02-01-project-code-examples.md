@@ -343,7 +343,7 @@ Which one will you [choose][matrix] ?
 
 [github]: https://github.com/cs230-stanford/cs230-code-examples
 [tf-post]: https://cs230-stanford.github.io/tensorflow-getting-started.html
-[pytorch-post]: https://cs230-stanford.github.io/pytorch-psp.html
+[pytorch-post]: https://cs230-stanford.github.io/pytorch-getting-started.html
 [tf-data]: https://cs230-stanford.github.io/tensorflow-input-data.html
 [tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
