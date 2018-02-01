@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Introduction to PyTorch"
+title:  "Introduction to PyTorch Code Examples"
 description: "Tutorial for the PyTorch part of the starter code"
 excerpt: "An overview of training, models, loss functions and optimizers"
 author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
@@ -71,7 +71,7 @@ utils.py
   - `model/net.py`: specifies the neural network architecture, the loss function and evaluation metrics
   - `model/data_loader.py`: specifies how the data should be fed to the network
   - `train.py`: contains the main training loop 
-  - `evaluate.py`: conatins the main loop for evaluating the model
+  - `evaluate.py`: contains the main loop for evaluating the model
   - `utils.py`: utility functions for handling hyperparams/logging/storing model
 
 We recommend reading through `train.py` to get a high-level overview.
@@ -85,7 +85,7 @@ Once you get something working for your dataset, feel free to edit any part of t
 
 ### Core Training Step
 
-Let's begin with a look at what the heart of our training algorithm looks like. The five lines below pass a batch of inputs through the model, calculate the loss, perform backpropogation and update the parameters.
+Let's begin with a look at what the heart of our training algorithm looks like. The five lines below pass a batch of inputs through the model, calculate the loss, perform backpropagation and update the parameters.
 
 ```python
 output_batch = model(train_batch)           # compute model output
@@ -126,7 +126,7 @@ class TwoLayerNet(torch.nn.Module):
     return y_pred
 ```
 
-The `__init__` function initialises the two linear layers of the model. PyTorch takes care of the proper initialisation of the parameters you specify. In the `forward` function, we first apply the first linear layer, apply ReLU activation and then apply the second linear layer. The module assumes that the first dimension of `x` is the batch size. If the input to the network is simply a vector of dimension 100, and the batch size is 32, then the dimension of `x` would be 32x100. Let's see an example of how to define a model and compute a forward pass:
+The `__init__` function initialises the two linear layers of the model. PyTorch takes care of the proper initialization of the parameters you specify. In the `forward` function, we first apply the first linear layer, apply ReLU activation and then apply the second linear layer. The module assumes that the first dimension of `x` is the batch size. If the input to the network is simply a vector of dimension 100, and the batch size is 32, then the dimension of `x` would be 32x100. Let's see an example of how to define a model and compute a forward pass:
 
 ```python
 # N is batch size; D_in is input dimension;
@@ -168,7 +168,7 @@ This was a fairly simple example of writing our own loss function. In the sectio
 
 ### Optimizer
 
-The `torch.optim` [package](http://pytorch.org/docs/master/optim.html) provides an easy to use interface for common optmization algorithms. Defining your optimizer is really as simple as:
+The `torch.optim` [package](http://pytorch.org/docs/master/optim.html) provides an easy to use interface for common optimization algorithms. Defining your optimizer is really as simple as:
 
 ```python
 # pick an SGD optimizer
@@ -223,6 +223,20 @@ utils.load_checkpoint(restore_path, model, optimizer)
 ```
 
 The `optimizer` argument is optional and you may choose to restart with a new optimizer. `load_checkpoint` internally loads the saved checkpoint and restores the model weights and the state of the optimizer.
+
+### Using the GPU
+
+Interspersed through the code you will find lines such as:
+```python
+> model = net.Net(params).cuda() if params.cuda else net.Net(params)
+
+> if params.cuda:
+     batch_data, batch_labels = batch_data.cuda(), batch_labels.cuda()
+```
+
+PyTorch makes the use of the GPU explicit and transparent using these commands. Calling `.cuda()` on a model/Tensor/Variable sends it to the GPU. In order to train a model on the GPU, all the relevant parameters and Variables must be sent to the GPU using `.cuda()`. 
+
+### Painless Debugging 
 
 <div style="height:5px;font-size:1px;">&nbsp;</div>
 
