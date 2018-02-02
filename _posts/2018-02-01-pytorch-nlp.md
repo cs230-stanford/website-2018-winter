@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Named Entity Recognition Tagging"
-description: "Defining a Recurrent Network and Loading Text Data""
+description: "NER Tagging in PyTorch"
 excerpt: "Defining a Recurrent Network and Loading Text Data"
 author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-31
