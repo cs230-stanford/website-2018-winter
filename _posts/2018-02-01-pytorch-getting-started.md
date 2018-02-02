@@ -129,7 +129,7 @@ Variable containing:
 [torch.FloatTensor of size 2x2]
 ```
 
-This prelude should give you a sense of the things to come. PyTorch packs elegance and expressiveness in its minimalist and intuitive syntax. Familiarise yourself with some more examples from the [Resources](#resources) section before moving ahead.
+This prelude should give you a sense of the things to come. PyTorch packs elegance and expressiveness in its minimalist and intuitive syntax. Familiarize yourself with some more examples from the [Resources](#resources) section before moving ahead.
 
 ### Core Training Step
 
@@ -215,7 +215,7 @@ PyTorch makes it very easy to extend this and write your own custom loss functio
 def myCrossEntropyLoss(outputs, labels):
   batch_size = outputs.size()[0]            # batch_size
   outputs = F.log_softmax(outputs, dim=1)   # compute the log of softmax values
-  outputs = outputs[range(batch\_size), labels] # pick the values corresponding to the labels
+  outputs = outputs[range(batch_size), labels] # pick the values corresponding to the labels
   return -torch.sum(outputs)/num_examples
 ```
 
@@ -239,7 +239,7 @@ Once gradients have been computed using `loss.backward()`, calling `optimizer.st
 
 ### Training vs Evaluation
 
-Before training the model, it is imperative to call `model.train()`. Likewise, you must call `model.eval()` before testing the model. This corrects for the differences in dropout, batch normalisation during training and testing.
+Before training the model, it is imperative to call `model.train()`. Likewise, you must call `model.eval()` before testing the model. This corrects for the differences in dropout, batch normalization during training and testing.
 
 ### Computing Metrics
 By this stage you should be able to understand most of the code in `train.py` and `evaluate.py` (except how we fetch the data, which we'll come to in the subsequent posts). Apart from keeping an eye on the loss, it is also helpful to monitor other metrics such as accuracy and precision/recall. To do this, you can define your own metric functions for a batch of model outputs in the `model/net.py` file. In order to make it easier, we convert the PyTorch Variables into NumPy arrays before passing them into the metric functions. For a multi-class classification problem as set up in the section on [Loss Function](#lossfunc), we can write a function to compute accuracy using NumPy as:
