@@ -3,7 +3,7 @@ layout: post
 title:  "Splitting into train, dev and test sets"
 description: "Short tutorial detailing the best practices to split your dataset into train, dev and test sets"
 excerpt: "Best practices to split your dataset into train, dev and test sets"
-author: "Olivier Moindrot, Guillaume Genthial"
+author: "Teaching assistants Olivier Moindrot and Guillaume Genthial"
 date:   2018-01-24
 mathjax: true
 published: true
@@ -75,7 +75,7 @@ data/
 
 #### Build it in a reproducible way
 
-Often a dataset will come either in one big set that you will split into train, dev and test. Academic dataests often come already with a train/test split (to be able to compare different models on a common test set). You will therefore have to build yourself the train/dev split before beginning your project.
+Often a dataset will come either in one big set that you will split into train, dev and test. Academic datasets often come already with a train/test split (to be able to compare different models on a common test set). You will therefore have to build yourself the train/dev split before beginning your project.
 
 A good practice that is true for every software, but especially in machine learning, is to make every step of your project reproducible.
 It should be possible to start the project again from scratch and create the same exact split between train, dev and test sets.
@@ -111,7 +111,7 @@ __What could go wrong?__ Suppose that the first 100 images (`img_000.jpg` to `im
 We therefore need to ensure that the filenames are correctly shuffled before splitting the data.
 ```python
 filenames = ['img_000.jpg', 'img_001.jpg', ...]
-random.shuffle(filenames)  # shuffles in place
+random.shuffle(filenames)  # randomly shuffles the ordering of filenames
 
 split_1 = int(0.8 * len(filenames))
 split_2 = int(0.9 * len(filenames))
@@ -136,7 +136,7 @@ Here is a good way to remove any randomness in the process:
 filenames = ['img_000.jpg', 'img_001.jpg', ...]
 filenames.sort()  # make sure that the filenames have a fixed order before shuffling
 random.seed(230)
-random.shuffle(filenames)
+random.shuffle(filenames) # shuffles the ordering of filenames (deterministic given the chosen seed)
 
 split_1 = int(0.8 * len(filenames))
 split_2 = int(0.9 * len(filenames))
