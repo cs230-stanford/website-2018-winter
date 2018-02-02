@@ -62,8 +62,7 @@ class SIGNSDataset(Dataset):
     self.filenames = [os.path.join(data_dir, f) for f in self.filenames]
       
     # the first character of the filename contains the label
-    self.labels = [int(filename.split('/')[-1][0]) for
-                   filename in self.filenames]
+    self.labels = [int(filename.split('/')[-1][0]) for filename in self.filenames]
     self.transform = transform
       
   def __len__(self):
@@ -96,7 +95,7 @@ test_dataset = SIGNSDataset(test_data_path, eval_transformer)
 
 ### Loading Batches of Data
 
-`torch.utils.data.DataLoader` provides an iterator that takes in a `Dataset` object and performs batching, shuffling and loading of the data. This is crucial when images are big in size and take time to load. In such a case, the GPU can be left idling while the CPU fetches the images from file and then applies the transforms. In contrast, the DataLoader class (using multiprocessing) fetches the data asynchronously and prefetches batches to be sent to the GPU. Initializing the `DataLoader` is quite easy:
+`torch.utils.data.DataLoader` provides an iterator that takes in a `Dataset` object and performs batching, shuffling and loading of the data. This is crucial when images are big in size and take time to load. In such a case, the GPU can be left idling while the CPU fetches the images from file and then applies the transforms. In contrast, the DataLoader class (using multiprocessing) fetches the data asynchronously and prefetches batches to be sent to the GPU. Initialising the `DataLoader` is quite easy:
 
 ```python
 train_dataloader = DataLoader(SIGNSDataset(train_data_path, train_transformer), 

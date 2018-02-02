@@ -65,21 +65,21 @@ parser.add_argument('--data_dir', default='data/', help="Directory containing th
 ```
 When experimenting, you need to try multiples combinations of hyperparameters. This quickly becomes unmanageable because you cannot keep track of the hyperparameters you are testing . Plus, how do you even keep track of the parameters if you want to go back to a previous experiment ?
 
-2. Hard-code the values of your hyperparameters in a new `hyperparams.py` file and import at the beginning of your `train.py` file for instance, get these hyperparameters. Again, you'll need to find a way to save your config, and this is not very clean.
+2. Hard-code the values of your hyperparameters in a new `params.py` file and import at the beginning of your `train.py` file for instance, get these hyperparameters. Again, you'll need to find a way to save your config, and this is not very clean.
 
 3. Write all your parameters in a file (we used `.json` but could be anything else) and store this file in the directory containing your experiment.
 If you need to go back to your experiment later, you can quickly review which hyperparameters yielded the performance etc.
 
-We chose to take this third approach in our code. We define a class `Hyperparams` in `utils.py`.
+We chose to take this third approach in our code. We define a class `Params` in `utils.py`. Note that to be in accordance with the deep learning programming frameworks we use, we are refering to hyperparameters as `params` in the code.
 
 Loading the hyperparameters is as simple as writing
 
 ```python
-hyperparams = Hyperparams("experiments/base_model/hyperparams.json")
+params = Params("experiments/base_model/params.json")
 ```
 
 
-and if your `hyperparams.json` file looks like
+and if your `params.json` file looks like
 
 ```json
 {
@@ -95,17 +95,17 @@ and if your `hyperparams.json` file looks like
 you'll be able to access the different entries with
 
 ```python
-hyperparams.model_version
+params.model_version
 ```
-> In your code, once your hyperparams object is initialized, you can update it with another `.json` file with the `params.update("other_hyperparams.json")` method.
+> In your code, once your params object is initialized, you can update it with another `.json` file with the `params.update("other_params.json")` method.
 
 Later, in your code, for example when you define your model, you can thus do something like
 
 ```python
-if hyperparams.model_version == "baseline":
-    logits = build_model_baseline(inputs, hyperparams)
-elif hyperparams.model_version == "simple_convolutions":
-    logits = bulid_model_simple_convolutions(inputs, hyperparams)
+if params.model_version == "baseline":
+    logits = build_model_baseline(inputs, params)
+elif params.model_version == "simple_convolutions":
+    logits = bulid_model_simple_convolutions(inputs, params)
 ```
 
 which will be quite handy to have different functions and behaviors depending on a set of hyperparameters !
@@ -115,20 +115,20 @@ which will be quite handy to have different functions and behaviors depending on
 
 An important part of any machine learning project is hyperparameter tuning, please refer to the Coursera Deep Learning Specialization ([#2][course2] and [#3][course3]) for more detailed information. In other words, you want to see how your model performs on the development set on different sets of hyperparameters. There are basically 2 ways to implement this:
 
-1. Have a python loop over the different set of hyperparameters and at each iteration of the loop, run the `train_and_evaluate(model_spec, hyperparams, ...)` function, like
+1. Have a python loop over the different set of hyperparameters and at each iteration of the loop, run the `train_and_evaluate(model_spec, params, ...)` function, like
 ```python
 for lr in [0.1, 0.01, 0.001]:
-    hyperparams.learning_rate = lr
-    train_and_evaluate(model_spec, hyperparams, ...)
+    params.learning_rate = lr
+    train_and_evaluate(model_spec, params, ...)
 ```
 
 2. Have a more general script that will create a subfolder for each set of hyperparameteres and launch a training job using the `python train.py` command. While there is not much difference in the simplest setting, some more advanced clusters have some job managers and instead of running multiple `python train.py`, they instead do something like `job-manager-submit train.py` which will run the jobs concurrently, making the hyperparameter tuning much faster !
 ```python
 for lr in [0.1, 0.01, 0.001]:
-    hyperparams.learning_rate = lr
-    # Create new experiment directory and save the relevant hyperparams.json
+    params.learning_rate = lr
+    # Create new experiment directory and save the relevant params.json
     subfolder = create_subfolder("lr_{}".format(lr))
-    export_params_to_json(hyperparams, subfolder)
+    export_params_to_json(params, subfolder)
     # Launch a training in this directory -- it will call `train.py`
     lauch_training_job(model_dir=subfolder, ...)
 ```
