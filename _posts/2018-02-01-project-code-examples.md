@@ -91,11 +91,11 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 ### Download the data
 
-__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) etc.
+__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) OR [`pytorch/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/vision/README.md), [`pytorch/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/README.md)  
 
 #### Vision
 
-_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md)_
+_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md) or [`pytorch/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/vision/README.md)_
 
 For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
 
@@ -119,7 +119,7 @@ Once the download is complete, move the dataset into `data/SIGNS`. Run the scrip
 
 #### Natural Language Processing (NLP)
 
-*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md)*
+*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) or [`pytorch/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/README.md)*
 
 We provide a small subset of the kaggle dataset (30 sentences) for testing in `data/small` but you are encouraged to download the original version on the [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) website.
 
