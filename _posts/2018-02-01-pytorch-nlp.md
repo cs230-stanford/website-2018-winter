@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Named Entity Recognition Tagging"
-description: "NER Tagging in PyTorch"
+description: "Defining a Convolutional Network and Loading Image Signs"
 excerpt: "Defining a Recurrent Network and Loading Text Data"
 author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-31
@@ -128,8 +128,8 @@ This is where it gets fun. When we sample a batch of sentences, not all the sent
 # compute length of longest sentence in batch
 batch_max_len = max([len(s) for s in batch_sentences])
 
-# prepare a numpy array with the data, initializing the data with 'PAD' 
-# and all labels with -1; initializing labels to -1 differentiates tokens 
+# prepare a numpy array with the data, initialising the data with 'PAD' 
+# and all labels with -1; initialising labels to -1 differentiates tokens 
 # with tags from 'PAD' tokens
 batch_data = vocab['PAD']*np.ones((len(batch_sentences), batch_max_len))
 batch_labels = -1*np.ones((len(batch_sentences), batch_max_len))
@@ -147,9 +147,7 @@ batch_data, batch_labels = torch.LongTensor(batch_data), torch.LongTensor(batch_
 batch_data, batch_labels = Variable(batch_data), Variable(batch_labels)
 ```
 
-A lot of things happened in the above code. We first calculated the length of the longest sentence in the batch. We then initialized NumPy arrays of dimension `(num_sentences, batch_max_len)` for the sentence and labels, and filled them in from the lists. Since the values are indices (and not floats), PyTorch's Embedding layer expects inputs to be of the `Long` type. We hence convert them to `LongTensor`.
-
-After filling them in, we observe that the sentences that are shorter than the longest sentence in the batch have the special token `PAD` to fill in the remaining space. Moreover, the `PAD` tokens, introduced as a result of packaging the sentences in a matrix, are assigned a label of -1. Doing so differentiates them from other tokens that have label indices in the range `[0,1,...,NUM_TAGS-1]`. This will be crucial when we calculate the loss for our model's prediction, and we'll come to that in a bit.
+A lot of things happened in the above code. We first calculated the length of the longest sentence in the batch. We then initialised NumPy arrays of dimension `(num_sentences, batch_max_len)` for the sentence and labels, and filled them in from the lists. After filling them in, we observe that the sentences that are shorter than the longest sentence in the batch have the special token `PAD` to fill in the remaining space. Moreover, the `PAD` tokens, introduced as a result of packaging the sentences in a matrix, are assigned a label of -1. Doing so differentiates them from other tokens that have label indinces in the range `[0,1,...,NUM_TAGS-1]`. This will be crucial when we calculate the loss for our model's prediction, and we'll come to that in a bit.
 
 In our code, we package the above code in a custom data\_iterator function. We can then use the generator as follows:
 ```python
@@ -206,11 +204,11 @@ We use an LSTM for the recurrent network. Before running the LSTM, we first tran
     return F.log_softmax(s, dim=1)   # dim: batch_size*batch_max_len x num_tags
 ```
 
-The embedding layer augments an extra dimension to our input which then has shape `(batch_size, batch_max_len, embedding_dim)`. We run it through the LSTM which gives an output for each token of length `lstm_hidden_dim`. In the next step, we open up the 3D Variable and reshape it such that we get the hidden state for each token, i.e. the new dimension is `(batch_size*batch_max_len, lstm_hidden_dim)`. Here the `-1` is implicitly inferred to be equal to `batch_size*batch_max_len`. The reason behind this reshaping is that the fully connected layer assumes a 2D input, with one example along each row. 
+The embedding layer augments an extra dimension to our input which then has shape `(batch_size, batch_max_len, embedding_dim)`. We run it through the LSTM which gives an output for each token of length `lstm_hidden_dim`. In the next step, we open up the 3D Variable and reshape it such that we get the hidden state for each token, i.e. the new dimension is `(batch_size*batch_max_len, lstm_hidden_dim)`. Here the `-1` is implicity inferred to be equal to `batch_size*batch_max_len`. The reason behind this reshaping is that the fully connected layer assumes a 2D input, with one example along each row. 
 
 After the reshaping, we apply the fully connected layer which gives a vector of `NUM_TAGS` for each token in each sentence. The output is a log\_softmax over the tags for each token. We use log\_softmax since it is numerically more stable than first taking the softmax and then the log.
 
-All that is left is to compute the loss. But there's a catch- we can't use a `torch.nn.loss` function straight out of the box because that would add the loss from the `PAD` tokens as well. Here's where the power of PyTorch comes into play- we can write our own custom loss function!
+All that is left is to compute the loss. But there's a catch- we can't use a `torch.nn.loss` funtion straight out of the box because that would add the loss from the `PAD` tokens as well. Here's where the power of PyTorch comes into play- we can write our own custom loss function!
 
 ### Writing a Custom Loss Function
 
@@ -227,12 +225,12 @@ def loss_fn(outputs, labels):
   num_tokens = int(torch.sum(mask).data[0])
   
   # pick the values corresponding to labels and multiply by mask
-  outputs = outputs[range(outputs.shape[0]), labels]*mask
+  outputs[range(outputs.shape[0]), labels]*mask)
   
   # cross entropy loss for all non 'PAD' tokens
   return -torch.sum(outputs)/num_tokens
 ```
-The input labels has dimension `(batch_size, batch_max_len)` while outputs has dimension `(batch_size*batch_max_len, NUM_TAGS)`. We compute a mask using the fact that all `PAD` tokens in `labels` have the value `-1`. We then compute the Negative Log Likelihood Loss (remember the output from the network is already softmax-ed and log-ed!) for all the non `PAD` tokens. We can now compute derivates by simply calling `.backward()` on the loss returned by this function.
+The input labels has dimension `(batch_size, batch_max_len)` while outputs has dimension `(batch_size*batch_max_len, NUM_TAGS)`. We compute a mask using the fact that all `PAD` tokens in `labels` have the value `-1`. We the compute the Negative Log Likelihood Loss (remember the output from the network is already softmax-ed and log-ed!) for all the non `PAD` tokens. We can now compute derivates by simply calling `.backward()` on the loss returned by this function.
 
 Remember, you can set a breakpoint using `pdb.set_trace()` at any place in the forward function, loss function or virtually anywhere and examine the dimensions of the Variables, tinker around and diagnose what's going wrong. That's the beauty of PyTorch :).
 

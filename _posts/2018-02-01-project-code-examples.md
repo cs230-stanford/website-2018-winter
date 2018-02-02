@@ -3,7 +3,7 @@ layout: post
 title:  "Introducing the Project Code Examples"
 description: "Introduction and installation"
 excerpt: "Introduction and installation"
-author: "Guillaume Genthial, Olivier Moindrot, Surag Nair"
+author: "Teaching assistants Guillaume Genthial, Olivier Moindrot, Surag Nair"
 date:   2018-01-24
 mathjax: true
 published: true
@@ -25,9 +25,7 @@ tensorflow/
     nlp/
 ```
 
-This tutorial is the introduction to a series explaining how to structure a deep learning project:
-
-- __this post: installation, get started with the code for the projects__
+This post will help you familiarize with the Project Code Examples, and introduces a series of posts explaining how to structure a deep learning project:
 
 #### Tensorflow
 - [second post][tf-post]: introduction to Tensorflow
@@ -43,7 +41,7 @@ __Goals of the code examples__
 
 - through these code examples, explain and demonstrate the best practices for structuring a deep learning project
 - help students kickstart their project with a working codebase
-- in each tensorflow and pytorch, give two examples of a structured project: one for a vision task, one for a NLP task
+- in each tensorflow and pytorch, give two examples of projects: one for a vision task, one for a NLP task
 
 __Table of Content__
 
@@ -70,15 +68,15 @@ It is a good practice to have multiple virtual environments to work on different
 **Installing Python 3**: To use `python3`, make sure to install version 3.5 or 3.6 on your local machine.
 If you are on Mac OS X, you can do this using [Homebrew](https://brew.sh) with `brew install python3`. You can find instructions for Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04).
 
-**Virtual environment**: If we don't have it already, install `virtualenv` using `sudo pip install virtualenv` (or `pip install --user virtualenv` if you don't have sudo).
-Here we create a virtual environment named `.env`. __Run this command inside each example repo__ for instance in `tensorflow/nlp`
+**Virtual environment**: If we don't have it already, install `virtualenv` by typing `sudo pip install virtualenv` (or `pip install --user virtualenv` if you don't have sudo) in your terminal.
+Here we create a virtual environment named `.env`. __Navigate inside each example repo and run the following command __ for instance in `tensorflow/nlp`
 ```bash
 virtualenv -p python3 .env
 source .env/bin/activate
 pip install -r requirements.txt
 ```
 
-Run `deactivate` if you want to leave the virtual environment. Next time you want to work on the project, just re-run `source .env/bin/activate`.
+Run `deactivate` if you want to leave the virtual environment. Next time you want to work on the project, just re-run `source .env/bin/activate` after navigating to the correct directory.
 
 ### If you have a GPU
 
@@ -91,15 +89,15 @@ Note that your GPU needs to be set up first (drivers, CUDA and CuDNN).
 
 ### Download the data
 
-__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) OR [`pytorch/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/vision/README.md), [`pytorch/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/README.md)  
+__You'll find descriptions of the tasks__ in [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md), [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) etc.
 
 #### Vision
 
-_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md) or [`pytorch/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/vision/README.md)_
+_All instructions can be found in the [`tensorflow/vision/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/vision/README.md)_
 
-For the vision example, we will used the SIGNS dataset created for this class. The dataset is hosted on google drive, download it [here][SIGNS].
+For the vision example, we will used the SIGNS dataset created for the Deep Learning Specialization. The dataset is hosted on google drive, download it [here][SIGNS].
 
-This will download the SIGNS dataset (~1.1 GB) containing photos of hands signs making numbers between 0 and 5.
+This will download the SIGNS dataset (~1.1 GB) containing photos of hands signs representing numbers between 0 and 5.
 Here is the structure of the data:
 ```
 SIGNS/
@@ -114,18 +112,18 @@ SIGNS/
 The images are named following `{label}_IMG_{id}.jpg` where the label is in `[0, 5]`.
 The training set contains 1,080 images and the test set contains 120 images.
 
-Once the download is complete, move the dataset into `data/SIGNS`. Run the script `build_dataset.py` which will resize the images to size `(64, 64)`. The new reiszed dataset will be located by default in `data/64x64_SIGNS`.
+Once the download is complete, move the dataset into the `data/SIGNS` folder. Run the script ` python build_dataset.py` which will resize the images to size `(64, 64)`. The new resized dataset will be located by default in `data/64x64_SIGNS`.
 
 
 #### Natural Language Processing (NLP)
 
-*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md) or [`pytorch/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/README.md)*
+*All instructions can be found in the [`tensorflow/nlp/README.md`](https://github.com/cs230-stanford/cs230-code-examples/blob/master/tensorflow/nlp/README.md)*
 
 We provide a small subset of the kaggle dataset (30 sentences) for testing in `data/small` but you are encouraged to download the original version on the [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) website.
 
-1. __[kaggle] Download the dataset__ `ner_dataset.csv` on [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) and save it under the `nlp/data/kaggle` directory. Make sure you download the simple version `ner_dataset.csv` and NOT the full version `ner.csv`.
+1. __Download the dataset__ `ner_dataset.csv` on [Kaggle](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus/data) and save it under the `nlp/data/kaggle` directory. Make sure you download the simple version `ner_dataset.csv` and NOT the full version `ner.csv`.
 
-2. __[kaggle] Build the dataset__ Run the following script
+2. __Build the dataset__ Run the following script
 ```
 python build_kaggle_dataset.py
 ```
@@ -144,7 +142,7 @@ kaggle/
 ```
 *Debug* If you get some errors, check that you downloaded the right file and saved it in the right directory. If you have issues with encoding, try running the script with python 2.7.
 
-3. __[kaggle and small] Build the vocabulary__ For both datasets, `data/small` and `data/kaggle` you need to build the vocabulary, with
+3. __Build the vocabulary__ For both datasets, `data/small` and `data/kaggle` you need to build the vocabulary, with
 ```
 python build_vocab.py --data_dir  data/small
 ```
@@ -188,9 +186,6 @@ Here is each file or directory's purpose:
 - `synthesize_results.py`: explore different experiments in a directory and display a nice table of the results
 - `evaluate.py`: evaluate the model on the test set (should be run once at the end of your project)
 
-__Files that you'll need to modify (at first) are into the `model` module__.
-You should only modify the model definition and the data pipeline at first.
-
 ---
 
 ## Running experiments
@@ -214,7 +209,7 @@ Different experiments will be stored in different directories, each with their o
 }
 ```
 
-The structure of `experiments` after running a few different models might look like this (try to give meaningful names to the directories):
+The structure of `experiments` after running a few different models might look like this (try to give meaningful names to the directories depending on what experiment you are running):
 ```
 experiments/
     base_model/
@@ -314,6 +309,7 @@ Both framework have their pros and cons:
 __Tensorflow__
 - mature, most of the models and layers are already implemented in the library.
 - documented and plenty of code / tutorials online
+- the Deep Learning Specialization teaches you how to use Tensorflow
 - built for large-scale deployment and used by a lot of companies
 - has some very useful tools like Tensorboard for visualization (though you can also use [Tensorboard with PyTorch](https://github.com/lanpa/tensorboard-pytorch))
 - but some ramp-up time is needed to understand some of the concepts (session, graph, variable scope, etc.) -- *(reason why we have code examples that take care of these subtleties)*
@@ -357,5 +353,5 @@ Which one will you [choose][matrix] ?
 [tf-model]: https://cs230-stanford.github.io/tensorflow-model.html
 
 <!-- TODO: add a public link -->
-[SIGNS]: https://drive.google.com/drive/u/1/folders/19xqDh1dlfIs3G18DcDI1OvBom0T8AX6H
+[SIGNS]: https://drive.google.com/file/d/1ufiR6hUKhXoAyiBNsySPkUwlvE_wfEHC/view?usp=sharing
 [matrix]: https://youtu.be/zE7PKRjrid4?t=1m26s
