@@ -3,7 +3,7 @@ layout: post
 title:  "Building a data pipeline"
 description: "Tutorial explaining how to use Tensorflow tf.data for text and images"
 excerpt: "Using Tensorflow tf.data for text and images"
-author: "Olivier Moindrot, Guillaume Genthial"
+author: "Teaching assistants Olivier Moindrot and Guillaume Genthial"
 date:   2018-01-24
 mathjax: true
 published: true

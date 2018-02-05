@@ -3,7 +3,7 @@ layout: post
 title:  "Create and train a Model"
 description: "Create and train a Model in Tensorflow using tf.layers, tf.train, tf.metrics, Tensorboard"
 excerpt: "Using tf.layers, tf.train, tf.metrics, Tensorboard"
-author: "Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Guillaume Genthial and Olivier Moindrot"
 date: 2018-01-30
 mathjax: true
 published: true
@@ -151,14 +151,14 @@ train_and_evaluate(train_model_spec, eval_model_spec, args.model_dir, params, ar
 
 The `train_and_evaluate` function performs a given number of epochs (= full pass on the `train_inputs`). At the end of each epoch, it evaluates the performance on the development set (`dev` or `train-dev` in the course material).
 
-> Remember the discussion about different graphs for Training and Evaluation. Here, notice how the `eval_model_spec` is given the `reuse=True` argument. It will make sure that the nodes of the Evaluation graph that must share weights with the Training graph __do__ share their weights.
+> Remember the discussion about different graphs for Training and Evaluation. Here, notice how the `eval_model_spec` is given the `reuse=True` argument. It will make sure that the nodes of the Evaluation graph which must share weights with the Training graph __do__ share their weights.
 
 
 ### Evalution and tf.metrics
 
 [Tensorflow doc](https://www.tensorflow.org/api_docs/python/tf/metrics)
 
-So far, we explained how we input data to the graph, how we define the different nodes and training ops, but we don't know (yet) how to compute some metrics on our dataset. There are basically 2 possibilities
+So far, we've explained how we input data to the graph, how we define the different nodes and training ops, but we don't know (yet) how to compute some metrics on our dataset. There are basically 2 possibilities
 
 1. __[run evaluation outside the Tensorflow graph]__ Evaluate the prediction over the dataset by running `sess.run(prediction)` and use it to evaluate your model (without Tensorflow, with pure python code). This option can also be used if you need to write a file with all the predicitons and use a script (distributed by a conference for instance) to evaluate the performance of your model.
 2. __[use Tensorflow]__ As the above method can be quite complicated for simple metrics, Tensorflow luckily has some built-in tools to run evaluation. Again, we are going to create nodes and operations in the Graph. The concept is simple: we will use the `tf.metrics` API to build those, the idea being that we need to update the metric on each batch. At the end of the epoch, we can just query the updated metric !
@@ -169,10 +169,8 @@ We'll cover method 2 as this is the one we implemented in the code examples (but
 ```python
 # Define the different metrics
 with tf.variable_scope("metrics"):
-    metrics = {
-        'accuracy': tf.metrics.accuracy(labels=labels, predictions=predictions,
-        'loss': tf.metrics.mean(loss)
-    }
+    metrics = {'accuracy': tf.metrics.accuracy(labels=labels, predictions=predictions,
+               'loss': tf.metrics.mean(loss)}
 
 # Group the update ops for the tf.metrics, so that we can run only one op to update them all
 update_metrics_op = tf.group(*[op for _, op in metrics.values()])
@@ -312,10 +310,10 @@ Once these nodes are added to the `model_spec` dictionnary, we need to evaluate 
 ```python
 if i % params.save_summary_steps == 0:
     # Perform a mini-batch update
-    _, _, loss_val, summ, global_step_val = sess.run([train_op, update_metrics, loss,
-                                                      summary_op, global_step])
+    _, _, loss_val, summ, global_step_val = sess.run([train_op, update_metrics, loss, summary_op, global_step])
     # Write summaries for tensorboard
     writer.add_summary(summ, global_step_val)
+    
 else:
     _, _, loss_val = sess.run([train_op, update_metrics, loss])
 ```

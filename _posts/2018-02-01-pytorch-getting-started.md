@@ -3,7 +3,7 @@ layout: post
 title:  "Introduction to PyTorch Code Examples"
 description: "Tutorial for the PyTorch Code Examples"
 excerpt: "An overview of training, models, loss functions and optimizers"
-author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Surag Nair, Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-31
 mathjax: true
 published: true
@@ -252,10 +252,9 @@ def accuracy(out, labels):
 
 You can add your own metrics in the `model/net.py` file. Once you are done, simply add them to the `metrics` dictionary:
 ```python
-metrics = {
-  'accuracy': accuracy,
-  # add your own custom metrics 
-}
+metrics = { 'accuracy': accuracy,
+            # add your own custom metrics,
+          }
 ```
 
 ### Saving and Loading Models

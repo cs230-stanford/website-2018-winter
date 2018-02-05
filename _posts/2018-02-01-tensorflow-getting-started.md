@@ -3,7 +3,7 @@ layout: post
 title:  "Introduction to Tensorflow"
 description: "Graph, Session, Nodes and variable scope"
 excerpt: "Graph, Session, Nodes and variable scope"
-author: "Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Guillaume Genthial and Olivier Moindrot"
 date:   2018-01-24
 mathjax: true
 published: true

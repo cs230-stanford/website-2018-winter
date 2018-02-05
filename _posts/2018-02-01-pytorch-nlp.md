@@ -3,7 +3,7 @@ layout: post
 title:  "Named Entity Recognition Tagging"
 description: "NER Tagging in PyTorch"
 excerpt: "Defining a Recurrent Network and Loading Text Data"
-author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Surag Nair, Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-31
 mathjax: true
 published: true
@@ -151,7 +151,7 @@ A lot of things happened in the above code. We first calculated the length of th
 
 After filling them in, we observe that the sentences that are shorter than the longest sentence in the batch have the special token `PAD` to fill in the remaining space. Moreover, the `PAD` tokens, introduced as a result of packaging the sentences in a matrix, are assigned a label of -1. Doing so differentiates them from other tokens that have label indices in the range `[0,1,...,NUM_TAGS-1]`. This will be crucial when we calculate the loss for our model's prediction, and we'll come to that in a bit.
 
-In our code, we package the above code in a custom data\_iterator function. We can then use the generator as follows:
+In our code, we package the above code in a custom data\_iterator function. Hyperparameters are stored in a data structure called "params". We can then use the generator as follows:
 ```python
 # train_data contains train_sentences and train_labels
 # params contains batch_size
