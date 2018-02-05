@@ -28,7 +28,7 @@ For this winter 2018 session, AWS is offering GPU credits for CS230 students. If
 
 Follow Amazon's [getting started guide][aws-tutorial] for creating a __Deep Learning instance__. Be sure to pick the Ubuntu version of the deep learning Amazon Machine Images (AMI) at the third screen. For the instance type, we recommend using p2.xlarge. Follow the instructions to SSH into the instance.
 
-**IMPORTANT**: Be sure to **turn off your instance** when you are not using it! If you leave it running, you will be billed continuously for the hours it is left on and you will run out of credits very quickly.
+**IMPORTANT**: Be sure to not forget to **turn off your instance** when you are not using it! If you leave it running, you will be billed continuously for the hours it is left on and you will run out of credits very quickly.
 
 <!-- TODO: May need a section on how to set up an EBS volume -->
 
@@ -43,8 +43,7 @@ git clone https://github.com/cs230-stanford/cs230-code-examples.git
 
 ### Start training
 
-You're ready to start training! Follow the instructions in the [project tutorial][post-1] to start training a model. Good luck with your projects!
-
+You're ready to start training! Follow the instructions in the [project tutorial][post-1] to start training a model. We're excited about the amazing things you will build!
 
 
 <!-- Links -->

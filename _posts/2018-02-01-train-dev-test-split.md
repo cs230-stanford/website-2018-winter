@@ -30,9 +30,9 @@ __Table of Content__
 
 _Please refer to the [course content][coursera] for a full overview._
 
-Setting up the training, development and test sets have a huge impact on productivity. It is important to choose the development and test sets from the __same distribution__ and it must be taken randomly from all the data.
+Setting up the training, development (dev) and test sets has a huge impact on productivity. It is important to choose the dev and test sets from the __same distribution__ and it must be taken randomly from all the data.
 
-__Guideline__: Choose a development set and test set to reflect data you expect to get in the future.
+__Guideline__: Choose a dev set and test set to reflect data you expect to get in the future.
 
 The size of the dev and test set should be big enough for the dev and test results to be representative of the performance of the model. If the dev set has 100 examples, the dev accuracy can vary a lot depending on the chosen dev set. For bigger datasets (>1M examples), the dev and test set can have around 10,000 examples each for instance (only 1% of the total data).
 
