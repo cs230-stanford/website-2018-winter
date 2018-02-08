@@ -124,8 +124,8 @@ Variable containing:
 >>> y.backward()       # compute gradients of y wrt a
 >>> print(a.grad)      # print dy/da_ij = 2*a_ij for a_11, a_12, a21, a22
 Variable containing:
-  4   8
- 12  16
+  2  4
+  6  8
 [torch.FloatTensor of size 2x2]
 ```
 
