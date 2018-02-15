@@ -26,7 +26,7 @@ For this winter 2018 session, AWS is offering GPU credits for CS230 students. If
 
 ### Create a Deep Learning EC2 instance
 
-Follow Amazon's [getting started guide][aws-tutorial] for creating a __Deep Learning instance__. Be sure to pick the Ubuntu version of the deep learning Amazon Machine Images (AMI) at the third screen. For the instance type, we recommend using p2.xlarge. Follow the instructions to SSH into the instance.
+Follow Amazon's [getting started guide][aws-tutorial] for creating a __Deep Learning instance__. Be sure to pick the Ubuntu version of the deep learning Amazon Machine Images (AMI) at the third screen. For the instance type, we recommend using __p2.xlarge__. This is available in the __US East (Northern Virginia)__ region (it's not available in Northern California). Follow the instructions to SSH into the instance.
 
 **IMPORTANT**: Be sure to not forget to **turn off your instance** when you are not using it! If you leave it running, you will be billed continuously for the hours it is left on and you will run out of credits very quickly.
 
