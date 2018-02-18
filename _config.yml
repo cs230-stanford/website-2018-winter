@@ -4,7 +4,7 @@ description: "Material for Stanford CS230"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://cs230-stanford.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  cs230-stanford
-# google_analytics:
+google_analytics: UA-114319548-1
 
 
 # Build settings
