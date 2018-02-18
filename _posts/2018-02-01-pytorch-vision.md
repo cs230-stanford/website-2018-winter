@@ -3,7 +3,7 @@ layout: post
 title:  "Classifying Images of Hand Signs"
 description: "Defining a Convolutional Network and Loading Image Signs"
 excerpt: "Defining a Convolutional Network and Loading Image Data"
-author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Surag Nair, Guillaume Genthial and Olivier Moindrot"
 date:   2018-01-31
 mathjax: true
 published: true
@@ -41,12 +41,12 @@ __Table of Contents__
 
 ### Problem Setup
 
-We use images from the SIGNS dataset. Each image from this dataset is a picture of a hand making a sign that represents a number between 1 and 6. It is 1080 training images and 120 test images. In our example, we use images scaled down to size `64x64`.
+We use images from deeplearning.ai's SIGNS dataset that you have used in one of [Course 2][course2]'s programming assignment. Each image from this dataset is a picture of a hand making a sign that represents a number between 1 and 6. It is 1080 training images and 120 test images. In our example, we use images scaled down to size `64x64`.
 
 
 ### Making a PyTorch Dataset
 
-`torch.utils.data` provides some nifty functionality for loading data. We use `torch.utils.data.Dataset`, which is an abstract class representing a dataset. To make our own SIGNSDataset, we need to inherit `Dataset` and override the following methods:
+`torch.utils.data` provides some nifty functionality for loading data. We use `torch.utils.data.Dataset`, which is an abstract class representing a dataset. To make our own SIGNSDataset class, we need to inherit the `Dataset` class and override the following methods:
 - `__len__`: so that `len(dataset)` returns the size of the dataset
 - `__getitem__`: to support indexing using `dataset[i]` to get the ith image
 
@@ -62,8 +62,7 @@ class SIGNSDataset(Dataset):
     self.filenames = [os.path.join(data_dir, f) for f in self.filenames]
       
     # the first character of the filename contains the label
-    self.labels = [int(filename.split('/')[-1][0]) for 
-                   filename in self.filenames]
+    self.labels = [int(filename.split('/')[-1][0]) for filename in self.filenames]
     self.transform = transform
       
   def __len__(self):
@@ -96,12 +95,12 @@ test_dataset = SIGNSDataset(test_data_path, eval_transformer)
 
 ### Loading Batches of Data
 
-`torch.utils.data.DataLoader` provides an iterator that takes in a `Dataset` object and performs batching, shuffling and loading of the data. This is crucial when images are big in size and take time to load. In such a case, the GPU can be left idling while the CPU fetches the images from file and then applies the transforms. In contrast, the DataLoader class (using multiprocessing) fetches the data asynchronously and prefetches batches to be sent to the GPU. Initializing the `DataLoader` is quite easy:
+`torch.utils.data.DataLoader` provides an iterator that takes in a `Dataset` object and performs batching, shuffling and loading of the data. This is crucial when images are big in size and take time to load. In such a case, the GPU can be left idling while the CPU fetches the images from file and then applies the transforms. In contrast, the DataLoader class (using multiprocessing) fetches the data asynchronously and prefetches batches to be sent to the GPU. Initialising the `DataLoader` is quite easy:
 
 ```python
 train_dataloader = DataLoader(SIGNSDataset(train_data_path, train_transformer), 
-                              batch_size=params.batch_size, shuffle=True,
-                              num_workers=params.num_workers)
+                              batch_size=hyperparams.batch_size, shuffle=True,
+                              num_workers=hyperparams.num_workers)
 ```
 
 We can then iterate through batches of examples as follows:
@@ -128,18 +127,18 @@ import torch.nn.functional as F
 class Net(nn.Module):
   def __init__(self):
     # we define convolutional layers 
-    self.conv1 = nn.Conv2d(3, 32, 3, stride=1, padding=1)
+    self.conv1 = nn.Conv2d(in_channels = 3, out_channels = 32, kernel_size = 3, strid = 1, padding = 1)
     self.bn1 = nn.BatchNorm2d(32)
-    self.conv2 = nn.Conv2d(32, 64, 3, stride=1, padding=1)
+    self.conv2 = nn.Conv2d(in_channels = 32, out_channels = 64, kernel_size = 3, stride = 1, padding = 1)
     self.bn2 = nn.BatchNorm2d(64)
-    self.conv3 = nn.Conv2d(64, 128, 3, stride=1, padding=1)
+    self.conv3 = nn.Conv2d(in_channels = 64, in_channels = 128, kernel_size = 3, stride  1, padding = 1)
     self.bn3 = nn.BatchNorm2d(128)
             
     # 2 fully connected layers to transform the output of the convolution layers to the final output
-    self.fc1 = nn.Linear(8*8*128, 128)
+    self.fc1 = nn.Linear(in_features = 8*8*128, out_features = 128)
     self.fcbn1 = nn.BatchNorm1d(128)
-    self.fc2 = nn.Linear(128, 6)       
-    self.dropout_rate = params.dropout_rate
+    self.fc2 = nn.Linear(in_features = 128, out_features = 6)       
+    self.dropout_rate = hyperparams.dropout_rate
 ```
 
 The first parameter to the convolutional filter `nn.Conv2d` is the number of input channels, the second is the number of output channels, and the third is the size of the square filter (`3x3` in this case). Similarly, the batch normalisation layer takes as input the number of channels for 2D images and the number of features in the 1D case. The fully connected `Linear` layers take  the input and output dimensions.
@@ -190,3 +189,4 @@ That concludes the description of the PyTorch Vision code example. You can proce
 [post-1]: https://cs230-stanford.github.io/project-code-examples.html
 [pt-start]: https://cs230-stanford.github.io/pytorch-getting-started.html
 [pt-nlp]: https://cs230-stanford.github.io/pytorch-nlp.html
+[course2]: https://www.coursera.org/learn/deep-neural-network

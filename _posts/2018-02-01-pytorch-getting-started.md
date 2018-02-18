@@ -3,7 +3,7 @@ layout: post
 title:  "Introduction to PyTorch Code Examples"
 description: "Tutorial for the PyTorch Code Examples"
 excerpt: "An overview of training, models, loss functions and optimizers"
-author: "Surag Nair, Guillaume Genthial, Olivier Moindrot"
+author: "Teaching assistants Surag Nair, Guillaume Genthial, Olivier Moindrot"
 date:   2018-01-31
 mathjax: true
 published: true
@@ -124,8 +124,8 @@ Variable containing:
 >>> y.backward()       # compute gradients of y wrt a
 >>> print(a.grad)      # print dy/da_ij = 2*a_ij for a_11, a_12, a21, a22
 Variable containing:
-  4   8
- 12  16
+  2  4
+  6  8
 [torch.FloatTensor of size 2x2]
 ```
 
@@ -252,10 +252,9 @@ def accuracy(out, labels):
 
 You can add your own metrics in the `model/net.py` file. Once you are done, simply add them to the `metrics` dictionary:
 ```python
-metrics = {
-  'accuracy': accuracy,
-  # add your own custom metrics 
-}
+metrics = { 'accuracy': accuracy,
+            # add your own custom metrics,
+          }
 ```
 
 ### Saving and Loading Models
