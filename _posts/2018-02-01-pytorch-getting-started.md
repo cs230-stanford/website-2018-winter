@@ -66,7 +66,6 @@ train.py
 evaluate.py
 search_hyperparams.py
 synthesize_results.py
-evaluate.py
 utils.py
 ```
 
