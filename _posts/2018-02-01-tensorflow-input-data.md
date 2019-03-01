@@ -202,7 +202,7 @@ iterator_init_op = iterator.initializer
 inputs = {'images': images, 'labels': labels, 'iterator_init_op': iterator_init_op}
 ```
 
-This dictionay of inputs will be passed to the model function, which we will detail in the [next post][post-4].
+This dictionary of inputs will be passed to the model function, which we will detail in the [next post][post-4].
 
 
 ## Building an image data pipeline
